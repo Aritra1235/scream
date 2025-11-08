@@ -1,4 +1,9 @@
 import { pgTable, text, timestamp, index, boolean, bigint, integer, pgEnum, primaryKey } from 'drizzle-orm/pg-core'
+if (!process.env.CDN_BASE_URL || !process.env.DEFAULT_AVATAR_OBJECT || !process.env.DEFAULT_BANNER_OBJECT) {
+    throw new Error('CDN_BASE_URL or DEFAULT_AVATAR_OBJECT or DEFAULT_BANNER_OBJECT is not set');
+}
+const defaultAvatarUrl = process.env.CDN_BASE_URL + process.env.DEFAULT_AVATAR_OBJECT;
+const defaultBannerUrl = process.env.CDN_BASE_URL + process.env.DEFAULT_BANNER_OBJECT;
 
 export const user = pgTable(
   'user',
@@ -7,8 +12,8 @@ export const user = pgTable(
     username: text('username').unique(),
     display_name: text('display_name'),
     bio: text('bio'),
-    avatar_url: text('avatar_url'),
-    banner_url: text('banner_url'),
+    avatar_url: text('avatar_url').default(defaultAvatarUrl),
+    banner_url: text('banner_url').default(defaultBannerUrl),
     verified: boolean('verified').notNull().default(false),
     name: text('name'),
     email: text('email').notNull().unique(),
