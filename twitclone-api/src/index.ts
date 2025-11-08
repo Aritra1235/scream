@@ -4,14 +4,23 @@ import { cors } from '@elysiajs/cors'
 import { openapi } from '@elysiajs/openapi'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
+import { betterAuth, betterAuthView } from "./modules/auth";
+
+
+
 
 const app = new Elysia()
   .get('/', () => 'Hello World!')
-  .use(cors(
-    {
-      origin: '*'
-    }
-  ))
+  .use(
+    cors({
+      origin: "http://localhost:3001",
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"],
+    }),
+  )
+  .use(betterAuth)
+  .all("/api/auth/*", betterAuthView)
   .use(openapi())
   .use(
     opentelemetry({
