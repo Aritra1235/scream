@@ -4,8 +4,8 @@ export const user = pgTable(
   'user',
   {
     id: bigint("id", { mode: "bigint" }).primaryKey(),    
-    username: text('username').notNull().unique(),
-    display_name: text('display_name').notNull(),
+    username: text('username').unique(),
+    display_name: text('display_name'),
     bio: text('bio'),
     avatar_url: text('avatar_url'),
     banner_url: text('banner_url'),
@@ -14,6 +14,7 @@ export const user = pgTable(
     email: text('email').notNull().unique(),
     emailVerified: boolean('emailVerified').notNull().default(false),
     image: text('image'),
+    onboarded: boolean('onboarded').notNull().default(false),
     createdAt: timestamp('createdAt').notNull().defaultNow(),
     updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   },

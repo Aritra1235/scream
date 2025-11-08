@@ -1,12 +1,20 @@
 import { betterAuth } from "better-auth"
 import { openAPI } from "better-auth/plugins"
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../db/client"; // your drizzle instance
+import { db } from "../db/client";
+import * as schema from "../db/schema";
+import { generateId } from "./snowflake";
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
+        schema: schema,
     }),
+    advanced: {
+        database: {
+            generateId: () => generateId().toString(),
+        },
+    },
     emailAndPassword: { 
         enabled: true, 
     },
