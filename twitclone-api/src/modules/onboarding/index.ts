@@ -2,9 +2,10 @@ import { Elysia } from "elysia";
 import { userIdSchema } from './model';
 import { checkIfUserOnboarded } from './service';
 import { auth } from '../../utils/auth';
+import { apiPrefix } from '../../utils/const';
 
-const onboarding = new Elysia({ name: "onboarding" })
-    .get('/onboarding/:userId', async ({ params, request: { headers }, status }) => {
+const onboarding = new Elysia({ name: "onboarding", prefix: apiPrefix })
+    .get('/onboarding/:userId', async ({ params, request: { headers }, status, }) => {
         const session = await auth.api.getSession({
             headers
         });
@@ -26,7 +27,7 @@ const onboarding = new Elysia({ name: "onboarding" })
     }, {
         params: userIdSchema
     })
-    
+
 
 
 export { onboarding };
