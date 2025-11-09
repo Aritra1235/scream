@@ -7,6 +7,8 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
 import { betterAuth, betterAuthView } from "./modules/auth";
 import { onboarding } from "./modules/onboarding";
 import { imgUpload } from "./modules/imgUpload";
+import { post } from "./modules/post";
+import { config } from "./config";
 
 
 const app = new Elysia()
@@ -23,6 +25,7 @@ const app = new Elysia()
   .all("/api/auth/*", betterAuthView)
   .use(onboarding)
   .use(imgUpload)
+  .use(post)
   .use(openapi())
   .use(
     opentelemetry({
@@ -31,8 +34,8 @@ const app = new Elysia()
           new OTLPTraceExporter({
             url: 'https://api.axiom.co/v1/traces',
             headers: {
-              Authorization: `Bearer ${Bun.env.AXIOM_TOKEN}`,
-              'X-Axiom-Dataset': Bun.env.AXIOM_DATASET ?? ''
+              Authorization: `Bearer ${config.axiom.token}`,
+              'X-Axiom-Dataset': config.axiom.dataset
             }
           })
         )

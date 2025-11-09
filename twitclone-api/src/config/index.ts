@@ -22,6 +22,9 @@ interface Config {
         secretAccessKey: string;
         bucketName: string;
     };
+    misc:{
+        port: number;
+    }
 }
 
 const config: Config = {
@@ -48,6 +51,10 @@ const config: Config = {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
         bucketName: process.env.AWS_S3_BUCKET_NAME as string,
     },
+    misc: {
+        port: parseInt(process.env.PORT || '3000', 10),
+    },
+
 }
 
 export { config };
