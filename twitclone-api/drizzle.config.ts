@@ -1,5 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
-
+import { config } from './src/config/index'
 export default defineConfig({
   dialect: 'postgresql',
   schema: './src/db/schema.ts',
@@ -7,7 +7,7 @@ export default defineConfig({
   verbose: true,
   
   dbCredentials: {
-    url: process.env.DATABASE_URL || '',
+    url: config.database.url,
   },
 })
 

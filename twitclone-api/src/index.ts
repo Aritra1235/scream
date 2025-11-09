@@ -5,7 +5,7 @@ import { openapi } from '@elysiajs/openapi'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-node'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
 import { betterAuth, betterAuthView } from "./modules/auth";
-
+import { onboarding } from "./modules/onboarding";
 
 
 
@@ -21,6 +21,7 @@ const app = new Elysia()
   )
   .use(betterAuth)
   .all("/api/auth/*", betterAuthView)
+  .use(onboarding)
   .use(openapi())
   .use(
     opentelemetry({

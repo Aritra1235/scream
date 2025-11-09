@@ -1,9 +1,11 @@
 import { pgTable, text, timestamp, index, boolean, bigint, integer, pgEnum, primaryKey } from 'drizzle-orm/pg-core'
-if (!process.env.CDN_BASE_URL || !process.env.DEFAULT_AVATAR_OBJECT || !process.env.DEFAULT_BANNER_OBJECT) {
+import { config } from '../config/index'
+
+if (!config.cdn.defaultAvatar || !config.cdn.defaultBanner) {
     throw new Error('CDN_BASE_URL or DEFAULT_AVATAR_OBJECT or DEFAULT_BANNER_OBJECT is not set');
 }
-const defaultAvatarUrl = process.env.CDN_BASE_URL + process.env.DEFAULT_AVATAR_OBJECT;
-const defaultBannerUrl = process.env.CDN_BASE_URL + process.env.DEFAULT_BANNER_OBJECT;
+const defaultAvatarUrl = config.cdn.defaultAvatar;
+const defaultBannerUrl = config.cdn.defaultBanner;
 
 export const user = pgTable(
   'user',
