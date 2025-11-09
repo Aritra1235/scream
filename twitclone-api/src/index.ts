@@ -8,7 +8,6 @@ import { betterAuth, betterAuthView } from "./modules/auth";
 import { onboarding } from "./modules/onboarding";
 
 
-
 const app = new Elysia()
   .get('/', () => 'Hello World!')
   .use(

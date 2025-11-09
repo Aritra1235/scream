@@ -127,27 +127,41 @@ export const posts = pgTable(
   }
 ) as any
 
+export const targetType = pgEnum('targetType', ['post', 'user', 'group'])
+
 export const mediaType = pgEnum('mediaType', ['image', 'video', 'gif'])
 
 export const media = pgTable(
   'media',
   {
     id: bigint('id', { mode: 'bigint' }).primaryKey(),
-    postId: bigint('postId', { mode: 'bigint' })
-      .notNull()
-      .references(() => posts.id, { onDelete: 'cascade' }),
+
+    // polymorphic reference
+    targetType: targetType('targetType').notNull(),
+    targetId: bigint('targetId', { mode: 'bigint' }).notNull(),
+
     mediaUrl: text('mediaUrl').notNull(),
     type: mediaType('type').notNull(),
+
     width: integer('width'),
     height: integer('height'),
+
     createdAt: timestamp('createdAt').notNull().defaultNow(),
   },
   (table) => {
     return {
-      postIdIdx: index('media_post_id_idx').on(table.postId),
+      // queries like: get all media for a post/user/group
+      targetIdx: index('media_target_idx').on(table.targetType, table.targetId),
+
+      // queries like: find all media of a type (e.g. all gifs)
+      typeIdx: index('media_type_idx').on(table.type),
+
+      // timestamp-based queries, for ordering
+      createdAtIdx: index('media_created_at_idx').on(table.createdAt),
     }
   }
 )
+
 
 export type Media = typeof media.$inferSelect
 export type NewMedia = typeof media.$inferInsert
