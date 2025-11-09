@@ -14,59 +14,6 @@ const s3Client = new S3Client({
     },
 });
 
-interface PresignedUrlOptions {
-    fileType: 'avatar' | 'banner';
-    userId: string;
-    contentType: string;
-    fileName?: string;
-}
-
-interface PresignedUrlResponse {
-    uploadUrl: string;
-    objectKey: string;
-}
-
-async function generatePresignedUrl(options: PresignedUrlOptions): Promise<PresignedUrlResponse> {
-    const { fileType, contentType } = options;
-    
-    // Generate unique object key using just UUID
-    const objectId = randomUUID();
-    const objectKey = `${fileType}s/${objectId}`;
-    
-    // Create PUT command with explicit ContentType
-    const putCommand = new PutObjectCommand({
-        Bucket: config.aws.bucketName,
-        Key: objectKey,
-        ContentType: contentType,
-        ACL: 'public-read',
-    });
-    
-    // Generate presigned URL (expires in 15 minutes)
-    const uploadUrl = await getSignedUrl(s3Client, putCommand, { expiresIn: 900 });
-    
-    return {
-        uploadUrl,
-        objectKey,
-    };
-}
-
-async function generateAvatarUploadUrl(userId: string, contentType: string): Promise<PresignedUrlResponse> {
-    return generatePresignedUrl({
-        fileType: 'avatar',
-        userId,
-        contentType,
-    });
-}
-
-async function generateBannerUploadUrl(userId: string, contentType: string): Promise<PresignedUrlResponse> {
-    return generatePresignedUrl({
-        fileType: 'banner',
-        userId,
-        contentType,
-    });
-}
-
-export { generateAvatarUploadUrl, generateBannerUploadUrl };
 
 
 export { s3Client };

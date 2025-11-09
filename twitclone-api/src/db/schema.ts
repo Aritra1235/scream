@@ -135,17 +135,17 @@ export const media = pgTable(
   'media',
   {
     id: bigint('id', { mode: 'bigint' }).primaryKey(),
-
+    userId: bigint('userId', { mode: 'bigint' })
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
     // polymorphic reference
     targetType: targetType('targetType').notNull(),
     targetId: bigint('targetId', { mode: 'bigint' }).notNull(),
-
     mediaUrl: text('mediaUrl').notNull(),
     type: mediaType('type').notNull(),
-
+    contentType: text('contentType').notNull(),
     width: integer('width'),
     height: integer('height'),
-
     createdAt: timestamp('createdAt').notNull().defaultNow(),
   },
   (table) => {
