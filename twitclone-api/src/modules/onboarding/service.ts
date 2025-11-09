@@ -7,4 +7,16 @@ async function checkIfUserOnboarded(userId: bigint) {
     return onboarded[0]?.onboarded ?? false;
 }
 
-export { checkIfUserOnboarded };
+async function onboardUser(userId: bigint, username: string, display_name: string, bio: string | null, avatar_url: string | null, banner_url: string | null) {
+    const onboarded = await db.update(user).set({
+        username,
+        display_name,
+        bio: bio ?? null,
+        avatar_url: avatar_url ?? null,
+        banner_url: banner_url ?? null,
+        onboarded: true,
+    }).where(eq(user.id, userId));
+    return onboarded;
+}
+
+export { checkIfUserOnboarded, onboardUser };

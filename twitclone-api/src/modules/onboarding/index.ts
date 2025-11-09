@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
-import { userIdSchema } from './model';
-import { checkIfUserOnboarded } from './service';
+import { userIdSchema, onboardingSchema } from './model';
+import { checkIfUserOnboarded, onboardUser } from './service';
 import { auth } from '../../utils/auth';
 import { apiPrefix } from '../../utils/const';
 
@@ -27,7 +27,22 @@ const onboarding = new Elysia({ name: "onboarding", prefix: apiPrefix })
     }, {
         params: userIdSchema
     })
-
+    .post('/onboarding', async ({ request: { headers }, status, body }) => {
+        const session = await auth.api.getSession({
+            headers
+        });
+        if (!session) {
+            return status(401, { message: "Unauthorized" });
+        }
+        const userId = session?.user.id;
+        const onboarded = await onboardUser(BigInt(userId), body.username, body.display_name, body.bio ?? null, body.avatar_url ?? null, body.banner_url ?? null);
+        if (!onboarded) {
+            return status(500, { message: "Failed to onboard user" });
+        }
+        return { message: "User onboarded"};
+    }, {
+        body: onboardingSchema
+    })
 
 
 export { onboarding };

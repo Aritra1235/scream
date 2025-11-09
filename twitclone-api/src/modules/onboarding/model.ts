@@ -7,4 +7,13 @@ const userIdSchema = v.object({
     ),
 })
 
-export { userIdSchema };
+const onboardingSchema = v.object({
+    username: v.string(),
+    display_name: v.string(),
+    bio: v.optional(v.string()),
+    avatar_url: v.optional(v.string()),
+    banner_url: v.optional(v.string()),
+});
+
+
+export { userIdSchema, onboardingSchema };
