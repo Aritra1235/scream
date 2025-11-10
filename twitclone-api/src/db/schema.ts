@@ -114,6 +114,7 @@ export const posts = pgTable(
       .references(() => posts.id, { onDelete: 'set null' }),
     mediaCount: integer('mediaCount').notNull().default(0),
     visibility: visibility('visibility').notNull().default('public'),
+    likes_count: integer('likes_count').notNull().default(0),
     createdAt: timestamp('createdAt').notNull().defaultNow(),
     updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   },
