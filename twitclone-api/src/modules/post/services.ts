@@ -5,17 +5,26 @@ import { eq, and } from 'drizzle-orm';
 import { generateId } from '../../utils/snowflake';
 
 async function createPost(userId: bigint, content: string, mediaCount: number) {
-    const post = await db.insert(posts).values({
-        id: generateId(),
-        userId,
-        content,
-        mediaCount,
-    }).returning();
-    if(!post) {
+    try {
+        const post = await db.insert(posts).values({
+            id: generateId(),
+            userId,
+            content,
+            mediaCount,
+        }).returning();
+        
+        if(!post || post.length === 0) {
+            throw new Error('Failed to create post');
+        }
+        return post;
+    } catch (error) {
+        // Log the actual error for debugging
+        console.error('Database error:', error);
+        // Throw a sanitized error without exposing internals
         throw new Error('Failed to create post');
     }
-    return post;
 }
+
 
 async function repostPost(userId: bigint, repostOf: bigint) {
     const post = await db.insert(posts).values({
