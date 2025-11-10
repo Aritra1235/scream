@@ -10,6 +10,7 @@ import { imgUpload } from "./modules/imgUpload";
 import { post } from "./modules/post";
 import { config } from "./config";
 import { like } from "./modules/like";
+import { feed } from "./modules/feed";
 
 
 const app = new Elysia()
@@ -28,6 +29,7 @@ const app = new Elysia()
   .use(imgUpload)
   .use(post)
   .use(like)
+  .use(feed)
   .use(openapi())
   .use(
     opentelemetry({
