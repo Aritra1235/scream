@@ -2,14 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import SignIn from "@/components/SignIn";
+import SignIn from "@/components/auth/SignIn";
 
 export default function SignInPage() {
   const router = useRouter();
   const [error, setError] = useState<string>("");
 
   const handleSuccess = () => {
-    router.push("/home");
+    router.push("/onboarding");
   };
 
   const handleError = (errorMessage: string) => {

@@ -1,9 +1,7 @@
 import { pgTable, text, timestamp, index, boolean, bigint, integer, pgEnum, primaryKey } from 'drizzle-orm/pg-core'
 import { config } from '../config/index'
 
-if (!config.cdn.defaultAvatar || !config.cdn.defaultBanner) {
-    throw new Error('CDN_BASE_URL or DEFAULT_AVATAR_OBJECT or DEFAULT_BANNER_OBJECT is not set');
-}
+
 const defaultAvatarUrl = config.cdn.defaultAvatar;
 const defaultBannerUrl = config.cdn.defaultBanner;
 

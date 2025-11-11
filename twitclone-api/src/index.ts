@@ -11,6 +11,7 @@ import { post } from "./modules/post";
 import { config } from "./config";
 import { like } from "./modules/like";
 import { feed } from "./modules/feed";
+import { username } from "./modules/username";
 
 
 const app = new Elysia()
@@ -30,6 +31,7 @@ const app = new Elysia()
   .use(post)
   .use(like)
   .use(feed)
+  .use(username)
   .use(openapi())
   .use(
     opentelemetry({

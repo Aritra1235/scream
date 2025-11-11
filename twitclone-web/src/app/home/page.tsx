@@ -14,6 +14,20 @@ export default function HomePage() {
             try {
                 const session = await authClient.getSession();
                 if (session.data?.user) {
+                    // Check if user has completed onboarding
+                    const response = await fetch(
+                        `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/onboarding/${session.data.user.id}`,
+                        {
+                            credentials: 'include'
+                        }
+                    );
+                    if (response.ok) {
+                        const onboardingData = await response.json();
+                        if (!onboardingData.onboarded) {
+                            router.push("/onboarding");
+                            return;
+                        }
+                    }
                     setUser(session.data.user);
                 } else {
                     router.push("/sign-in");
