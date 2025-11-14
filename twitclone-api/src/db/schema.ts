@@ -11,6 +11,7 @@ export const user = pgTable(
     id: bigint("id", { mode: "bigint" }).primaryKey(),    
     username: text('username').unique(),
     display_name: text('display_name'),
+    displayUsername: text('displayUsername'),
     bio: text('bio'),
     avatar_url: text('avatar_url').default(defaultAvatarUrl),
     banner_url: text('banner_url').default(defaultBannerUrl),

@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth"
-import { openAPI } from "better-auth/plugins"
+import { openAPI, username } from "better-auth/plugins"
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db/client";
 import * as schema from "../db/schema";
@@ -29,5 +29,6 @@ export const auth = betterAuth({
     },
     plugins: [ 
         openAPI(), 
+        username(),
     ] 
 })
