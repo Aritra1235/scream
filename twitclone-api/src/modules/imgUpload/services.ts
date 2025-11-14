@@ -31,7 +31,6 @@ async function generatePresignedUrl(options: PresignedUrlOptions): Promise<Presi
         Bucket: config.aws.bucketName,
         Key: objectKey,
         ContentType: contentType,
-        ACL: 'public-read',
     });
     
     // Generate presigned URL (expires in 15 minutes)

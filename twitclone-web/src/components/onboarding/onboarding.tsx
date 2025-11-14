@@ -7,24 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Check, Upload, User } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Upload, User, Image as ImageIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner"; 
 
-type OnboardingStep = 'username' | 'displayName' | 'bio' | 'profilePicture' | 'bannerPicture';
+type OnboardingStep = 'username' | 'displayName' | 'bio' | 'images';
 
 interface OnboardingData {
     username: string;
     displayName: string;
     bio: string;
-    profilePicture: File | null;
-    bannerPicture: File | null;
+    profilePictureUrl: string | null; 
+    bannerPictureUrl: string | null; 
 }
 
 export default function Onboarding() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [currentStep, setCurrentStep] = useState<OnboardingStep>('username');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     const [error, setError] = useState<string>('');
     const [user, setUser] = useState<any>(null);
 
@@ -32,12 +33,20 @@ export default function Onboarding() {
         username: '',
         displayName: '',
         bio: '',
-        profilePicture: null,
-        bannerPicture: null
+        profilePictureUrl: null,
+        bannerPictureUrl: null
     });
 
+    // State for username validation
     const [usernameError, setUsernameError] = useState<string>('');
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+    // State for image previews and individual upload loading
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+    const [isUploadingBanner, setIsUploadingBanner] = useState(false);
+
 
     useEffect(() => {
         let isMounted = true;
@@ -162,51 +171,23 @@ export default function Onboarding() {
     };
 
     const handleBioSubmit = async () => {
-        setCurrentStep('profilePicture');
+        setCurrentStep('images'); // Go to the new combined image step
     };
 
-    const handleProfilePictureSubmit = () => {
-        setCurrentStep('bannerPicture');
-    };
-
-    const handleBannerPictureSubmit = async () => {
+    // New handler for the final submission from the image step
+    const handleFinalSubmit = async () => {
         setIsSubmitting(true);
         setError('');
 
         try {
-            let avatarUrl = null;
-            let bannerUrl = null;
-
-            // Upload profile picture if exists
-            if (data.profilePicture) {
-                avatarUrl = await uploadImage(data.profilePicture, 'avatar');
-                if (!avatarUrl) {
-                    throw new Error('Failed to upload profile picture');
-                }
-            }
-
-            // Upload banner picture if exists
-            if (data.bannerPicture) {
-                bannerUrl = await uploadImage(data.bannerPicture, 'banner');
-                if (!bannerUrl) {
-                    throw new Error('Failed to upload banner picture');
-                }
-            }
-
-            // Submit onboarding data
+            // Images are already uploaded. We just need to send the URLs.
             const onboardingData: any = {
                 username: data.username,
                 display_name: data.displayName,
-                bio: data.bio || null
+                bio: data.bio || null,
+                avatar_url: data.profilePictureUrl || null,
+                banner_url: data.bannerPictureUrl || null,
             };
-
-            // Only include URLs if they exist
-            if (avatarUrl) {
-                onboardingData.avatar_url = avatarUrl;
-            }
-            if (bannerUrl) {
-                onboardingData.banner_url = bannerUrl;
-            }
 
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/onboarding`,
@@ -233,15 +214,56 @@ export default function Onboarding() {
         }
     };
 
-    const handleFileChange = (field: 'profilePicture' | 'bannerPicture') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    // New file change handler that uploads immediately
+    const handleFileChange = (field: 'profilePicture' | 'bannerPicture') => async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            setData(prev => ({
-                ...prev,
-                [field]: file
-            }));
+        if (!file) return;
+
+        const isAvatar = field === 'profilePicture';
+        const previewUrl = URL.createObjectURL(file);
+
+        if (isAvatar) {
+            setAvatarPreview(previewUrl);
+            setIsUploadingAvatar(true);
+        } else {
+            setBannerPreview(previewUrl);
+            setIsUploadingBanner(true);
+        }
+
+        setError(''); // Clear previous errors
+
+        try {
+            const uploadedUrl = await uploadImage(file, isAvatar ? 'avatar' : 'banner');
+
+            if (uploadedUrl) {
+                if (isAvatar) {
+                    setData(prev => ({ ...prev, profilePictureUrl: uploadedUrl }));
+                } else {
+                    setData(prev => ({ ...prev, bannerPictureUrl: uploadedUrl }));
+                }
+            } else {
+                throw new Error('Upload returned no URL');
+            }
+        } catch (uploadError) {
+            console.error('Image upload failed:', uploadError);
+            setError(`Failed to upload ${isAvatar ? 'profile picture' : 'banner'}. Please try again.`);
+            // Clear the failed preview
+            if (isAvatar) {
+                setAvatarPreview(null);
+            } else {
+                setBannerPreview(null);
+            }
+        } finally {
+            if (isAvatar) {
+                setIsUploadingAvatar(false);
+            } else {
+                setIsUploadingBanner(false);
+            }
+            // Revoke the object URL after a short delay to ensure image has rendered
+            setTimeout(() => URL.revokeObjectURL(previewUrl), 1000);
         }
     };
+
 
     const uploadImage = async (file: File, fileType: 'avatar' | 'banner'): Promise<string | null> => {
         try {
@@ -276,10 +298,11 @@ export default function Onboarding() {
                 throw new Error('Failed to upload file to S3');
             }
 
-            // Step 3: Get image dimensions (for now, using placeholder values)
-            const img = new Image();
+            // Step 3: Get image dimensions
             const dimensions = await new Promise<{ width: number; height: number }>((resolve) => {
+                const img = new Image();
                 img.onload = () => resolve({ width: img.width, height: img.height });
+                img.onerror = () => resolve({ width: 0, height: 0 }); // Handle error
                 img.src = URL.createObjectURL(file);
             });
 
@@ -318,17 +341,17 @@ export default function Onboarding() {
     };
 
     const getStepNumber = (step: OnboardingStep): number => {
-        const steps = ['username', 'displayName', 'bio', 'profilePicture', 'bannerPicture'];
+        const steps = ['username', 'displayName', 'bio', 'images'];
         return steps.indexOf(step) + 1;
     };
 
-    const getTotalSteps = 5;
+    const getTotalSteps = 4; // Updated total steps
 
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-background">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <Spinner className="h-12 w-12 mx-auto mb-4" />
                     <p className="text-muted-foreground">Loading...</p>
                 </div>
             </div>
@@ -336,18 +359,18 @@ export default function Onboarding() {
     }
 
     return (
-        <div className="min-h-screen bg-background p-4">
-            <div className="max-w-md mx-auto">
+        <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+            <div className="max-w-md w-full">
                 {/* Progress Indicator */}
                 <div className="mb-8">
-                    <div className="flex justify-between items-center mb-2">
-                        {(['username', 'displayName', 'bio', 'profilePicture', 'bannerPicture'] as OnboardingStep[]).map((step, index) => (
+                    <div className="flex justify-between items-center mb-2 max-w-sm mx-auto">
+                        {(['username', 'displayName', 'bio', 'images'] as OnboardingStep[]).map((step, index) => (
                             <div key={step} className="flex items-center">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
                                     getStepNumber(currentStep) > index + 1
                                         ? 'bg-primary text-primary-foreground'
                                         : getStepNumber(currentStep) === index + 1
-                                        ? 'bg-primary text-primary-foreground'
+                                        ? 'bg-primary text-primary-foreground scale-110'
                                         : 'bg-muted text-muted-foreground'
                                 }`}>
                                     {getStepNumber(currentStep) > index + 1 ? (
@@ -356,12 +379,12 @@ export default function Onboarding() {
                                         index + 1
                                     )}
                                 </div>
-                                {index < 4 && (
-                                    <div className={`w-12 h-0.5 mx-2 ${
+                                {index < getTotalSteps - 1 && (
+                                    <div className={`flex-1 h-0.5 mx-2 ${
                                         getStepNumber(currentStep) > index + 1
                                             ? 'bg-primary'
                                             : 'bg-muted'
-                                    }`} />
+                                    }`} style={{ minWidth: '40px' }} />
                                 )}
                             </div>
                         ))}
@@ -371,21 +394,19 @@ export default function Onboarding() {
                     </p>
                 </div>
 
-                <Card className="border-0 shadow-2xl">
+                <Card className="shadow-2xl shadow-primary/5 border-0">
                     <CardHeader className="text-center pb-6">
                         <CardTitle className="text-2xl">
                             {currentStep === 'username' && 'Choose your username'}
                             {currentStep === 'displayName' && 'What should we call you?'}
                             {currentStep === 'bio' && 'Tell us about yourself'}
-                            {currentStep === 'profilePicture' && 'Add a profile picture'}
-                            {currentStep === 'bannerPicture' && 'Add a banner picture'}
+                            {currentStep === 'images' && 'Customize your profile'}
                         </CardTitle>
                         <CardDescription>
                             {currentStep === 'username' && 'This will be your unique @username'}
                             {currentStep === 'displayName' && 'This is how others will see your name'}
                             {currentStep === 'bio' && 'Write a short bio (optional)'}
-                            {currentStep === 'profilePicture' && 'Upload a profile picture (optional)'}
-                            {currentStep === 'bannerPicture' && 'Upload a banner image (optional)'}
+                            {currentStep === 'images' && 'Upload a profile and banner picture (optional)'}
                         </CardDescription>
                     </CardHeader>
 
@@ -406,7 +427,7 @@ export default function Onboarding() {
                                         <Input
                                             id="username"
                                             value={data.username}
-                                            onChange={(e) => setData(prev => ({ ...prev, username: e.target.value.toLowerCase() }))}
+                                            onChange={(e) => setData(prev => ({ ...prev, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') }))}
                                             className="pl-8"
                                             placeholder="yourusername"
                                             disabled={isSubmitting}
@@ -419,14 +440,17 @@ export default function Onboarding() {
                                         <p className="text-xs text-muted-foreground">Checking availability...</p>
                                     )}
                                 </div>
-                                <Button
-                                    onClick={handleUsernameSubmit}
-                                    className="w-full"
-                                    disabled={isSubmitting || isCheckingUsername || !!usernameError}
-                                >
-                                    {isCheckingUsername ? 'Checking...' : 'Continue'}
-                                    {!isCheckingUsername && !usernameError && <ChevronRight className="w-4 h-4 ml-2" />}
-                                </Button>
+                                <div className="pt-10">
+                                    <Button
+                                        onClick={handleUsernameSubmit}
+                                        className="w-full"
+                                        disabled={isSubmitting || isCheckingUsername || !!usernameError || data.username.length < 3}
+                                    >
+                                        {isCheckingUsername ? <Spinner className="mr-2" /> : null}
+                                        {isCheckingUsername ? 'Checking...' : 'Continue'}
+                                        {!isCheckingUsername && <ChevronRight className="w-4 h-4 ml-2" />}
+                                    </Button>
+                                </div>
                             </div>
                         )}
 
@@ -443,7 +467,7 @@ export default function Onboarding() {
                                         disabled={isSubmitting}
                                     />
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 pt-10">
                                     <Button
                                         variant="outline"
                                         onClick={() => setCurrentStep('username')}
@@ -455,7 +479,7 @@ export default function Onboarding() {
                                     <Button
                                         onClick={handleDisplayNameSubmit}
                                         className="flex-1"
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || !data.displayName.trim()}
                                     >
                                         Continue
                                         <ChevronRight className="w-4 h-4 ml-2" />
@@ -482,7 +506,7 @@ export default function Onboarding() {
                                         {data.bio.length}/160
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 pt-10">
                                     <Button
                                         variant="outline"
                                         onClick={() => setCurrentStep('displayName')}
@@ -503,146 +527,90 @@ export default function Onboarding() {
                             </div>
                         )}
 
-                        {/* Profile Picture Step */}
-                        {currentStep === 'profilePicture' && (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label>Profile Picture</Label>
-                                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
-                                        {data.profilePicture ? (
-                                            <div className="space-y-4">
-                                                <div className="w-20 h-20 mx-auto rounded-full bg-muted flex items-center justify-center">
-                                                    <User className="w-8 h-8 text-muted-foreground" />
+                        {/* NEW Images Step */}
+                        {currentStep === 'images' && (
+                            <div className="space-y-6">
+                                {/* Profile Preview */}
+                                <div className="relative w-full"> {/* Removed overflow-hidden and border from here */}
+                                    {/* Banner Area */}
+                                    <label htmlFor="banner-picture" className="cursor-pointer">
+                                        <div className="relative h-36 w-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground hover:bg-muted-foreground/20 transition-all rounded-lg overflow-hidden border bg-muted"> {/* Added rounding, overflow, and border here */}
+                                            {bannerPreview ? (
+                                                <img src={bannerPreview} alt="Banner preview" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="text-center">
+                                                    <ImageIcon className="w-8 h-8 mx-auto" />
+                                                    <span className="text-xs">Upload Banner</span>
                                                 </div>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {data.profilePicture.name}
-                                                </p>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => document.getElementById('profile-picture')?.click()}
-                                                >
-                                                    Change
-                                                </Button>
+                                            )}
+                                            {isUploadingBanner && (
+                                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                                    <Spinner className="text-white" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </label>
+
+                                    {/* Avatar Area - Now a sibling to the label, will overlay without being clipped */}
+                                    <div className="absolute top-24 left-4">
+                                        <label htmlFor="profile-picture" className="cursor-pointer">
+                                            <div className="relative w-24 h-24 rounded-full bg-muted border-4 border-card flex items-center justify-center text-muted-foreground overflow-hidden hover:opacity-90 transition-all">
+                                                {avatarPreview ? (
+                                                    <img src={avatarPreview} alt="Avatar preview" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User className="w-10 h-10" />
+                                                )}
+                                                {isUploadingAvatar && (
+                                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                                        <Spinner className="text-white" />
+                                                    </div>
+                                                )}
                                             </div>
-                                        ) : (
-                                            <div className="space-y-4">
-                                                <div className="w-20 h-20 mx-auto rounded-full bg-muted flex items-center justify-center">
-                                                    <User className="w-8 h-8 text-muted-foreground" />
-                                                </div>
-                                                <div>
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() => document.getElementById('profile-picture')?.click()}
-                                                    >
-                                                        <Upload className="w-4 h-4 mr-2" />
-                                                        Upload Photo
-                                                    </Button>
-                                                    <p className="text-xs text-muted-foreground mt-2">
-                                                        PNG, JPG up to 5MB
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <input
-                                            id="profile-picture"
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={handleFileChange('profilePicture')}
-                                        />
+                                        </label>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+
+                                {/* Hidden File Inputs */}
+                                <input
+                                    id="profile-picture"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleFileChange('profilePicture')}
+                                    disabled={isUploadingAvatar}
+                                />
+                                <input
+                                    id="banner-picture"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleFileChange('bannerPicture')}
+                                    disabled={isUploadingBanner}
+                                />
+
+                                {/* Navigation */}
+                                <div className="flex gap-2 pt-10">
                                     <Button
                                         variant="outline"
                                         onClick={() => setCurrentStep('bio')}
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || isUploadingAvatar || isUploadingBanner}
                                     >
                                         <ChevronLeft className="w-4 h-4 mr-2" />
                                         Back
                                     </Button>
                                     <Button
-                                        onClick={handleProfilePictureSubmit}
+                                        onClick={handleFinalSubmit}
                                         className="flex-1"
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || isUploadingAvatar || isUploadingBanner}
                                     >
-                                        {data.profilePicture ? 'Continue' : 'Skip'}
-                                        <ChevronRight className="w-4 h-4 ml-2" />
+                                        {isSubmitting ? <Spinner className="mr-2" /> : null}
+                                        {isSubmitting ? 'Completing...' : 'Complete Setup'}
+                                        {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
                                     </Button>
                                 </div>
                             </div>
                         )}
 
-                        {/* Banner Picture Step */}
-                        {currentStep === 'bannerPicture' && (
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label>Banner Picture</Label>
-                                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center">
-                                        {data.bannerPicture ? (
-                                            <div className="space-y-4">
-                                                <div className="w-full h-20 bg-muted rounded-lg flex items-center justify-center">
-                                                    <User className="w-8 h-8 text-muted-foreground" />
-                                                </div>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {data.bannerPicture.name}
-                                                </p>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => document.getElementById('banner-picture')?.click()}
-                                                >
-                                                    Change
-                                                </Button>
-                                            </div>
-                                        ) : (
-                                            <div className="space-y-4">
-                                                <div className="w-full h-20 bg-muted rounded-lg flex items-center justify-center">
-                                                    <User className="w-8 h-8 text-muted-foreground" />
-                                                </div>
-                                                <div>
-                                                    <Button
-                                                        variant="outline"
-                                                        onClick={() => document.getElementById('banner-picture')?.click()}
-                                                    >
-                                                        <Upload className="w-4 h-4 mr-2" />
-                                                        Upload Banner
-                                                    </Button>
-                                                    <p className="text-xs text-muted-foreground mt-2">
-                                                        PNG, JPG up to 5MB (recommended: 1200x400px)
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <input
-                                            id="banner-picture"
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={handleFileChange('bannerPicture')}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => setCurrentStep('profilePicture')}
-                                        disabled={isSubmitting}
-                                    >
-                                        <ChevronLeft className="w-4 h-4 mr-2" />
-                                        Back
-                                    </Button>
-                                    <Button
-                                        onClick={handleBannerPictureSubmit}
-                                        className="flex-1"
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? 'Completing...' : data.bannerPicture ? 'Complete Setup' : 'Skip & Complete'}
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
                     </CardContent>
                 </Card>
             </div>
