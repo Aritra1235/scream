@@ -1,13 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Feed } from "@/components/posts/Feed";
 import { authClient } from "@/lib/auth-client";
+
+interface User {
+    id: string;
+    name?: string;
+    email: string;
+}
 
 export default function HomePage() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -61,25 +68,15 @@ export default function HomePage() {
     }
 
     return (
-        <div className="min-h-screen bg-background p-8">
-            <div className="max-w-4xl mx-auto">
-                <div className="bg-card rounded-lg border p-8 shadow-sm">
-                    <h1 className="text-3xl font-bold mb-4">Welcome to TwitClone, {user.name || user.email}!</h1>
-                    <p className="text-muted-foreground mb-6">
-                        This is your home feed. Your personalized Twitter-like experience starts here.
-                    </p>
-                    <div className="space-y-4">
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <h2 className="font-semibold mb-2">What's next?</h2>
-                            <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                                <li>View your timeline</li>
-                                <li>Post your first tweet</li>
-                                <li>Follow other users</li>
-                                <li>Explore trending topics</li>
-                            </ul>
-                        </div>
-                    </div>
+        <div className="min-h-screen bg-background">
+            <div className="max-w-2xl mx-auto border-x border-border">
+                {/* Header */}
+                <div className="sticky top-0 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3">
+                    <h1 className="text-xl font-bold">Home</h1>
                 </div>
+
+                {/* Feed */}
+                <Feed />
             </div>
         </div>
     );
