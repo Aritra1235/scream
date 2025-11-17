@@ -1,5 +1,8 @@
+"use client";
+
 import Sidebar from "@/components/Sidebar";
 import { Geist, Geist_Mono } from "next/font/google";
+import { useRef, useEffect } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,16 +19,42 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      const target = e.target as HTMLElement;
+      const sidebar = document.querySelector('aside');
+      const rightSide = document.querySelector('[data-right-side]');
+      
+      if ((sidebar?.contains(target) || rightSide?.contains(target)) && mainRef.current) {
+        e.preventDefault();
+        mainRef.current.scrollTop += e.deltaY;
+      }
+    };
+
+    const container = mainRef.current?.parentElement;
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
+
   return (
     <div
       className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-black text-white overflow-hidden`}
     >
       <div className="flex w-full max-w-7xl overflow-hidden">
         <Sidebar />
-        <main className="flex-1 border-x border-neutral-800 min-w-0 overflow-y-auto">
+        <main ref={mainRef} className="flex-1 border-x border-neutral-800 min-w-0 overflow-y-auto">
           {children}
         </main>
-        <div className="hidden xl:block w-80 lg:w-96"></div>
+        <div className="hidden xl:block w-80 lg:w-96" data-right-side></div>
       </div>
     </div>
   );

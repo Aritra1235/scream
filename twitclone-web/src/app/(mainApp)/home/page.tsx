@@ -68,15 +68,19 @@ export default function HomePage() {
     }
 
     return (
-        <div className="min-h-screen bg-background">
-            <div className="max-w-2xl mx-auto border-x border-border">
-                {/* Header */}
-                <div className="sticky top-0 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3">
-                    <h1 className="text-xl font-bold">Home</h1>
-                </div>
+        <div className="h-screen flex flex-col bg-background">
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <div className="max-w-2xl mx-auto w-full border-x border-border flex flex-col flex-1 overflow-hidden">
+                    {/* Header */}
+                    <div className="sticky top-0 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3 z-10">
+                        <h1 className="text-xl font-bold">Home</h1>
+                    </div>
 
-                {/* Feed */}
-                <Feed />
+                    {/* Feed */}
+                    <div className="flex-1 overflow-y-auto">
+                        <Feed />
+                    </div>
+                </div>
             </div>
         </div>
     );

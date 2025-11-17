@@ -49,7 +49,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden h-screen border-r border-neutral-800 px-4 py-3 text-neutral-50 sm:flex sm:w-64 lg:w-72 overflow-y-auto">
+    <aside className="hidden h-screen border-r border-neutral-800 px-4 py-3 text-neutral-50 sm:flex sm:w-64 lg:w-72 overflow-hidden">
       <nav className="flex flex-col w-full">
         <div className="mb-2 text-2xl font-bold px-3 py-2">Twitr</div>
         <ul className="flex flex-col gap-10 mt-4">
