@@ -227,3 +227,49 @@ export type NewVerification = typeof verification.$inferInsert
 export type Post = typeof posts.$inferSelect
 export type NewPost = typeof posts.$inferInsert
 
+// BetterAuth expects the model name to be "apikey" (all lowercase),
+// so we export the table under that name and alias `apiKey` for our own code.
+export const apikey = pgTable(
+  'apikey',
+  {
+    id: bigint('id', { mode: 'bigint' }).primaryKey(),
+    userId: bigint('userId', { mode: 'bigint' })
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    name: text('name'),
+    start: text('start'),
+    prefix: text('prefix'),
+    key: text('key').notNull().unique(),
+    refillInterval: integer('refillInterval').default(0),
+    refillAmount: integer('refillAmount').default(0),
+    lastRefillAt: timestamp('lastRefillAt'),
+    enabled: boolean('enabled').notNull().default(true),
+    rateLimitEnabled: boolean('rateLimitEnabled').notNull().default(false),
+    rateLimitTimeWindow: integer('rateLimitTimeWindow'),
+    rateLimitMax: integer('rateLimitMax'),
+    requestCount: integer('requestCount').notNull().default(0),
+    remaining: integer('remaining'),
+    lastRequest: timestamp('lastRequest'),
+    expiresAt: timestamp('expiresAt'),
+    permissions: text('permissions'),
+    metadata: text('metadata'),
+    createdAt: timestamp('createdAt').notNull().defaultNow(),
+    updatedAt: timestamp('updatedAt').notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('apiKey_user_id_idx').on(table.userId),
+      prefixIdx: index('apiKey_prefix_idx').on(table.prefix),
+      keyIdx: index('apiKey_key_idx').on(table.key),
+      enabledIdx: index('apiKey_enabled_idx').on(table.enabled),
+      expiresAtIdx: index('apiKey_expires_at_idx').on(table.expiresAt),
+    }
+  }
+)
+
+export type ApiKey = typeof apikey.$inferSelect
+export type NewApiKey = typeof apikey.$inferInsert
+
+// Alias for existing imports in the codebase that use `apiKey`
+export const apiKey = apikey
+

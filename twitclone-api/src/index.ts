@@ -12,6 +12,7 @@ import { config } from "./config";
 import { like } from "./modules/like";
 import { feed } from "./modules/feed";
 import { username } from "./modules/username";
+import { apiKeyModule } from "./modules/apikey";
 
 
 const app = new Elysia()
@@ -32,6 +33,7 @@ const app = new Elysia()
   .use(like)
   .use(feed)
   .use(username)
+  .use(apiKeyModule)
   .use(openapi())
   .use(
     opentelemetry({

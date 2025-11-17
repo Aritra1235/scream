@@ -7,10 +7,33 @@ import { createPost, repostPost, deletePost, isPostOwner } from "./services";
 const post = new Elysia({ name: "post", prefix: apiPrefix })
     .post('/post/create', async ({ request: { headers }, status, body }) => {
         const session = await auth.api.getSession({ headers });
-        if (!session) {
-            return status(401, { message: "Unauthorized" });
-        }
+
         
+        if (!session) {
+            console.log(headers.get('Authorization'));
+            const apiKey = await auth.api.verifyApiKey({ 
+                body: {
+                    key: headers.get('Authorization') || '',
+                }
+            });
+            console.log('apiKey', apiKey);
+            if (!apiKey) {
+                return status(401, { message: "Unauthorized" });
+            }
+            const userId = apiKey.key?.userId;
+            if (!userId) {
+                return status(401, { message: "Invalid API key" });
+            }
+            const post = await createPost(BigInt(userId), body.content, body.mediaCount);
+            return { 
+                message: "Post created", 
+                post: { 
+                    ...post[0], 
+                    id: post[0].id.toString(), 
+                    userId: post[0].userId.toString() 
+                } 
+            };
+        }
         try {
             const userId = session.user.id;
             const post = await createPost(BigInt(userId), body.content, body.mediaCount);
