@@ -18,11 +18,11 @@ export default function DashboardLayout({
 }>) {
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen justify-center bg-black text-white`}
+      className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-black text-white overflow-hidden`}
     >
-      <div className="flex w-full max-w-7xl">
+      <div className="flex w-full max-w-7xl overflow-hidden">
         <Sidebar />
-        <main className="flex-1 border-x border-neutral-800 min-w-0">
+        <main className="flex-1 border-x border-neutral-800 min-w-0 overflow-y-auto">
           {children}
         </main>
         <div className="hidden xl:block w-80 lg:w-96"></div>
