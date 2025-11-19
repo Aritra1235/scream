@@ -79,6 +79,7 @@ export function TweetInput() {
                             <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
                                 <ImageIcon className="h-6 w-6" />
                             </button>
+                            {/*
                             <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
                                 <FileVideo className="h-6 w-6" />
                             </button>
@@ -91,6 +92,7 @@ export function TweetInput() {
                             <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
                                 <MapPin className="h-6 w-6" />
                             </button>
+                            */}
                         </div>
                         <Button
                             onClick={handlePost}
