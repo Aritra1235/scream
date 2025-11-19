@@ -1,107 +1,217 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import React from "react";
+
+const NeoButton = ({ children, href, variant = "primary", className = "" }: { children: React.ReactNode; href?: string; variant?: "primary" | "secondary"; className?: string }) => {
+  const baseStyles = "inline-flex items-center justify-center px-8 py-4 font-black text-lg border-4 border-black transition-all duration-200 hover:-translate-y-1 hover:translate-x-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none";
+  const variants = {
+    primary: "bg-[#FF6B6B] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
+    secondary: "bg-[#4ECDC4] text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
+  };
+
+  if (href) {
+    return (
+      <Link href={href} className={`${baseStyles} ${variants[variant]} ${className}`}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <button className={`${baseStyles} ${variants[variant]} ${className}`}>
+      {children}
+    </button>
+  );
+};
+
+const FeatureCard = ({ title, description, icon, color }: { title: string; description: string; icon: React.ReactNode; color: string }) => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02, rotate: -1 }}
+      className={`p-8 border-4 border-black ${color} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none`}
+    >
+      <div className="mb-6 p-4 bg-white border-4 border-black w-fit shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        {icon}
+      </div>
+      <h3 className="text-2xl font-black mb-4 uppercase tracking-tight">{title}</h3>
+      <p className="text-lg font-bold leading-relaxed">{description}</p>
+    </motion.div>
+  );
+};
 
 export default function LandingPage() {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end start"],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <header className="relative z-10 px-6 py-4">
-        <div className="mx-auto max-w-7xl flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">T</span>
+    <div className="min-h-screen bg-[#FFE66D] text-black font-sans selection:bg-black selection:text-white overflow-x-hidden">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b-4 border-black px-6 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-black flex items-center justify-center text-white font-black text-xl">
+              T
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">TwitClone</span>
+            <span className="text-2xl font-black uppercase tracking-tighter">TwitClone</span>
           </div>
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
-              Features
-            </a>
-            <a href="#about" className="text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">
-              About
-            </a>
-            <Button asChild className="rounded-full">
-              <Link href="/sign-up">
-                Get Started
-              </Link>
-            </Button>
-          </nav>
+          <div className="hidden md:flex items-center gap-8 font-bold">
+            <a href="#features" className="hover:underline decoration-4 underline-offset-4 decoration-[#FF6B6B]">Features</a>
+            <a href="#about" className="hover:underline decoration-4 underline-offset-4 decoration-[#4ECDC4]">About</a>
+            <NeoButton href="/sign-up" variant="primary" className="py-2 px-6 text-base">
+              Join Now
+            </NeoButton>
+          </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 px-6 py-20">
-        <div className="mx-auto max-w-7xl text-center">
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-              Welcome to
-              <span className="block text-blue-500">TwitClone</span>
+      <motion.section
+        ref={targetRef}
+        style={{ opacity, scale, y }}
+        className="relative min-h-screen flex items-center justify-center pt-20 px-6 border-b-4 border-black bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+      >
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 50, rotate: 5 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
+          >
+            <h1 className="text-6xl md:text-9xl font-black mb-8 leading-none tracking-tighter drop-shadow-[4px_4px_0px_rgba(255,255,255,1)]">
+              SCREAM YOUR <br />
+              <span className="text-[#FF6B6B] bg-black px-4 transform -skew-x-6 inline-block mt-2">THOUGHTS</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Share your thoughts, connect with friends, and discover what's happening in the world around you.
-              Join millions of users on the ultimate social platform.
-            </p>
-          </div>
+          </motion.div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button asChild size="lg" className="text-lg px-8 py-4 rounded-full">
-              <Link href="/sign-up">
-                Start Tweeting
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4 rounded-full border-2">
-              Learn More
-            </Button>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="text-xl md:text-3xl font-bold mb-12 max-w-3xl mx-auto bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1"
+          >
+            The rawest, loudest, and most chaotic social platform on the internet.
+            No filters. No algorithm. Just pure, unadulterated noise.
+          </motion.p>
 
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          >
+            <NeoButton href="/sign-up" variant="primary">
+              START SCREAMING
+            </NeoButton>
+            <NeoButton href="#features" variant="secondary">
+              WHAT IS THIS?
+            </NeoButton>
+          </motion.div>
+        </div>
+
+        {/* Decorative Elements */}
+        <div className="absolute top-32 left-10 w-24 h-24 bg-[#4ECDC4] border-4 border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-bounce hidden md:block" />
+        <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#FF6B6B] border-4 border-black rotate-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hidden md:block" />
+      </motion.section>
+
+      {/* Marquee */}
+      <div className="bg-black text-white py-4 border-y-4 border-black overflow-hidden whitespace-nowrap">
+        <motion.div
+          animate={{ x: [0, -1000] }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          className="inline-block text-4xl font-black uppercase tracking-widest"
+        >
+          • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES
+        </motion.div>
+        <motion.div
+          animate={{ x: [0, -1000] }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          className="inline-block text-4xl font-black uppercase tracking-widest"
+        >
+          • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES
+        </motion.div>
+      </div>
+
+      {/* Features Section */}
+      <section id="features" className="py-24 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-5xl md:text-7xl font-black mb-20 text-center uppercase tracking-tight">
+            Why <span className="underline decoration-8 decoration-[#4ECDC4] underline-offset-8">Join Us?</span>
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            <FeatureCard
+              title="Lightning Fast"
+              description="So fast it'll melt your face off. We optimized everything so you can doomscroll at the speed of light."
+              color="bg-[#F7FFF7]"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Lightning Fast</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Experience blazing-fast performance with our optimized platform designed for seamless social interactions.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              }
+            />
+            <FeatureCard
+              title="Global Chaos"
+              description="Connect with weirdos from every corner of the globe. Language barriers? Who cares. Memes are universal."
+              color="bg-[#FFE66D]"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Connect Globally</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Connect with people from around the world. Share ideas, stories, and build meaningful relationships.
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-orange-500 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              }
+            />
+            <FeatureCard
+              title="Stay Woke"
+              description="Or don't. We don't care. Read what's trending or post pictures of your cat. It's your life."
+              color="bg-[#FF6B6B]"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Stay Inspired</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Discover trending topics, breaking news, and creative content that keeps you engaged and informed.
-              </p>
-            </div>
+              }
+            />
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 px-6 bg-[#4ECDC4] border-t-4 border-black">
+        <div className="max-w-5xl mx-auto text-center bg-white border-4 border-black p-12 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)]">
+          <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase">
+            Ready to lose your mind?
+          </h2>
+          <p className="text-xl font-bold mb-10 max-w-2xl mx-auto">
+            Join millions of other users who have already given up on productivity.
+            It's free, it's fun, and it's waiting for you.
+          </p>
+          <NeoButton href="/sign-up" variant="primary" className="text-xl px-12 py-6">
+            GET STARTED NOW
+          </NeoButton>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="relative z-10 px-6 py-8 border-t border-gray-200 dark:border-gray-700">
-        <div className="mx-auto max-w-7xl text-center">
-          <p className="text-gray-600 dark:text-gray-400">
-            © 2025 TwitClone. Built with passion for social connection.
-          </p>
+      <footer className="bg-black text-white py-12 px-6 border-t-4 border-black">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-center md:text-left">
+            <h4 className="text-2xl font-black uppercase mb-2">TwitClone</h4>
+            <p className="font-mono text-sm text-gray-400">© 2025. Built with rage and coffee.</p>
+          </div>
+          <div className="flex gap-6">
+            <a href="#" className="font-bold hover:text-[#FF6B6B] transition-colors">PRIVACY</a>
+            <a href="#" className="font-bold hover:text-[#4ECDC4] transition-colors">TERMS</a>
+            <a href="#" className="font-bold hover:text-[#FFE66D] transition-colors">CONTACT</a>
+          </div>
         </div>
       </footer>
     </div>

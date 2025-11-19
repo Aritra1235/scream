@@ -3,6 +3,8 @@
 import Sidebar from "@/components/Sidebar";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useRef, useEffect } from "react";
+import { UserInitializer } from "@/components/user-initializer";
+import { UserStoreDebug } from "@/components/user-store-debug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,6 +53,8 @@ export default function DashboardLayout({
     >
       <div className="flex w-full max-w-7xl overflow-hidden">
         <Sidebar />
+        <UserInitializer />
+        <UserStoreDebug />
         <main ref={mainRef} className="flex-1 border-x border-neutral-800 min-w-0 overflow-y-auto">
           {children}
         </main>

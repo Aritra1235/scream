@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Feed } from "@/components/posts/Feed";
+import { TweetInput } from "@/components/posts/TweetInput";
 import { authClient } from "@/lib/auth-client";
 
 interface User {
@@ -76,8 +77,11 @@ export default function HomePage() {
                         <h1 className="text-xl font-bold">Home</h1>
                     </div>
 
+
+
                     {/* Feed */}
                     <div className="flex-1 overflow-y-auto">
+                        <TweetInput />
                         <Feed />
                     </div>
                 </div>
