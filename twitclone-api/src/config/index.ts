@@ -52,7 +52,7 @@ const config: Config = {
         bucketName: process.env.AWS_S3_BUCKET_NAME as string,
     },
     misc: {
-        port: parseInt(process.env.PORT || '3000', 10),
+        port: parseInt(process.env.PORT as string, 10),
     },
 
 }
