@@ -16,13 +16,13 @@ const feed = new Elysia({ name: "feed", prefix: apiPrefix })
             const limit = parseInt(query.limit) || 20;
             const offset = parseInt(query.offset) || 0;
 
-            const simpleFeedPosts = await getSimpleFeed(limit, offset);
+            const simpleFeedPosts = await getSimpleFeed(limit, offset, session.user.id);
             return { posts: simpleFeedPosts };
         } catch (error) {
             console.error('Feed error:', error);
             return status(500, { message: "Failed to load feed" });
         }
     })
-    
+
 
 export { feed };

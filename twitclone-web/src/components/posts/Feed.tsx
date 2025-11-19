@@ -18,6 +18,7 @@ interface FeedPost {
     likes: number;
     reposts: number;
     replies: number;
+    liked_by_user: boolean;
   };
 }
 
@@ -60,7 +61,7 @@ export function Feed({ className = '' }: FeedProps) {
 
       const data: FeedResponse = await response.json();
       data.posts.forEach(post => {
-        post.author.avatar_url = process.env.NEXT_PUBLIC_CDN_BASE_URL+"/"+post.author.avatar_url;
+        post.author.avatar_url = process.env.NEXT_PUBLIC_CDN_BASE_URL + "/" + post.author.avatar_url;
       });
 
       if (append) {
@@ -150,12 +151,12 @@ export function Feed({ className = '' }: FeedProps) {
             disabled={isLoading}
             className="w-full py-3 px-4 bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
           >
-          {isLoading ? (
-            <div className="flex items-center justify-center gap-2">
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
                 <Spinner className="size-4" />
                 Loading more posts...
-            </div>
-          ) : (
+              </div>
+            ) : (
               'Load more posts'
             )}
           </button>

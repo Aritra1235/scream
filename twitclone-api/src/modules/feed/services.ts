@@ -18,10 +18,11 @@ interface SimpleFeedPost {
         likes: number;
         reposts: number;
         replies: number;
+        liked_by_user: boolean;
     };
 }
 
-async function getSimpleFeed(limit: number = 20, offset: number = 0): Promise<SimpleFeedPost[]> {
+async function getSimpleFeed(limit: number = 20, offset: number = 0, currentUserId?: string): Promise<SimpleFeedPost[]> {
     try {
         // Get posts with author info first
         const postsWithAuthors = await db.select({
@@ -35,12 +36,12 @@ async function getSimpleFeed(limit: number = 20, offset: number = 0): Promise<Si
             avatar_url: user.avatar_url,
             verified: user.verified,
         })
-        .from(posts)
-        .innerJoin(user, eq(posts.userId, user.id))
-        .where(isNull(posts.parentId)) // Only show top-level posts, not replies
-        .orderBy(desc(posts.createdAt)) // Latest first
-        .limit(limit)
-        .offset(offset);
+            .from(posts)
+            .innerJoin(user, eq(posts.userId, user.id))
+            .where(isNull(posts.parentId)) // Only show top-level posts, not replies
+            .orderBy(desc(posts.createdAt)) // Latest first
+            .limit(limit)
+            .offset(offset);
 
         // Get engagement counts for each post
         const postsWithEngagement = await Promise.all(
@@ -57,11 +58,20 @@ async function getSimpleFeed(limit: number = 20, offset: number = 0): Promise<Si
                     .from(posts)
                     .where(eq(posts.parentId, post.id));
 
+                let likedByUser = false;
+                if (currentUserId) {
+                    const [like] = await db.select()
+                        .from(likes)
+                        .where(and(eq(likes.postId, post.id), eq(likes.userId, BigInt(currentUserId))));
+                    likedByUser = !!like;
+                }
+
                 return {
                     ...post,
                     likeCount: likeCount.count || 0,
                     repostCount: repostCount.count || 0,
                     replyCount: replyCount.count || 0,
+                    likedByUser,
                 };
             })
         );
@@ -82,6 +92,7 @@ async function getSimpleFeed(limit: number = 20, offset: number = 0): Promise<Si
                 likes: post.likeCount,
                 reposts: post.repostCount,
                 replies: post.replyCount,
+                liked_by_user: post.likedByUser,
             },
         }));
     } catch (error) {

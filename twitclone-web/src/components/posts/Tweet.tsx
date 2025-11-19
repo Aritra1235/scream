@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Heart, MessageCircle, Repeat2, Share, MoreHorizontal } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -18,11 +18,51 @@ interface TweetProps {
     likes: number;
     reposts: number;
     replies: number;
+    liked_by_user: boolean;
   };
 }
 
 export function Tweet({ id, content, createdAt, mediaCount, author, engagement }: TweetProps) {
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
+  const [liked, setLiked] = useState(engagement.liked_by_user);
+  const [likesCount, setLikesCount] = useState(engagement.likes);
+  const [isLiking, setIsLiking] = useState(false);
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isLiking) return;
+
+    const originalLiked = liked;
+    const originalCount = likesCount;
+
+    // Optimistic update
+    setLiked(!liked);
+    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+    setIsLiking(true);
+
+    try {
+      const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/like/${liked ? 'unlike' : 'like'}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId: id }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update like status');
+      }
+    } catch (error) {
+      console.error('Error updating like status:', error);
+      // Revert on error
+      setLiked(originalLiked);
+      setLikesCount(originalCount);
+    } finally {
+      setIsLiking(false);
+    }
+  };
 
   return (
     <article className="border-b border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer">
@@ -85,11 +125,14 @@ export function Tweet({ id, content, createdAt, mediaCount, author, engagement }
               <span className="text-sm">{engagement.reposts}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-red-500 transition-colors group">
-              <div className="p-2 rounded-full group-hover:bg-red-500/10 transition-colors">
-                <Heart className="w-4 h-4" />
+            <button
+              onClick={handleLike}
+              className={`flex items-center gap-2 transition-colors group ${liked ? 'text-pink-600' : 'text-muted-foreground hover:text-pink-600'}`}
+            >
+              <div className={`p-2 rounded-full transition-colors ${liked ? 'bg-pink-600/10' : 'group-hover:bg-pink-600/10'}`}>
+                <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
               </div>
-              <span className="text-sm">{engagement.likes}</span>
+              <span className="text-sm">{likesCount}</span>
             </button>
 
             <button className="flex items-center gap-2 text-muted-foreground hover:text-blue-500 transition-colors group">
