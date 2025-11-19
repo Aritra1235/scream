@@ -61,7 +61,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           </div>
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
           <CardDescription className="text-muted-foreground">
-            Sign in to your TwitClone account
+            Sign in to your SCREAM account
           </CardDescription>
         </CardHeader>
 

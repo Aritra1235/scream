@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { UserInitializer } from "@/components/user-initializer";
 import { UserStoreDebug } from "@/components/user-store-debug";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TwitClone - Share Your Thoughts",
-  description: "Join millions on TwitClone - the ultimate social platform to share your thoughts, connect with friends, and discover what's happening around the world.",
+  title: "SCREAM - SCREAM YOUR THOUGHTS",
+  description: "Join millions on Scream - The rawest, loudest, and most chaotic social platform on the internet. No filters. No algorithm. Just pure, unadulterated noise.",
 };
 
 export default function RootLayout({
@@ -25,11 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

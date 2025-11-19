@@ -65,85 +65,81 @@ export function Tweet({ id, content, createdAt, mediaCount, author, engagement }
   };
 
   return (
-    <article className="border-b border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer">
-      <div className="flex gap-3">
+    <article className="border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card">
+      <div className="flex gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
           <img
             src={author.avatar_url || '/default-avatar.png'}
             alt={`${author.display_name || author.username}'s avatar`}
-            className="w-12 h-12 rounded-full object-cover"
+            className="w-12 h-12 border-2 border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] object-cover bg-muted"
           />
         </div>
 
         {/* Tweet Content */}
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-semibold text-foreground hover:underline truncate">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <span className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate">
               {author.display_name || author.username}
             </span>
             {author.verified && (
-              <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
+              <div className="bg-foreground text-background p-0.5 rounded-none border border-border">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
             )}
-            <span className="text-muted-foreground text-sm">
+            <span className="text-muted-foreground font-bold text-sm">
               @{author.username}
             </span>
-            <span className="text-muted-foreground text-sm">·</span>
-            <span className="text-muted-foreground text-sm hover:underline">
+            <span className="text-foreground font-black text-sm">·</span>
+            <span className="text-muted-foreground font-bold text-sm hover:underline decoration-2 underline-offset-2 uppercase">
               {timeAgo}
             </span>
           </div>
 
           {/* Content */}
-          <div className="text-foreground mb-3 whitespace-pre-wrap break-words">
+          <div className="text-foreground text-lg font-medium mb-4 whitespace-pre-wrap break-words leading-relaxed">
             {content}
           </div>
 
-          {/* Media placeholder - will be implemented when media fetching is added */}
+          {/* Media placeholder */}
           {mediaCount > 0 && (
-            <div className="mb-3 bg-muted rounded-lg p-4 text-center text-muted-foreground">
-              {mediaCount} media file{mediaCount > 1 ? 's' : ''} attached
+            <div className="mb-4 bg-muted border-2 border-border p-4 text-center font-bold text-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
+              {mediaCount} MEDIA FILE{mediaCount > 1 ? 'S' : ''} ATTACHED
             </div>
           )}
 
           {/* Engagement Actions */}
-          <div className="flex items-center justify-between max-w-md mt-3">
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-blue-500 transition-colors group">
-              <div className="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
-                <MessageCircle className="w-4 h-4" />
+          <div className="flex items-center justify-between max-w-md mt-2">
+            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group">
+              <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-blue-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
+                <MessageCircle className="w-5 h-5" />
               </div>
-              <span className="text-sm">{engagement.replies}</span>
+              <span className="font-bold text-sm">{engagement.replies}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-green-500 transition-colors group">
-              <div className="p-2 rounded-full group-hover:bg-green-500/10 transition-colors">
-                <Repeat2 className="w-4 h-4" />
+            <button className="flex items-center gap-2 text-foreground hover:text-green-600 transition-colors group">
+              <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-green-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
+                <Repeat2 className="w-5 h-5" />
               </div>
-              <span className="text-sm">{engagement.reposts}</span>
+              <span className="font-bold text-sm">{engagement.reposts}</span>
             </button>
 
             <button
               onClick={handleLike}
-              className={`flex items-center gap-2 transition-colors group ${liked ? 'text-pink-600' : 'text-muted-foreground hover:text-pink-600'}`}
+              className={`flex items-center gap-2 transition-colors group ${liked ? 'text-[#FF6B6B]' : 'text-foreground hover:text-[#FF6B6B]'}`}
             >
-              <div className={`p-2 rounded-full transition-colors ${liked ? 'bg-pink-600/10' : 'group-hover:bg-pink-600/10'}`}>
-                <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
+              <div className={`p-2 border-2 border-transparent transition-all ${liked ? 'bg-[#FF6B6B] border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] text-black' : 'group-hover:border-border group-hover:bg-[#FF6B6B] group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]'}`}>
+                <Heart className={`w-5 h-5 ${liked ? 'fill-black' : ''}`} />
               </div>
-              <span className="text-sm">{likesCount}</span>
+              <span className="font-bold text-sm">{likesCount}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-blue-500 transition-colors group">
-              <div className="p-2 rounded-full group-hover:bg-blue-500/10 transition-colors">
-                <Share className="w-4 h-4" />
-              </div>
-            </button>
-
-            <button className="flex items-center gap-2 text-muted-foreground hover:text-muted-foreground transition-colors group">
-              <div className="p-2 rounded-full group-hover:bg-muted transition-colors">
-                <MoreHorizontal className="w-4 h-4" />
+            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group">
+              <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-blue-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
+                <Share className="w-5 h-5" />
               </div>
             </button>
           </div>

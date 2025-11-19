@@ -90,7 +90,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-primary-foreground font-bold text-lg">T</span>
           </div>
-          <CardTitle className="text-2xl font-bold">Join TwitClone</CardTitle>
+          <CardTitle className="text-2xl font-bold">Join SCREAM</CardTitle>
           <CardDescription className="text-muted-foreground">
             Create your account to get started
           </CardDescription>

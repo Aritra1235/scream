@@ -28,7 +28,7 @@ export default function DashboardLayout({
       const target = e.target as HTMLElement;
       const sidebar = document.querySelector('aside');
       const rightSide = document.querySelector('[data-right-side]');
-      
+
       if ((sidebar?.contains(target) || rightSide?.contains(target)) && mainRef.current) {
         e.preventDefault();
         mainRef.current.scrollTop += e.deltaY;
@@ -49,13 +49,18 @@ export default function DashboardLayout({
 
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-black text-white overflow-hidden`}
+      className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-background text-foreground overflow-hidden`}
     >
       <div className="flex w-full max-w-7xl overflow-hidden">
         <Sidebar />
         <UserInitializer />
-        <UserStoreDebug />
-        <main ref={mainRef} className="flex-1 border-x border-neutral-800 min-w-0 overflow-y-auto">
+        {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
+          <>
+            <UserStoreDebug />
+            {console.log('NEXT_PUBLIC_NODE_ENV', process.env.NEXT_PUBLIC_NODE_ENV)}
+          </>
+        )}
+        <main ref={mainRef} className="flex-1 border-x-4 border-border bg-card min-w-0 overflow-y-auto">
           {children}
         </main>
         <div className="hidden xl:block w-80 lg:w-96" data-right-side></div>
@@ -63,4 +68,3 @@ export default function DashboardLayout({
     </div>
   );
 }
-

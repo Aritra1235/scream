@@ -53,38 +53,23 @@ export default function HomePage() {
         checkAuth();
     }, [router]);
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-background">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">Loading...</p>
-                </div>
-            </div>
-        );
-    }
+    
 
     if (!user) {
         return null; // This shouldn't render as we redirect, but just in case
     }
 
     return (
-        <div className="h-screen flex flex-col bg-background">
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="max-w-2xl mx-auto w-full border-x border-border flex flex-col flex-1 overflow-hidden">
-                    {/* Header */}
-                    <div className="sticky top-0 bg-background/80 backdrop-blur-sm border-b border-border px-4 py-3 z-10">
-                        <h1 className="text-xl font-bold">Home</h1>
-                    </div>
+        <div className="flex flex-col bg-card min-h-full">
+            {/* Header */}
+            <div className="sticky top-0 bg-card/90 backdrop-blur-sm border-b-4 border-border px-6 py-4 z-10">
+                <h1 className="text-2xl font-black uppercase tracking-tight">Home</h1>
+            </div>
 
-
-
-                    {/* Feed */}
-                    <div className="flex-1 overflow-y-auto">
-                        <TweetInput />
-                        <Feed />
-                    </div>
-                </div>
+            {/* Feed */}
+            <div className="flex-1">
+                <TweetInput />
+                <Feed />
             </div>
         </div>
     );

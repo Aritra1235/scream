@@ -62,10 +62,10 @@ export default function Sidebar() {
 
   return (
     <>
-      <aside className="hidden h-screen border-r border-neutral-800 px-4 py-3 text-neutral-50 sm:flex sm:w-64 lg:w-72 overflow-hidden sticky top-0">
+      <aside className="hidden h-screen px-4 py-3 text-foreground sm:flex sm:w-64 lg:w-72 overflow-hidden sticky top-0">
         <nav className="flex flex-col w-full h-full">
-          <div className="mb-2 text-2xl font-bold px-3 py-2">Twitr</div>
-          <ul className="flex flex-col gap-2 mt-4">
+          <div className="mb-2 text-3xl font-black px-3 py-2 uppercase tracking-tighter">SCREAM</div>
+          <ul className="flex flex-col gap-4 mt-4">
             {navItems.map((item) => {
               const isActive =
                 pathname === item.href ||
@@ -75,15 +75,15 @@ export default function Sidebar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`group flex items-center gap-5 rounded-full px-4 py-3 text-xl transition-colors ${isActive
-                      ? "font-bold text-white"
-                      : "font-normal text-neutral-50 hover:bg-neutral-900"
+                    className={`group flex items-center gap-4 rounded-none border-2 border-transparent px-4 py-3 text-xl transition-all duration-200 ${isActive
+                      ? "font-black bg-[#4ECDC4] border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] -translate-y-1 translate-x-1"
+                      : "font-bold hover:bg-card hover:border-border hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:translate-x-1"
                       }`}
                   >
                     <span>
                       {isActive ? item.activeIcon : item.icon}
                     </span>
-                    <span className="hidden md:inline">{item.label}</span>
+                    <span className="hidden md:inline uppercase tracking-tight">{item.label}</span>
                   </Link>
                 </li>
               );
@@ -92,12 +92,12 @@ export default function Sidebar() {
 
           <Button
             onClick={() => setIsModalOpen(true)}
-            className="mt-8 w-full bg-blue-500 text-white text-lg font-bold py-6 rounded-full hover:bg-blue-600 transition-colors shadow-lg"
+            className="mt-8 w-full bg-[#FF6B6B] text-black text-xl font-black py-8 rounded-none border-4 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:bg-[#FF8787] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] active:translate-y-0 active:translate-x-0 active:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:active:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all"
           >
-            <span className="hidden md:inline">Post</span>
+            <span className="hidden md:inline uppercase">Scream</span>
             <span className="md:hidden">
               <svg
-                className="w-5 h-5"
+                className="w-6 h-6"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -108,8 +108,8 @@ export default function Sidebar() {
 
           {user && (
             <div className="mt-auto mb-4">
-              <button className="flex items-center gap-3 w-full p-3 rounded-full hover:bg-neutral-900 transition-colors text-left group">
-                <div className="h-10 w-10 rounded-full bg-neutral-700 overflow-hidden">
+              <button className="flex items-center gap-3 w-full p-3 border-2 border-border bg-card shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] transition-all text-left group">
+                <div className="h-10 w-10 border-2 border-border bg-muted overflow-hidden">
                   {user.avatar_url ? (
                     <img
                       src={user.avatar_url}
@@ -117,19 +117,19 @@ export default function Sidebar() {
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-blue-400 to-purple-500" />
+                    <div className="h-full w-full bg-[#FFE66D]" />
                   )}
                 </div>
                 <div className="hidden md:block flex-1 min-w-0">
-                  <div className="font-bold text-sm truncate text-white">
+                  <div className="font-black text-sm truncate text-foreground uppercase">
                     {user.name}
                   </div>
-                  <div className="text-neutral-500 text-sm truncate">
+                  <div className="text-muted-foreground text-sm truncate font-bold">
                     @{user.username}
                   </div>
                 </div>
                 <div className="hidden md:block">
-                  <MoreHorizontal className="h-5 w-5 text-neutral-500 group-hover:text-white transition-colors" />
+                  <MoreHorizontal className="h-5 w-5 text-foreground" />
                 </div>
               </button>
             </div>

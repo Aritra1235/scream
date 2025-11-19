@@ -137,7 +137,7 @@ export function Feed({ className = '' }: FeedProps) {
 
   return (
     <div className={className}>
-      <div className="divide-y divide-border">
+      <div className="divide-y-4 divide-black">
         {posts.map((post) => (
           <Tweet key={post.id} {...post} />
         ))}
@@ -145,19 +145,19 @@ export function Feed({ className = '' }: FeedProps) {
 
       {/* Load More Button */}
       {hasMore && (
-        <div className="p-4 border-t border-border">
+        <div className="p-6 border-t-4 border-black">
           <button
             onClick={loadMore}
             disabled={isLoading}
-            className="w-full py-3 px-4 bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors"
+            className="w-full py-4 px-6 bg-[#FFE66D] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#ffd93d] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none text-lg font-black uppercase transition-all"
           >
             {isLoading ? (
               <div className="flex items-center justify-center gap-2">
-                <Spinner className="size-4" />
-                Loading more posts...
+                <Spinner className="size-6" />
+                LOADING...
               </div>
             ) : (
-              'Load more posts'
+              'LOAD MORE SCREAMS'
             )}
           </button>
         </div>

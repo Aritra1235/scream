@@ -54,9 +54,9 @@ export function TweetInput() {
     if (!user) return null;
 
     return (
-        <div className="border-b border-neutral-800 px-4 py-4">
+        <div className="border-b-4 border-border px-4 py-6 bg-card">
             <div className="flex gap-4">
-                <div className="h-10 w-10 rounded-full bg-neutral-700 overflow-hidden flex-shrink-0">
+                <div className="h-12 w-12 border-2 border-border bg-muted overflow-hidden flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]">
                     {user.avatar_url ? (
                         <img
                             src={user.avatar_url}
@@ -64,40 +64,40 @@ export function TweetInput() {
                             className="h-full w-full object-cover"
                         />
                     ) : (
-                        <div className="h-full w-full bg-gradient-to-br from-blue-400 to-purple-500" />
+                        <div className="h-full w-full bg-[#FFE66D]" />
                     )}
                 </div>
                 <div className="flex-1">
                     <Textarea
-                        placeholder="What's happening?"
+                        placeholder="WHAT'S ON YOUR MIND?"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="min-h-[50px] w-full resize-none border-none bg-transparent dark:bg-transparent p-0 text-xl placeholder:text-neutral-500 focus-visible:ring-0"
+                        className="min-h-[100px] w-full resize-none border-4 border-border bg-background p-4 text-xl font-bold placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:focus-visible:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-shadow rounded-none"
                     />
-                    <div className="mt-2 flex items-center justify-between border-t border-neutral-800 pt-3">
-                        <div className="flex gap-2 text-blue-400">
-                            <button className="rounded-full p-2 hover:bg-blue-500/10 transition-colors">
-                                <ImageIcon className="h-5 w-5" />
+                    <div className="mt-4 flex items-center justify-between">
+                        <div className="flex gap-2 text-foreground">
+                            <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
+                                <ImageIcon className="h-6 w-6" />
                             </button>
-                            <button className="rounded-full p-2 hover:bg-blue-500/10 transition-colors">
-                                <FileVideo className="h-5 w-5" />
+                            <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
+                                <FileVideo className="h-6 w-6" />
                             </button>
-                            <button className="rounded-full p-2 hover:bg-blue-500/10 transition-colors">
-                                <Smile className="h-5 w-5" />
+                            <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
+                                <Smile className="h-6 w-6" />
                             </button>
-                            <button className="rounded-full p-2 hover:bg-blue-500/10 transition-colors">
-                                <Calendar className="h-5 w-5" />
+                            <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
+                                <Calendar className="h-6 w-6" />
                             </button>
-                            <button className="rounded-full p-2 hover:bg-blue-500/10 transition-colors">
-                                <MapPin className="h-5 w-5" />
+                            <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
+                                <MapPin className="h-6 w-6" />
                             </button>
                         </div>
                         <Button
                             onClick={handlePost}
                             disabled={!content.trim() || isPosting}
-                            className="rounded-full bg-blue-500 px-6 font-bold text-white hover:bg-blue-600 disabled:opacity-50"
+                            className="rounded-none border-2 border-border bg-[#4ECDC4] px-8 py-6 font-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:bg-[#45b8b0] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:disabled:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all uppercase"
                         >
-                            {isPosting ? "Posting..." : "Post"}
+                            {isPosting ? "SCREAMING..." : "SCREAM"}
                         </Button>
                     </div>
                 </div>

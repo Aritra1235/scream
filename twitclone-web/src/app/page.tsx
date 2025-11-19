@@ -63,7 +63,7 @@ export default function LandingPage() {
             <div className="w-10 h-10 bg-black flex items-center justify-center text-white font-black text-xl">
               T
             </div>
-            <span className="text-2xl font-black uppercase tracking-tighter">TwitClone</span>
+            <span className="text-2xl font-black uppercase tracking-tighter">SCREAM</span>
           </div>
           <div className="hidden md:flex items-center gap-8 font-bold">
             <a href="#features" className="hover:underline decoration-4 underline-offset-4 decoration-[#FF6B6B]">Features</a>
@@ -204,7 +204,7 @@ export default function LandingPage() {
       <footer className="bg-black text-white py-12 px-6 border-t-4 border-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
-            <h4 className="text-2xl font-black uppercase mb-2">TwitClone</h4>
+            <h4 className="text-2xl font-black uppercase mb-2">SCREAM</h4>
             <p className="font-mono text-sm text-gray-400">© 2025. Built with rage and coffee.</p>
           </div>
           <div className="flex gap-6">
