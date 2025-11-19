@@ -15,6 +15,8 @@ import { username } from "./modules/username";
 import { apiKeyModule } from "./modules/apikey";
 import { profile } from "./profile";  
 
+console.log('config', config);
+
 
 const app = new Elysia()
   .get('/', () => 'Hello World!')
