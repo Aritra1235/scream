@@ -22,7 +22,7 @@ const app = new Elysia()
   .get('/', () => 'Hello World!')
   .use(
     cors({
-      origin: "http://localhost:3001",
+      origin: ["http://localhost:3000", config.misc.webUrl],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],

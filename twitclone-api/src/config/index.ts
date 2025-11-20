@@ -24,6 +24,7 @@ interface Config {
     };
     misc:{
         port: number;
+        webUrl: string;
     }
 }
 
@@ -53,6 +54,7 @@ const config: Config = {
     },
     misc: {
         port: parseInt(process.env.PORT as string, 10),
+        webUrl: process.env.WEB_URL as string,
     },
 
 }
