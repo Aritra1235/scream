@@ -149,7 +149,7 @@ export function Feed({ className = '' }: FeedProps) {
           <button
             onClick={loadMore}
             disabled={isLoading}
-            className="w-full py-4 px-6 bg-[#FFE66D] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#ffd93d] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none text-lg font-black uppercase transition-all"
+            className="w-full py-4 px-6 bg-[#FFE66D] border-4 text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-[#ffd93d] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-none text-lg font-black uppercase transition-all"
           >
             {isLoading ? (
               <div className="flex items-center justify-center gap-2">
