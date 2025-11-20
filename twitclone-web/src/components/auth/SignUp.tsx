@@ -85,12 +85,12 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
   return (
     <div className={`w-full max-w-md mx-auto ${className}`}>
-      <Card className="border-0 shadow-2xl">
+      <Card className="border-0 shadow-2xl bg-card">
         <CardHeader className="text-center pb-8">
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-primary-foreground font-bold text-lg">T</span>
+            <span className="text-primary-foreground font-bold text-lg">S</span>
           </div>
-          <CardTitle className="text-2xl font-bold">Join SCREAM</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">Join SCREAM</CardTitle>
           <CardDescription className="text-muted-foreground">
             Create your account to get started
           </CardDescription>
@@ -100,9 +100,8 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Field */}
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-foreground">Full Name</Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="name"
                   type="text"
@@ -110,7 +109,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                   value={formData.name}
                   onChange={handleInputChange("name")}
                   disabled={isLoading}
-                  className="pl-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
               </div>
@@ -118,9 +117,8 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email" className="text-foreground">Email address</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
@@ -128,7 +126,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                   value={formData.email}
                   onChange={handleInputChange("email")}
                   disabled={isLoading}
-                  className="pl-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
               </div>
@@ -136,7 +134,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -145,21 +143,21 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                   value={formData.password}
                   onChange={handleInputChange("password")}
                   disabled={isLoading}
-                  className="pr-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="group absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    <EyeOff className="h-4 w-4 text-foreground group-active:scale-90" />
                   ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <Eye className="h-4 w-4 text-foreground group-active:scale-90" />
                   )}
                 </Button>
               </div>
@@ -167,7 +165,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Confirm Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-foreground">Confirm Password</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -176,21 +174,21 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                   value={formData.confirmPassword}
                   onChange={handleInputChange("confirmPassword")}
                   disabled={isLoading}
-                  className="pr-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="group absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={isLoading}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    <EyeOff className="h-4 w-4 text-foreground group-active:scale-90" />
                   ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <Eye className="h-4 w-4 text-foreground group-active:scale-90" />
                   )}
                 </Button>
               </div>
@@ -203,18 +201,18 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                 checked={agreeToTerms}
                 onCheckedChange={(checked) => setAgreeToTerms(checked === true)}
                 disabled={isLoading}
-                className="mt-1"
+                className="mt-1 border-foreground/20"
               />
               <Label
                 htmlFor="terms"
-                className="text-sm font-normal leading-5 cursor-pointer"
+                className="text-sm font-normal leading-5 cursor-pointer text-foreground"
               >
                 I agree to the{" "}
-                <Button variant="link" className="p-0 h-auto text-sm underline">
+                <Button variant="link" className="p-0 h-auto text-sm underline text-primary hover:text-primary/80">
                   Terms of Service
                 </Button>{" "}
                 and{" "}
-                <Button variant="link" className="p-0 h-auto text-sm underline">
+                <Button variant="link" className="p-0 h-auto text-sm underline text-primary hover:text-primary/80">
                   Privacy Policy
                 </Button>
               </Label>
@@ -241,10 +239,10 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
+              <Separator className="w-full bg-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-card px-2 text-muted-foreground">
                 Already have an account?
               </span>
             </div>
@@ -254,7 +252,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full border-border text-foreground hover:bg-accent"
             disabled={isLoading}
             onClick={onSignInClick}
           >

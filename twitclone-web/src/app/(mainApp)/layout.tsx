@@ -5,6 +5,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { useRef, useEffect } from "react";
 import { UserInitializer } from "@/components/user-initializer";
 import { UserStoreDebug } from "@/components/user-store-debug";
+import { useUserStore } from "@/store/user-store";
+import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,6 +25,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const mainRef = useRef<HTMLDivElement>(null);
+  const { user, isLoading } = useUserStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/sign-in");
+    }
+  }, [isLoading, user]);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -45,26 +56,36 @@ export default function DashboardLayout({
         container.removeEventListener('wheel', handleWheel);
       }
     };
-  }, []);
+  }, [isLoading]);
 
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-background text-foreground overflow-hidden`}
-    >
-      <div className="flex w-full max-w-7xl overflow-hidden">
-        <Sidebar />
-        <UserInitializer />
-        {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
-          <>
-            <UserStoreDebug />
-            {console.log('NEXT_PUBLIC_NODE_ENV', process.env.NEXT_PUBLIC_NODE_ENV)}
-          </>
-        )}
-        <main ref={mainRef} className="flex-1 border-x-4 border-border bg-card min-w-0 overflow-y-auto">
-          {children}
-        </main>
-        <div className="hidden xl:block w-80 lg:w-96" data-right-side></div>
-      </div>
-    </div>
+    <>
+      <UserInitializer />
+      {isLoading ? (
+        <div className={`${geistSans.variable} ${geistMono.variable} flex h-screen w-full items-center justify-center bg-background text-foreground`}>
+          <Spinner className="size-10" />
+        </div>
+      ) : !user ? (
+        null
+      ) : (
+        <div
+          className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-background text-foreground overflow-hidden`}
+        >
+          <div className="flex w-full max-w-7xl overflow-hidden">
+            <Sidebar />
+            {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
+              <>
+                <UserStoreDebug />
+                {console.log('NEXT_PUBLIC_NODE_ENV', process.env.NEXT_PUBLIC_NODE_ENV)}
+              </>
+            )}
+            <main ref={mainRef} className="flex-1 border-x-4 border-border bg-card min-w-0 overflow-y-auto">
+              {children}
+            </main>
+            <div className="hidden xl:block w-80 lg:w-96" data-right-side></div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

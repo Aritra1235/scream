@@ -22,7 +22,7 @@ export default function SignUpPage() {
       }
     };
     checkAuth();
-  }, [router]); 
+  }, []); 
 
   if (checking) {
     return (

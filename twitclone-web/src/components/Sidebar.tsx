@@ -54,11 +54,7 @@ const navItems: NavItem[] = [
 export default function Sidebar() {
   const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user, fetchUser } = useUserStore();
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+  const { user } = useUserStore();
 
   return (
     <>

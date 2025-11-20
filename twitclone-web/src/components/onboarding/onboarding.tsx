@@ -90,7 +90,7 @@ export default function Onboarding() {
         return () => {
             isMounted = false;
         };
-    }, [router]);
+    }, []);
 
     // Debounced username validation
     useEffect(() => {
@@ -394,15 +394,15 @@ export default function Onboarding() {
                     </p>
                 </div>
 
-                <Card className="shadow-2xl shadow-primary/5 border-0">
+                <Card className="shadow-2xl shadow-primary/5 border-0 bg-card">
                     <CardHeader className="text-center pb-6">
-                        <CardTitle className="text-2xl">
+                        <CardTitle className="text-2xl text-foreground">
                             {currentStep === 'username' && 'Choose your username'}
                             {currentStep === 'displayName' && 'What should we call you?'}
                             {currentStep === 'bio' && 'Tell us about yourself'}
                             {currentStep === 'images' && 'Customize your profile'}
                         </CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-muted-foreground">
                             {currentStep === 'username' && 'This will be your unique @username'}
                             {currentStep === 'displayName' && 'This is how others will see your name'}
                             {currentStep === 'bio' && 'Write a short bio (optional)'}
@@ -421,14 +421,14 @@ export default function Onboarding() {
                         {currentStep === 'username' && (
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="username">Username</Label>
+                                    <Label htmlFor="username" className="text-foreground">Username</Label>
                                     <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-bold pointer-events-none">@</span>
                                         <Input
                                             id="username"
                                             value={data.username}
                                             onChange={(e) => setData(prev => ({ ...prev, username: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '') }))}
-                                            className="pl-8"
+                                            className="pl-8 bg-background text-foreground"
                                             placeholder="yourusername"
                                             disabled={isSubmitting}
                                         />
@@ -446,7 +446,7 @@ export default function Onboarding() {
                                         className="w-full"
                                         disabled={isSubmitting || isCheckingUsername || !!usernameError || data.username.length < 3}
                                     >
-                                        {isCheckingUsername ? <Spinner className="mr-2" /> : null}
+                                        {isCheckingUsername ? <Spinner className="mr-2 h-4 w-4" /> : null}
                                         {isCheckingUsername ? 'Checking...' : 'Continue'}
                                         {!isCheckingUsername && <ChevronRight className="w-4 h-4 ml-2" />}
                                     </Button>
@@ -458,13 +458,14 @@ export default function Onboarding() {
                         {currentStep === 'displayName' && (
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="displayName">Display Name</Label>
+                                    <Label htmlFor="displayName" className="text-foreground">Display Name</Label>
                                     <Input
                                         id="displayName"
                                         value={data.displayName}
                                         onChange={(e) => setData(prev => ({ ...prev, displayName: e.target.value }))}
                                         placeholder="Your display name"
                                         disabled={isSubmitting}
+                                        className="bg-background text-foreground"
                                     />
                                 </div>
                                 <div className="flex gap-2 pt-10">
@@ -472,6 +473,7 @@ export default function Onboarding() {
                                         variant="outline"
                                         onClick={() => setCurrentStep('username')}
                                         disabled={isSubmitting}
+                                        className="border-border text-foreground hover:bg-accent"
                                     >
                                         <ChevronLeft className="w-4 h-4 mr-2" />
                                         Back
@@ -492,13 +494,13 @@ export default function Onboarding() {
                         {currentStep === 'bio' && (
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="bio">Bio</Label>
+                                    <Label htmlFor="bio" className="text-foreground">Bio</Label>
                                     <Textarea
                                         id="bio"
                                         value={data.bio}
                                         onChange={(e) => setData(prev => ({ ...prev, bio: e.target.value }))}
                                         placeholder="Tell us a bit about yourself..."
-                                        className="min-h-[100px] resize-none"
+                                        className="min-h-[100px] resize-none bg-background text-foreground"
                                         disabled={isSubmitting}
                                         maxLength={160}
                                     />
@@ -511,6 +513,7 @@ export default function Onboarding() {
                                         variant="outline"
                                         onClick={() => setCurrentStep('displayName')}
                                         disabled={isSubmitting}
+                                        className="border-border text-foreground hover:bg-accent"
                                     >
                                         <ChevronLeft className="w-4 h-4 mr-2" />
                                         Back
@@ -531,21 +534,21 @@ export default function Onboarding() {
                         {currentStep === 'images' && (
                             <div className="space-y-6">
                                 {/* Profile Preview */}
-                                <div className="relative w-full"> {/* Removed overflow-hidden and border from here */}
+                                <div className="relative w-full">
                                     {/* Banner Area */}
                                     <label htmlFor="banner-picture" className="cursor-pointer">
-                                        <div className="relative h-36 w-full bg-muted-foreground/10 flex items-center justify-center text-muted-foreground hover:bg-muted-foreground/20 transition-all rounded-lg overflow-hidden border bg-muted"> {/* Added rounding, overflow, and border here */}
+                                        <div className="relative h-36 w-full bg-muted/50 flex items-center justify-center text-foreground hover:bg-muted/70 transition-all rounded-lg overflow-hidden border-2 border-border">
                                             {bannerPreview ? (
                                                 <img src={bannerPreview} alt="Banner preview" className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="text-center">
-                                                    <ImageIcon className="w-8 h-8 mx-auto" />
-                                                    <span className="text-xs">Upload Banner</span>
+                                                    <ImageIcon className="w-8 h-8 mx-auto text-foreground" />
+                                                    <span className="text-xs text-foreground font-medium">Upload Banner</span>
                                                 </div>
                                             )}
                                             {isUploadingBanner && (
                                                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                                    <Spinner className="text-white" />
+                                                    <Spinner className="text-white h-6 w-6" />
                                                 </div>
                                             )}
                                         </div>
@@ -554,15 +557,15 @@ export default function Onboarding() {
                                     {/* Avatar Area - Now a sibling to the label, will overlay without being clipped */}
                                     <div className="absolute top-24 left-4">
                                         <label htmlFor="profile-picture" className="cursor-pointer">
-                                            <div className="relative w-24 h-24 rounded-full bg-muted border-4 border-card flex items-center justify-center text-muted-foreground overflow-hidden hover:opacity-90 transition-all">
+                                            <div className="relative w-24 h-24 rounded-full bg-muted border-4 border-card flex items-center justify-center text-foreground overflow-hidden hover:opacity-90 transition-all shadow-lg">
                                                 {avatarPreview ? (
                                                     <img src={avatarPreview} alt="Avatar preview" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <User className="w-10 h-10" />
+                                                    <User className="w-10 h-10 text-foreground" />
                                                 )}
                                                 {isUploadingAvatar && (
                                                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                                        <Spinner className="text-white" />
+                                                        <Spinner className="text-white h-6 w-6" />
                                                     </div>
                                                 )}
                                             </div>
@@ -594,6 +597,7 @@ export default function Onboarding() {
                                         variant="outline"
                                         onClick={() => setCurrentStep('bio')}
                                         disabled={isSubmitting || isUploadingAvatar || isUploadingBanner}
+                                        className="border-border text-foreground hover:bg-accent"
                                     >
                                         <ChevronLeft className="w-4 h-4 mr-2" />
                                         Back
@@ -603,7 +607,7 @@ export default function Onboarding() {
                                         className="flex-1"
                                         disabled={isSubmitting || isUploadingAvatar || isUploadingBanner}
                                     >
-                                        {isSubmitting ? <Spinner className="mr-2" /> : null}
+                                        {isSubmitting ? <Spinner className="mr-2 h-4 w-4" /> : null}
                                         {isSubmitting ? 'Completing...' : 'Complete Setup'}
                                         {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
                                     </Button>

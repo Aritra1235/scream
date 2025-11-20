@@ -148,8 +148,8 @@ export function TweetModal({
 
               <div className="border-t-4 border-border pt-4 flex items-center justify-between">
                 <div className="flex gap-2 text-foreground">
-                  <button className="border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5">
-                    <ImageIcon className="h-6 w-6" />
+                  <button className="group border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5 active:scale-95">
+                    <ImageIcon className="h-6 w-6 text-foreground" />
                   </button>
                 </div>
 

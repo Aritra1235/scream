@@ -23,7 +23,7 @@ export default function SignInPage() {
     };
 
     checkAuth();
-  }, [router]);
+  }, []);
 
   const handleSuccess = () => {
     router.push("/onboarding");

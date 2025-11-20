@@ -54,12 +54,12 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
 
   return (
     <div className={`w-full max-w-md mx-auto ${className}`}>
-      <Card className="border-0 shadow-2xl">
+      <Card className="border-0 shadow-2xl bg-card">
         <CardHeader className="text-center pb-8">
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-primary-foreground font-bold text-lg">T</span>
+            <span className="text-primary-foreground font-bold text-lg">S</span>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">Welcome back</CardTitle>
           <CardDescription className="text-muted-foreground">
             Sign in to your SCREAM account
           </CardDescription>
@@ -69,9 +69,8 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email" className="text-foreground">Email address</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
@@ -79,7 +78,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="pl-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
               </div>
@@ -87,7 +86,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-foreground">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -96,21 +95,21 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
-                  className="pr-10"
+                  className="pr-10 bg-background text-foreground"
                   required
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="group absolute right-0 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    <EyeOff className="h-4 w-4 text-foreground group-active:scale-90" />
                   ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground" />
+                    <Eye className="h-4 w-4 text-foreground group-active:scale-90" />
                   )}
                 </Button>
               </div>
@@ -124,10 +123,11 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
                   checked={rememberMe}
                   onCheckedChange={(checked) => setRememberMe(checked === true)}
                   disabled={isLoading}
+                  className="border-foreground/20"
                 />
                 <Label
                   htmlFor="remember"
-                  className="text-sm font-normal cursor-pointer"
+                  className="text-sm font-normal cursor-pointer text-foreground"
                 >
                   Remember me
                 </Label>
@@ -135,7 +135,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
               <Button
                 type="button"
                 variant="link"
-                className="p-0 h-auto text-sm"
+                className="p-0 h-auto text-sm text-primary hover:text-primary/80"
                 disabled={isLoading}
               >
                 Forgot password?
@@ -163,10 +163,10 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
+              <Separator className="w-full bg-border" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-card px-2 text-muted-foreground">
                 Don't have an account?
               </span>
             </div>
@@ -176,7 +176,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full border-border text-foreground hover:bg-accent"
             disabled={isLoading}
             onClick={onSignUpClick}
           >
