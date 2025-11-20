@@ -6,7 +6,7 @@ import * as schema from "../db/schema";
 import { generateId } from "./snowflake";
 
 export const auth = betterAuth({
-    trustedOrigins: ["http://localhost:3001"],
+    trustedOrigins: ["http://localhost:3000", "https://scream.aritra.ovh"],
     database: drizzleAdapter(db, {
         provider: "pg",
         schema: schema,
