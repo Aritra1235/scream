@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { userIdSchema, onboardingSchema } from './model';
-import { checkIfUserOnboarded, onboardUser } from './service';
+import { checkIfUserOnboardedAndEmailVerified, onboardUser } from './service';
 import { auth } from '../../utils/auth';
 import { apiPrefix } from '../../utils/const';
 import { normalizeUsername } from '../../utils/normalize';
@@ -18,7 +18,10 @@ const onboarding = new Elysia({ name: "onboarding", prefix: apiPrefix })
         if (BigInt(userId) !== BigInt(params.userId)) {
             return status(403, { message: "Forbidden: Not your own user" });
         }
-        const onboarded = await checkIfUserOnboarded(BigInt(params.userId));
+        if (!session.user.emailVerified) {
+            return status(403, { message: "Email not verified" });
+        }
+        const onboarded = await checkIfUserOnboardedAndEmailVerified(BigInt(params.userId));
         
         if (onboarded) {
             return { message: "User already onboarded", onboarded: onboarded }
@@ -34,6 +37,9 @@ const onboarding = new Elysia({ name: "onboarding", prefix: apiPrefix })
         });
         if (!session) {
             return status(401, { message: "Unauthorized" });
+        }
+        if (!session.user.emailVerified) {
+            return status(403, { message: "Email not verified" });
         }
         const userId = session?.user.id;
         const onboarded = await onboardUser(BigInt(userId), normalizeUsername(body.username), body.display_name, body.bio ?? null, body.avatar_url ?? null, body.banner_url ?? null);

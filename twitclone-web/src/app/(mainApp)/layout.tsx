@@ -25,14 +25,21 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const mainRef = useRef<HTMLDivElement>(null);
-  const { user, isLoading } = useUserStore();
+  const { user, isLoading, needsEmailVerification } = useUserStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (isLoading) {
+      return;
+    }
+    if (needsEmailVerification) {
+      router.push("/verify-email");
+      return;
+    }
+    if (!user) {
       router.push("/sign-in");
     }
-  }, [isLoading, user]);
+  }, [isLoading, user, needsEmailVerification, router]);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {

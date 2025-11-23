@@ -11,6 +11,9 @@ const profile = new Elysia({ name: "profile", prefix: apiPrefix })
         if (!session) {
             return status(401, { message: "Unauthorized" });
         }
+        if (!session.user.emailVerified) {
+            return status(403, { message: "Email not verified" });
+        }
         const userId = session?.user.id;
         const user = await getUser(BigInt(userId));
         return { user };

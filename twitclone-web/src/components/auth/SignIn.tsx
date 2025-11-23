@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, Loader2, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +43,14 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
       });
 
       if (result.error) {
+        const status = (result.error as any)?.status;
+        if (status === 403) {
+          onError?.("Please verify your email address before signing in.");
+          const query = new URLSearchParams();
+          query.set("email", email);
+          router.push(`/verify-email?${query.toString()}`);
+          return;
+        }
         onError?.(result.error.message || "Sign in failed");
       } else {
         onSuccess?.();

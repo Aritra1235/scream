@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SCREAM - SCREAM YOUR THOUGHTS",
-  description: "Join millions on Scream - The rawest, loudest, and most chaotic social platform on the internet. No filters. No algorithm. Just pure, unadulterated noise.",
+  description: "Join millions on Scream - The rawest, loudest, and most chaotic social platform on the internet. No filters. Transparent algorithms. Just pure, unadulterated noise.",
 };
 
 export default function RootLayout({

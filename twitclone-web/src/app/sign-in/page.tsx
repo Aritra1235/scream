@@ -16,14 +16,20 @@ export default function SignInPage() {
       const session = await authClient.getSession();
 
       if (session.data?.session) {
-        router.push("/home");
+        if (session.data.user?.emailVerified) {
+          router.push("/home");
+        } else {
+          const email = session.data.user?.email;
+          const query = email ? `?email=${encodeURIComponent(email)}` : "";
+          router.push(`/verify-email${query}`);
+        }
       } else {
         setChecking(false); 
       }
     };
 
     checkAuth();
-  }, []);
+  }, [router]);
 
   const handleSuccess = () => {
     router.push("/onboarding");

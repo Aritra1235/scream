@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, Loader2, User, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 
 interface SignUpProps {
-  onSuccess?: () => void;
+  onSuccess?: (email: string) => void;
   onError?: (error: string) => void;
   onSignInClick?: () => void;
   className?: string;
@@ -74,7 +75,7 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
       if (result.error) {
         onError?.(result.error.message || "Sign up failed");
       } else {
-        onSuccess?.();
+        onSuccess?.(formData.email);
       }
     } catch (error) {
       onError?.("An unexpected error occurred");
@@ -208,13 +209,21 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
                 className="text-sm font-normal leading-5 cursor-pointer text-foreground"
               >
                 I agree to the{" "}
-                <Button variant="link" className="p-0 h-auto text-sm underline text-primary hover:text-primary/80">
+                <Link
+                  href="/terms"
+                  className="text-primary hover:text-primary/80 underline"
+                  target="_blank"
+                >
                   Terms of Service
-                </Button>{" "}
+                </Link>{" "}
                 and{" "}
-                <Button variant="link" className="p-0 h-auto text-sm underline text-primary hover:text-primary/80">
+                <Link
+                  href="/privacy"
+                  className="text-primary hover:text-primary/80 underline"
+                  target="_blank"
+                >
                   Privacy Policy
-                </Button>
+                </Link>
               </Label>
             </div>
 

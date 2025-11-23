@@ -184,9 +184,9 @@ export default function Onboarding() {
             const onboardingData: any = {
                 username: data.username,
                 display_name: data.displayName,
-                bio: data.bio || null,
-                avatar_url: data.profilePictureUrl || null,
-                banner_url: data.bannerPictureUrl || null,
+                ...(data.bio && { bio: data.bio }),
+                ...(data.profilePictureUrl && { avatar_url: data.profilePictureUrl }),
+                ...(data.bannerPictureUrl && { banner_url: data.bannerPictureUrl }),
             };
 
             const response = await fetch(

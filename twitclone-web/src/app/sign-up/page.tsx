@@ -14,15 +14,20 @@ export default function SignUpPage() {
   useEffect(() => {
     const checkAuth = async () => {
       const session = await authClient.getSession();
-      console.log("session", session);
       if (session.data?.session) {
-        router.push("/home");
+        if (session.data.user?.emailVerified) {
+          router.push("/home");
+          return;
+        }
+        const email = session.data.user?.email;
+        const query = email ? `?email=${encodeURIComponent(email)}` : "";
+        router.push(`/verify-email${query}`);
       } else {
         setChecking(false);
       }
     };
     checkAuth();
-  }, []); 
+  }, [router]);
 
   if (checking) {
     return (
@@ -32,8 +37,10 @@ export default function SignUpPage() {
     );
   }
 
-  const handleSuccess = () => {
-    router.push("/onboarding");
+  const handleSuccess = (email: string) => {
+    const query = new URLSearchParams();
+    query.set("email", email);
+    router.push(`/verify-email?${query.toString()}`);
   };
 
   const handleError = (errorMessage: string) => {

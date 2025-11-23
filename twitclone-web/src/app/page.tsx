@@ -67,7 +67,7 @@ export default function LandingPage() {
           </div>
           <div className="hidden md:flex items-center gap-8 font-bold">
             <a href="#features" className="hover:underline decoration-4 underline-offset-4 decoration-[#FF6B6B]">Features</a>
-            <a href="#about" className="hover:underline decoration-4 underline-offset-4 decoration-[#4ECDC4]">About</a>
+            <Link href="/about" className="hover:underline decoration-4 underline-offset-4 decoration-[#4ECDC4]">About</Link>
             <NeoButton href="/sign-up" variant="primary" className="py-2 px-6 text-base">
               Join Now
             </NeoButton>
@@ -100,7 +100,7 @@ export default function LandingPage() {
             className="text-xl md:text-3xl font-bold mb-12 max-w-3xl mx-auto bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1"
           >
             The rawest, loudest, and most chaotic social platform on the internet.
-            No filters. No algorithm. Just pure, unadulterated noise.
+            No filters. Transparent algorithms. Just pure, unadulterated noise.
           </motion.p>
 
           <motion.div
@@ -130,14 +130,14 @@ export default function LandingPage() {
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES
+          • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES
         </motion.div>
         <motion.div
           animate={{ x: [0, -1000] }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES • NO ALGORITHMS • PURE CHAOS • JUST VIBES
+          • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES
         </motion.div>
       </div>
 
@@ -208,9 +208,9 @@ export default function LandingPage() {
             <p className="font-mono text-sm text-gray-400">© 2025. Built with rage and coffee.</p>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="font-bold hover:text-[#FF6B6B] transition-colors">PRIVACY</a>
-            <a href="#" className="font-bold hover:text-[#4ECDC4] transition-colors">TERMS</a>
-            <a href="#" className="font-bold hover:text-[#FFE66D] transition-colors">CONTACT</a>
+            <Link href="/privacy" className="font-bold hover:text-[#FF6B6B] transition-colors">PRIVACY</Link>
+            <Link href="/terms" className="font-bold hover:text-[#4ECDC4] transition-colors">TERMS</Link>
+            <Link href="/contact" className="font-bold hover:text-[#FFE66D] transition-colors">CONTACT</Link>
           </div>
         </div>
       </footer>

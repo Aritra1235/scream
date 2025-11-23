@@ -3,9 +3,10 @@ import { user } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import { config } from '../../config/index';
 
-async function checkIfUserOnboarded(userId: bigint) {
-    const onboarded = await db.select().from(user).where(eq(user.id, userId));
-    return onboarded[0]?.onboarded ?? false;
+async function checkIfUserOnboardedAndEmailVerified(userId: bigint) {
+    const userData = await db.select().from(user).where(eq(user.id, userId));
+    const userRecord = userData[0];
+    return userRecord.onboarded && userRecord.emailVerified;
 }
 
 async function onboardUser(userId: bigint, username: string, display_name: string, bio: string | null, avatar_url: string | null, banner_url: string | null) {
@@ -20,4 +21,4 @@ async function onboardUser(userId: bigint, username: string, display_name: strin
     return onboarded;
 }
 
-export { checkIfUserOnboarded, onboardUser };
+export { checkIfUserOnboardedAndEmailVerified, onboardUser };
