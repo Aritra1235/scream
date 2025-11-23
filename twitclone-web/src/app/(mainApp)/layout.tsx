@@ -78,7 +78,7 @@ export default function DashboardLayout({
         <div
           className={`${geistSans.variable} ${geistMono.variable} flex h-screen justify-center bg-background text-foreground overflow-hidden`}
         >
-          <div className="flex w-full max-w-7xl overflow-hidden">
+          <div className="flex w-full max-w-[1200px] overflow-hidden">
             <Sidebar />
             {process.env.NEXT_PUBLIC_NODE_ENV === 'development' && (
               <>
@@ -89,7 +89,7 @@ export default function DashboardLayout({
             <main ref={mainRef} className="flex-1 border-x-4 border-border bg-card min-w-0 overflow-y-auto">
               {children}
             </main>
-            <div className="hidden xl:block w-80 lg:w-96" data-right-side></div>
+            <div className="hidden xl:block w-72" data-right-side></div>
           </div>
         </div>
       )}

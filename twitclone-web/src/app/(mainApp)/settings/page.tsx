@@ -1,20 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import { Moon, Sun, LogOut } from "lucide-react";
+
+import { authClient } from "@/lib/auth-client";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut();
+    } catch (error) {
+      console.error("[Settings] Failed to sign out", error);
+    } finally {
+      router.push("/sign-in");
+    }
+  };
 
   if (!mounted) {
     return (
@@ -81,6 +96,42 @@ export default function SettingsPage() {
                   }
                   className="data-[state=checked]:bg-[#4ECDC4] data-[state=unchecked]:bg-neutral-300 border-2 border-border rounded-none h-8 w-14"
                 />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 border-4 border-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] bg-card">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-black uppercase tracking-tight mb-1">
+                    Account
+                  </h2>
+                  <p className="text-sm font-bold text-muted-foreground">
+                    Manage your SCREAM account
+                  </p>
+                </div>
+              </div>
+
+              <Separator className="bg-border h-[2px]" />
+
+              <div className="flex items-center justify-between py-2">
+                <div className="space-y-1">
+                  <p className="text-sm font-black uppercase tracking-tight">
+                    Log out
+                  </p>
+                  <p className="text-xs font-bold text-muted-foreground">
+                    Sign out of your account on this device
+                  </p>
+                </div>
+                <Button
+                  variant="destructive"
+                  className="border-2 border-border rounded-none font-black uppercase tracking-tight"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
               </div>
             </div>
           </Card>
