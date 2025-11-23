@@ -3,6 +3,11 @@ interface Config {
         token: string;
         dataset: string;
     };
+    email: {
+        mailgunApiKey: string;
+        mailgunDomain: string;
+        dontSendEmail: string;
+    };
     betterAuth: {
         secret: string;
         url: string;
@@ -32,6 +37,11 @@ const config: Config = {
     axiom: {
         token: process.env.AXIOM_TOKEN as string,
         dataset: process.env.AXIOM_DATASET as string,
+    },
+    email: {
+        mailgunApiKey: process.env.MAILGUN_API_KEY as string,
+        mailgunDomain: process.env.MAILGUN_DOMAIN as string,
+        dontSendEmail: process.env.DONT_SEND_EMAIL as string,
     },
     betterAuth: {
         secret: process.env.BETTER_AUTH_SECRET as string,
