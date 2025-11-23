@@ -11,13 +11,19 @@ import {
     verificationEmailHtml,
     verificationEmailText,
     loginNotificationEmailHtml,
-    loginNotificationEmailText
+    loginNotificationEmailText,
+    passwordResetEmailHtml,
+    passwordResetEmailText,
+    passwordResetConfirmationEmailHtml,
+    passwordResetConfirmationEmailText
 } from "./email-templates";
-import { buildVerificationUrl, deriveFromAddress, getFriendlyName, getLocationFromIP } from "./auth.service";
+import { buildVerificationUrl, deriveFromAddress, getFriendlyName, getLocationFromIP, buildSignInUrl, buildResetPasswordUrl } from "./auth.service";
 
 
 
 const fromAddress = deriveFromAddress();
+const RESET_PASSWORD_TOKEN_EXPIRY_SECONDS = 60 * 60;
+const RESET_PASSWORD_TOKEN_EXPIRY_MINUTES = Math.floor(RESET_PASSWORD_TOKEN_EXPIRY_SECONDS / 60);
 
 export const auth = betterAuth({
     trustedOrigins: ["http://localhost:3001", "https://scream.aritra.ovh"],
@@ -52,6 +58,50 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true,
+        resetPasswordTokenExpiresIn: RESET_PASSWORD_TOKEN_EXPIRY_SECONDS,
+        revokeSessionsOnPasswordReset: true,
+        sendResetPassword: async ({ user, token }) => {
+            if (!user.email) {
+                return;
+            }
+            const friendlyName = getFriendlyName(user.name, user.email);
+            const resetUrl = buildResetPasswordUrl(token);
+            await sendEmail({
+                from: fromAddress,
+                to: user.email,
+                subject: "Reset your SCREAM password",
+                text: passwordResetEmailText({
+                    name: friendlyName,
+                    resetUrl,
+                    expiresInMinutes: RESET_PASSWORD_TOKEN_EXPIRY_MINUTES,
+                }),
+                html: passwordResetEmailHtml({
+                    name: friendlyName,
+                    resetUrl,
+                    expiresInMinutes: RESET_PASSWORD_TOKEN_EXPIRY_MINUTES,
+                }),
+            });
+        },
+        onPasswordReset: async ({ user }) => {
+            if (!user.email) {
+                return;
+            }
+            const friendlyName = getFriendlyName(user.name, user.email);
+            const signInUrl = buildSignInUrl();
+            await sendEmail({
+                from: fromAddress,
+                to: user.email,
+                subject: "Your SCREAM password was updated",
+                text: passwordResetConfirmationEmailText({
+                    name: friendlyName,
+                    signInUrl,
+                }),
+                html: passwordResetConfirmationEmailHtml({
+                    name: friendlyName,
+                    signInUrl,
+                }),
+            });
+        },
     },
     emailVerification: {
         sendOnSignUp: true,

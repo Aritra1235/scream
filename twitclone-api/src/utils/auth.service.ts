@@ -46,8 +46,17 @@ async function getLocationFromIP(ip: string): Promise<{ city?: string; country?:
 
 
 function resolveWebAppUrl() {
-    const configured = config.misc.webUrl || "http://localhost:3000";
-    return /^https?:\/\//.test(configured) ? configured : `https://${configured}`;
+    const configured = (config.misc.webUrl || "").trim();
+    const fallback = "http://localhost:3001";
+    const target = configured.length > 0 ? configured : fallback;
+
+    if (/^https?:\/\//i.test(target)) {
+        return target;
+    }
+
+    const isLocalhost = /^localhost(?::|$)/i.test(target) || /^127\./.test(target);
+    const scheme = isLocalhost ? "http" : "https";
+    return `${scheme}://${target}`;
 }
 
 const webAppBaseUrl = resolveWebAppUrl();
@@ -72,6 +81,17 @@ function buildVerificationUrl(token: string, email: string) {
     return url.toString();
 }
 
+function buildResetPasswordUrl(token: string) {
+    const url = new URL("/reset-password", webAppBaseUrl);
+    url.searchParams.set("token", token);
+    return url.toString();
+}
+
+function buildSignInUrl() {
+    const url = new URL("/sign-in", webAppBaseUrl);
+    return url.toString();
+}
+
 function getFriendlyName(name?: string | null, email?: string | null) {
     if (name && name.trim().length > 0) {
         return name.trim().split(" ")[0];
@@ -79,4 +99,4 @@ function getFriendlyName(name?: string | null, email?: string | null) {
     return email ?? "there";
 }
 
-export { getLocationFromIP, buildVerificationUrl, getFriendlyName , deriveFromAddress};
+export { getLocationFromIP, buildVerificationUrl, buildResetPasswordUrl, getFriendlyName , deriveFromAddress, buildSignInUrl, resolveWebAppUrl};

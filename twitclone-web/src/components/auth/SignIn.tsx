@@ -147,6 +147,7 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
                 variant="link"
                 className="p-0 h-auto text-sm text-primary hover:text-primary/80"
                 disabled={isLoading}
+                onClick={() => router.push("/forgot-password")}
               >
                 Forgot password?
               </Button>

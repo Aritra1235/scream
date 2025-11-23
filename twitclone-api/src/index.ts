@@ -14,15 +14,20 @@ import { feed } from "./modules/feed";
 import { username } from "./modules/username";
 import { apiKeyModule } from "./modules/apikey";
 import { profile } from "./profile";  
+import { resolveWebAppUrl } from "./utils/auth.service";
+import { password } from "./modules/password";
 
 console.log('config', config);
 
+
+const webAppUrl = resolveWebAppUrl();
+const corsOrigins = Array.from(new Set([webAppUrl].filter(Boolean)));
 
 const app = new Elysia()
   .get('/', () => 'Hello World!')
   .use(
     cors({
-      origin: ["http://localhost:3000", config.misc.webUrl],
+      origin: corsOrigins,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       credentials: true,
       allowedHeaders: ["Content-Type", "Authorization"],
@@ -38,6 +43,7 @@ const app = new Elysia()
   .use(username)
   .use(apiKeyModule)
   .use(profile)
+  .use(password)
   .use(openapi())
   .use(
     opentelemetry({

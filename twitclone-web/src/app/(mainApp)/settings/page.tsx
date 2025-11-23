@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sun, LogOut } from "lucide-react";
+import { Moon, Sun, LogOut, Lock } from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
 import { Switch } from "@/components/ui/switch";
@@ -114,6 +114,29 @@ export default function SettingsPage() {
               </div>
 
               <Separator className="bg-border h-[2px]" />
+
+              <div className="flex items-center justify-between py-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 border-2 border-border bg-background flex items-center justify-center">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-black uppercase tracking-tight">
+                      Reset Password
+                    </p>
+                    <p className="text-xs font-bold text-muted-foreground">
+                      Change your account password
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  className="border-2 border-border rounded-none font-black uppercase tracking-tight"
+                  onClick={() => router.push("/forgot-password")}
+                >
+                  Reset
+                </Button>
+              </div>
 
               <div className="flex items-center justify-between py-2">
                 <div className="space-y-1">
