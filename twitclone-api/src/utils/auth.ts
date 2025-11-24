@@ -5,7 +5,7 @@ import { db } from "../db/client";
 import * as schema from "../db/schema";
 import { generateId } from "./snowflake";
 import { eq } from "drizzle-orm";
-import sendEmail from "./email";
+import sendEmail from "./email-api";
 import { config } from "../config";
 import {
     verificationEmailHtml,
