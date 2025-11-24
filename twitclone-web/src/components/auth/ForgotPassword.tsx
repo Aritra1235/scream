@@ -207,23 +207,15 @@ export default function ForgotPassword() {
                     <Input
                       id="forgot-email"
                       type="email"
-                      placeholder="[email protected]"
+                      placeholder="[email protected]"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
-                      disabled={status === "sending"}
                       className="bg-background text-foreground"
                       required
                     />
                   </div>
-                  <Button type="submit" className="w-full" size="lg" disabled={status === "sending"}>
-                    {status === "sending" ? (
-                      <>
-                        <Spinner className="mr-2 h-4 w-4" />
-                        Sending link...
-                      </>
-                    ) : (
-                      "Send reset link"
-                    )}
+                  <Button type="submit" className="w-full" size="lg">
+                    Send reset link
                   </Button>
                 </form>
               </CardContent>
