@@ -24,6 +24,9 @@ export const user = pgTable(
     registered_from_ip: text('registered_from_ip'),
     last_login_ip: text('last_login_ip'),
     last_activity_ip: text('last_activity_ip'),
+    followers_count: integer('followers_count').notNull().default(0),
+    following_count: integer('following_count').notNull().default(0),
+    posts_count: integer('posts_count').notNull().default(0),
     createdAt: timestamp('createdAt').notNull().defaultNow(),
     updatedAt: timestamp('updatedAt').notNull().defaultNow(),
   },
@@ -212,24 +215,6 @@ export const follows = pgTable(
   }
 )
 
-export type Follow = typeof follows.$inferSelect
-export type NewFollow = typeof follows.$inferInsert
-
-export type User = typeof user.$inferSelect
-export type NewUser = typeof user.$inferInsert
-
-export type Session = typeof session.$inferSelect
-export type NewSession = typeof session.$inferInsert
-
-export type Account = typeof account.$inferSelect
-export type NewAccount = typeof account.$inferInsert
-
-export type Verification = typeof verification.$inferSelect
-export type NewVerification = typeof verification.$inferInsert
-
-export type Post = typeof posts.$inferSelect
-export type NewPost = typeof posts.$inferInsert
-
 // BetterAuth expects the model name to be "apikey" (all lowercase),
 // so we export the table under that name and alias `apiKey` for our own code.
 export const apikey = pgTable(
@@ -269,6 +254,24 @@ export const apikey = pgTable(
     }
   }
 )
+
+export type Follow = typeof follows.$inferSelect
+export type NewFollow = typeof follows.$inferInsert
+
+export type User = typeof user.$inferSelect
+export type NewUser = typeof user.$inferInsert
+
+export type Session = typeof session.$inferSelect
+export type NewSession = typeof session.$inferInsert
+
+export type Account = typeof account.$inferSelect
+export type NewAccount = typeof account.$inferInsert
+
+export type Verification = typeof verification.$inferSelect
+export type NewVerification = typeof verification.$inferInsert
+
+export type Post = typeof posts.$inferSelect
+export type NewPost = typeof posts.$inferInsert
 
 export type ApiKey = typeof apikey.$inferSelect
 export type NewApiKey = typeof apikey.$inferInsert

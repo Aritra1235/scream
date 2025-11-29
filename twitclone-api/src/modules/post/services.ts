@@ -1,7 +1,7 @@
 import { createPostSchema, repostPostSchema, deletePostSchema } from './modals';
 import { db } from '../../db/client';
-import { posts } from '../../db/schema';
-import { eq, and } from 'drizzle-orm';
+import { posts, user } from '../../db/schema';
+import { eq, and, sql } from 'drizzle-orm';
 import { generateId } from '../../utils/snowflake';
 
 async function createPost(userId: bigint, content: string, mediaCount: number) {
@@ -16,6 +16,7 @@ async function createPost(userId: bigint, content: string, mediaCount: number) {
         if(!post || post.length === 0) {
             throw new Error('Failed to create post');
         }
+        await db.update(user).set({ posts_count: sql`${user.posts_count} + 1` }).where(eq(user.id, userId));
         return post;
     } catch (error) {
         // Log the actual error for debugging
@@ -43,6 +44,7 @@ async function deletePost(postId: bigint) {
     if(!post) {
         throw new Error('Failed to delete post');
     }
+    await db.update(user).set({ posts_count: sql`${user.posts_count} - 1` }).where(eq(user.id, post[0].userId));
     return post;
 }
 

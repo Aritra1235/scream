@@ -13,7 +13,7 @@ import { like } from "./modules/like";
 import { feed } from "./modules/feed";
 import { username } from "./modules/username";
 import { apiKeyModule } from "./modules/apikey";
-import { profile } from "./profile";  
+import { profile } from "./modules/profile";  
 import { resolveWebAppUrl } from "./utils/auth.service";
 import { password } from "./modules/password";
 
