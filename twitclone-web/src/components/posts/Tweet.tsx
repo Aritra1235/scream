@@ -68,21 +68,21 @@ export function Tweet({ id, content, createdAt, mediaCount, author, engagement }
     <article className="border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card">
       <div className="flex gap-4">
         {/* Avatar */}
-        <div className="flex-shrink-0">
+        <a href={`/${author.username}`} className="flex-shrink-0" tabIndex={0}>
           <img
             src={author.avatar_url || '/default-avatar.png'}
             alt={`${author.display_name || author.username}'s avatar`}
             className="w-12 h-12 border-2 border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] object-cover bg-muted"
           />
-        </div>
+        </a>
 
         {/* Tweet Content */}
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <span className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate">
+            <a href={`/${author.username}`} className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate" tabIndex={0}>
               {author.display_name || author.username}
-            </span>
+            </a>
             {author.verified && (
               <div className="bg-foreground text-background p-0.5 rounded-none border border-border">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

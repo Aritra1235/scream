@@ -29,8 +29,16 @@ const profile = new Elysia({ name: "profile", prefix: apiPrefix })
     })
 
     .get('/profile/:username', async ({ params, status }) => {
-        const user = await getUserByUsername(params.username);
-        return { user };
+        try {
+            const user = await getUserByUsername(params.username);
+            if (!user) {
+                return status(404, { message: "User not found" });
+            }
+            return { user };
+        } catch (error) {
+            console.error('Failed to get user:', error);
+            return status(500, { message: "Failed to get user" });
+        }
     }, {
         params: usernameSchema
     })

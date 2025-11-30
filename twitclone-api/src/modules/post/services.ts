@@ -1,8 +1,9 @@
 import { createPostSchema, repostPostSchema, deletePostSchema } from './modals';
 import { db } from '../../db/client';
 import { posts, user } from '../../db/schema';
-import { eq, and, sql } from 'drizzle-orm';
+import { eq, and, sql, desc } from 'drizzle-orm';
 import { generateId } from '../../utils/snowflake';
+import { getUserIdByUsername } from '../common';
 
 async function createPost(userId: bigint, content: string, mediaCount: number) {
     try {
@@ -56,4 +57,35 @@ async function isPostOwner(postId: bigint, userId: bigint) {
     return true;
 }
 
-export { createPost, repostPost, deletePost, isPostOwner };
+async function getPostsByUserId(userId: bigint, limit: number = 20, offset: number = 0) {
+    try {
+        const userPosts = await db
+            .select()
+            .from(posts)
+            .where(eq(posts.userId, userId))
+            .orderBy(desc(posts.createdAt))   // newest first
+            .limit(limit)
+            .offset(offset);
+
+        return userPosts.map(post => ({
+            ...post,
+            id: post.id.toString(),
+            userId: post.userId.toString(),
+        }));
+
+    } catch (error) {
+        console.error('Database error:', error);
+        throw new Error('Failed to get posts');
+    }
+
+}    
+
+async function getPostsByUsername(username: string, limit: number = 20, offset: number = 0) {
+    const userId = await getUserIdByUsername(username);
+    if (!userId) {
+        return [];
+    }
+    return await getPostsByUserId(BigInt(userId), limit, offset);
+}
+
+export { createPost, repostPost, deletePost, isPostOwner, getPostsByUserId, getPostsByUsername };

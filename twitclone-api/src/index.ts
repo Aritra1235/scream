@@ -7,7 +7,7 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto'
 import { betterAuth, betterAuthView } from "./modules/auth";
 import { onboarding } from "./modules/onboarding";
 import { imgUpload } from "./modules/imgUpload";
-import { post } from "./modules/post";
+import { posts } from "./modules/post";
 import { config } from "./config";
 import { like } from "./modules/like";
 import { feed } from "./modules/feed";
@@ -37,7 +37,7 @@ const app = new Elysia()
   .all("/api/auth/*", betterAuthView)
   .use(onboarding)
   .use(imgUpload)
-  .use(post)
+  .use(posts)
   .use(like)
   .use(feed)
   .use(username)

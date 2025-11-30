@@ -17,4 +17,10 @@ const deletePostSchema = v.object({
     postId: v.string(),
 });
 
-export { createPostSchema, repostPostSchema, deletePostSchema };
+const getPostsByUsernameSchema = v.object({
+    username: v.optional(v.string()),
+    limit: v.optional(v.number()),
+    offset: v.optional(v.number()),
+});
+
+export { createPostSchema, repostPostSchema, deletePostSchema, getPostsByUsernameSchema };

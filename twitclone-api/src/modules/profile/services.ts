@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../db/client";
 import { user } from "../../db/schema";
 import { config } from "../../config";
+import { getUserIdByUsername } from "../common";
 
 export async function getUser(userId: bigint) {
     const userData = await db.select().from(user).where(eq(user.id, userId));
@@ -37,11 +38,16 @@ export async function getUser(userId: bigint) {
 
 
 export async function getUserByUsername(username: string) {
-    return await getUser(BigInt(await getUserIdByUsername(username)));
+    const userId = await getUserIdByUsername(username);
+    if (!userId) {
+        return null;
+    }
+    const user = await getUser(BigInt(userId));
+    if (!user) {
+        return null;
+    }
+    return user;
 }
 
-async function getUserIdByUsername(username: string) {
-    const userId = await db.select({ id: user.id }).from(user).where(eq(user.username, username));
-    return userId[0].id;
-}
+
 
