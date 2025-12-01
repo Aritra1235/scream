@@ -118,7 +118,7 @@ export default function Sidebar() {
                 </div>
                 <div className="hidden md:block flex-1 min-w-0">
                   <div className="font-black text-sm truncate text-foreground uppercase">
-                    {user.name}
+                    {user.display_name}
                   </div>
                   <div className="text-muted-foreground text-sm truncate font-bold">
                     @{user.username}
