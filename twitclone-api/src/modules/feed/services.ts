@@ -1,12 +1,19 @@
 import { db } from '../../db/client';
-import { posts, user, likes } from '../../db/schema';
-import { eq, desc, sql, and, isNull } from 'drizzle-orm';
+import { posts, user, likes, media } from '../../db/schema';
+import { eq, desc, sql, and, isNull, inArray } from 'drizzle-orm';
 
 interface SimpleFeedPost {
     id: string;
     content: string;
     createdAt: Date;
     mediaCount: number;
+    media: {
+        mediaUrl: string;
+        type: string;
+        width: number | null;
+        height: number | null;
+        contentType: string;
+    }[];
     author: {
         id: string;
         username: string | null;
@@ -43,6 +50,30 @@ async function getSimpleFeed(limit: number = 20, offset: number = 0, currentUser
             .limit(limit)
             .offset(offset);
 
+        // Preload media for all posts in this page
+        const postIds = postsWithAuthors.map((post) => post.id);
+        let mediaByPostId: Record<string, any[]> = {};
+
+        if (postIds.length > 0) {
+            const mediaRows = await db
+                .select()
+                .from(media)
+                .where(
+                    and(
+                        eq(media.targetType, 'post'),
+                        inArray(media.targetId, postIds),
+                    ),
+                )
+                .orderBy(desc(media.createdAt));
+
+            mediaByPostId = mediaRows.reduce((acc, item) => {
+                const key = item.targetId.toString();
+                if (!acc[key]) acc[key] = [];
+                acc[key] = [...acc[key], item];
+                return acc;
+            }, {} as Record<string, typeof mediaRows[number][]>);
+        }
+
         // Get engagement counts for each post
         const postsWithEngagement = await Promise.all(
             postsWithAuthors.map(async (post) => {
@@ -76,25 +107,37 @@ async function getSimpleFeed(limit: number = 20, offset: number = 0, currentUser
             })
         );
 
-        return postsWithEngagement.map(post => ({
-            id: post.id.toString(),
-            content: post.content,
-            createdAt: post.createdAt,
-            mediaCount: post.mediaCount,
-            author: {
-                id: post.userId.toString(),
-                username: post.username,
-                display_name: post.display_name,
-                avatar_url: post.avatar_url,
-                verified: post.verified,
-            },
-            engagement: {
-                likes: post.likeCount,
-                reposts: post.repostCount,
-                replies: post.replyCount,
-                liked_by_user: post.likedByUser,
-            },
-        }));
+        return postsWithEngagement.map(post => {
+            const postIdKey = post.id.toString();
+            const postMedia = (mediaByPostId[postIdKey] || []).map((item) => ({
+                mediaUrl: item.mediaUrl,
+                type: item.type,
+                width: item.width,
+                height: item.height,
+                contentType: item.contentType,
+            }));
+
+            return {
+                id: post.id.toString(),
+                content: post.content,
+                createdAt: post.createdAt,
+                mediaCount: post.mediaCount,
+                media: postMedia,
+                author: {
+                    id: post.userId.toString(),
+                    username: post.username,
+                    display_name: post.display_name,
+                    avatar_url: post.avatar_url,
+                    verified: post.verified,
+                },
+                engagement: {
+                    likes: post.likeCount,
+                    reposts: post.repostCount,
+                    replies: post.replyCount,
+                    liked_by_user: post.likedByUser,
+                },
+            };
+        });
     } catch (error) {
         console.error('Error fetching feed:', error);
         throw new Error('Failed to fetch feed');
@@ -120,6 +163,29 @@ async function getUserFeed(username: string, limit: number = 20, offset: number 
             .orderBy(desc(posts.createdAt))
             .limit(limit)
             .offset(offset);
+
+        const postIds = postsWithAuthors.map((post) => post.id);
+        let mediaByPostId: Record<string, any[]> = {};
+
+        if (postIds.length > 0) {
+            const mediaRows = await db
+                .select()
+                .from(media)
+                .where(
+                    and(
+                        eq(media.targetType, 'post'),
+                        inArray(media.targetId, postIds),
+                    ),
+                )
+                .orderBy(desc(media.createdAt));
+
+            mediaByPostId = mediaRows.reduce((acc, item) => {
+                const key = item.targetId.toString();
+                if (!acc[key]) acc[key] = [];
+                acc[key] = [...acc[key], item];
+                return acc;
+            }, {} as Record<string, typeof mediaRows[number][]>);
+        }
 
         const postsWithEngagement = await Promise.all(
             postsWithAuthors.map(async (post) => {
@@ -153,25 +219,37 @@ async function getUserFeed(username: string, limit: number = 20, offset: number 
             })
         );
 
-        return postsWithEngagement.map(post => ({
-            id: post.id.toString(),
-            content: post.content,
-            createdAt: post.createdAt,
-            mediaCount: post.mediaCount,
-            author: {
-                id: post.userId.toString(),
-                username: post.username,
-                display_name: post.display_name,
-                avatar_url: post.avatar_url,
-                verified: post.verified,
-            },
-            engagement: {
-                likes: post.likeCount,
-                reposts: post.repostCount,
-                replies: post.replyCount,
-                liked_by_user: post.likedByUser,
-            },
-        }));
+        return postsWithEngagement.map(post => {
+            const postIdKey = post.id.toString();
+            const postMedia = (mediaByPostId[postIdKey] || []).map((item) => ({
+                mediaUrl: item.mediaUrl,
+                type: item.type,
+                width: item.width,
+                height: item.height,
+                contentType: item.contentType,
+            }));
+
+            return {
+                id: post.id.toString(),
+                content: post.content,
+                createdAt: post.createdAt,
+                mediaCount: post.mediaCount,
+                media: postMedia,
+                author: {
+                    id: post.userId.toString(),
+                    username: post.username,
+                    display_name: post.display_name,
+                    avatar_url: post.avatar_url,
+                    verified: post.verified,
+                },
+                engagement: {
+                    likes: post.likeCount,
+                    reposts: post.repostCount,
+                    replies: post.replyCount,
+                    liked_by_user: post.likedByUser,
+                },
+            };
+        });
     } catch (error) {
         console.error('Error fetching user feed:', error);
         throw new Error('Failed to fetch user feed');

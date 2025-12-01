@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChevronLeft, ChevronRight, Check, Upload, User, Image as ImageIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner"; 
+import { uploadImage } from "@/lib/upload-image";
 
 type OnboardingStep = 'username' | 'displayName' | 'bio' | 'images';
 
@@ -233,7 +234,17 @@ export default function Onboarding() {
         setError(''); // Clear previous errors
 
         try {
-            const uploadedUrl = await uploadImage(file, isAvatar ? 'avatar' : 'banner');
+            if (!user?.id) {
+                throw new Error('User not loaded');
+            }
+
+            const uploadedUrl = await uploadImage({
+                file,
+                fileType: isAvatar ? 'avatar' : 'banner',
+                targetType: 'user',
+                targetId: user.id,
+                userId: user.id,
+            });
 
             if (uploadedUrl) {
                 if (isAvatar) {
@@ -264,81 +275,6 @@ export default function Onboarding() {
         }
     };
 
-
-    const uploadImage = async (file: File, fileType: 'avatar' | 'banner'): Promise<string | null> => {
-        try {
-            // Step 1: Get presigned URL
-            const presignedResponse = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/upload?fileType=${fileType}`,
-                {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': file.type
-                    }
-                }
-            );
-
-            if (!presignedResponse.ok) {
-                throw new Error('Failed to get upload URL');
-            }
-
-            const { uploadUrl, objectKey } = await presignedResponse.json();
-
-            // Step 2: Upload file to S3
-            const uploadResponse = await fetch(uploadUrl, {
-                method: 'PUT',
-                body: file,
-                headers: {
-                    'Content-Type': file.type
-                }
-            });
-
-            if (!uploadResponse.ok) {
-                throw new Error('Failed to upload file to S3');
-            }
-
-            // Step 3: Get image dimensions
-            const dimensions = await new Promise<{ width: number; height: number }>((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve({ width: img.width, height: img.height });
-                img.onerror = () => resolve({ width: 0, height: 0 }); // Handle error
-                img.src = URL.createObjectURL(file);
-            });
-
-            // Step 4: Save to database
-            const mediaUrl = objectKey;
-            const saveResponse = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/upload`,
-                {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        targetType: 'user',
-                        targetId: user?.id || '',
-                        userId: user?.id || '',
-                        contentType: file.type,
-                        type: 'image',
-                        mediaUrl,
-                        width: dimensions.width,
-                        height: dimensions.height
-                    })
-                }
-            );
-
-            if (!saveResponse.ok) {
-                throw new Error('Failed to save upload info');
-            }
-
-            return mediaUrl;
-        } catch (error) {
-            console.error('Image upload failed:', error);
-            return null;
-        }
-    };
 
     const getStepNumber = (step: OnboardingStep): number => {
         const steps = ['username', 'displayName', 'bio', 'images'];

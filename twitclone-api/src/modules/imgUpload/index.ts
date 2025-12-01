@@ -44,14 +44,45 @@ const imgUpload = new Elysia({ name: "imgUpload", prefix: apiPrefix })
         }
         const userId = session?.user.id;
         
-        if(body.targetType === 'user') {
-            const uploaded = await uploadedImageToDb(body.targetType, BigInt(userId), BigInt(userId), body.contentType, body.type, body.mediaUrl, body.width, body.height);
-            if(!uploaded) {
+        if (body.targetType === 'user') {
+            const uploaded = await uploadedImageToDb(
+                body.targetType,
+                BigInt(userId),
+                BigInt(userId),
+                body.contentType,
+                body.type,
+                body.mediaUrl,
+                body.width,
+                body.height
+            );
+            if (!uploaded) {
                 return status(500, { message: "Failed to upload image to database" });
             }
             return { message: "ok" };
         }
-        return { message: "Wrong target type" };
+
+        if (body.targetType === 'post') {
+            if (!body.targetId) {
+                return status(400, { message: "Post ID (targetId) is required for post media" });
+            }
+
+            const uploaded = await uploadedImageToDb(
+                body.targetType,
+                BigInt(body.targetId),
+                BigInt(userId),
+                body.contentType,
+                body.type,
+                body.mediaUrl,
+                body.width,
+                body.height
+            );
+            if (!uploaded) {
+                return status(500, { message: "Failed to upload image to database" });
+            }
+            return { message: "ok" };
+        }
+
+        return status(400, { message: "Wrong target type" });
     }, {
         body: uploadInfoSchema
     })

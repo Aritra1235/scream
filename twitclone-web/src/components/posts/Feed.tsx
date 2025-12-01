@@ -7,6 +7,13 @@ interface FeedPost {
   content: string;
   createdAt: string;
   mediaCount: number;
+  media?: {
+    mediaUrl: string;
+    type: string;
+    width: number | null;
+    height: number | null;
+    contentType: string;
+  }[];
   author: {
     id: string;
     username: string | null;
@@ -61,7 +68,15 @@ export function Feed({ className = '' }: FeedProps) {
 
       const data: FeedResponse = await response.json();
       data.posts.forEach(post => {
-        post.author.avatar_url = process.env.NEXT_PUBLIC_CDN_BASE_URL + "/" + post.author.avatar_url;
+        if (post.author.avatar_url) {
+          post.author.avatar_url = process.env.NEXT_PUBLIC_CDN_BASE_URL + "/" + post.author.avatar_url;
+        }
+        if (post.media && post.media.length > 0) {
+          post.media = post.media.map((item) => ({
+            ...item,
+            mediaUrl: `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${item.mediaUrl}`,
+          }));
+        }
       });
 
       if (append) {

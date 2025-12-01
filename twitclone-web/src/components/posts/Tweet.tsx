@@ -7,6 +7,13 @@ interface TweetProps {
   content: string;
   createdAt: string;
   mediaCount: number;
+  media?: {
+    mediaUrl: string;
+    type: string;
+    width: number | null;
+    height: number | null;
+    contentType: string;
+  }[];
   author: {
     id: string;
     username: string | null;
@@ -22,7 +29,7 @@ interface TweetProps {
   };
 }
 
-export function Tweet({ id, content, createdAt, mediaCount, author, engagement }: TweetProps) {
+export function Tweet({ id, content, createdAt, mediaCount, media, author, engagement }: TweetProps) {
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
   const [liked, setLiked] = useState(engagement.liked_by_user);
   const [likesCount, setLikesCount] = useState(engagement.likes);
@@ -104,10 +111,36 @@ export function Tweet({ id, content, createdAt, mediaCount, author, engagement }
             {content}
           </div>
 
-          {/* Media placeholder */}
-          {mediaCount > 0 && (
+          {/* Media */}
+          {media && media.length > 0 && (
+            <div className="mb-4 border-2 border-border bg-muted overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
+              <div
+                className={`grid gap-1 ${
+                  media.length === 1 ? "grid-cols-1" : "grid-cols-2"
+                }`}
+              >
+                {media.slice(0, 4).map((item, index) => (
+                  <div
+                    key={`${item.mediaUrl}-${index}`}
+                    className={media.length === 1 ? "w-full h-full" : "aspect-square w-full"}
+                  >
+                    <img
+                      src={item.mediaUrl}
+                      alt="Post media"
+                      className={`w-full h-full object-cover ${
+                        media.length === 1 ? "max-h-[500px]" : ""
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Fallback placeholder when mediaCount exists but media array missing */}
+          {(!media || media.length === 0) && mediaCount > 0 && (
             <div className="mb-4 bg-muted border-2 border-border p-4 text-center font-bold text-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
-              {mediaCount} MEDIA FILE{mediaCount > 1 ? 'S' : ''} ATTACHED
+              {mediaCount} MEDIA FILE{mediaCount > 1 ? "S" : ""} ATTACHED
             </div>
           )}
 

@@ -27,6 +27,7 @@ export default function UserPage() {
   const params = useParams();
   const router = useRouter();
   const username = params.username as string;
+
   
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +93,7 @@ export default function UserPage() {
       </div>
     );
   }
+  console.log('user', user);
 
   return (
     <div className="flex flex-col bg-card min-h-full">

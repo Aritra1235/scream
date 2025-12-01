@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, DragEvent } from "react";
 import { useUserStore } from "@/store/user-store";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,17 +12,128 @@ import {
     MapPin,
     Globe,
 } from "lucide-react";
+import { ImageCropper } from "./ImageCropper";
+import { uploadImage } from "@/lib/upload-image";
+
+interface SelectedImage {
+    id: string;
+    file: File;
+    previewUrl: string;
+}
+
+const MAX_IMAGES = 4;
 
 export function TweetInput() {
     const { user } = useUserStore();
     const [content, setContent] = useState("");
     const [isPosting, setIsPosting] = useState(false);
+    const [images, setImages] = useState<SelectedImage[]>([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const [croppingImage, setCroppingImage] = useState<SelectedImage | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        return () => {
+            images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+        };
+    }, [images]);
+
+    const handleFiles = (fileList: FileList | null) => {
+        if (!fileList) return;
+
+        const existingCount = images.length;
+        const availableSlots = MAX_IMAGES - existingCount;
+        if (availableSlots <= 0) return;
+
+        const accepted: SelectedImage[] = [];
+        Array.from(fileList)
+            .filter((file) => file.type.startsWith("image/"))
+            .slice(0, availableSlots)
+            .forEach((file) => {
+                const id = crypto.randomUUID();
+                const previewUrl = URL.createObjectURL(file);
+                accepted.push({ id, file, previewUrl });
+            });
+
+        if (accepted.length > 0) {
+            setImages((prev) => [...prev, ...accepted]);
+        }
+    };
+
+    const handleImageButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleFiles(event.target.files);
+        // reset value so selecting the same file again triggers change
+        event.target.value = "";
+    };
+
+    const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsDragging(false);
+        handleFiles(event.dataTransfer.files);
+    };
+
+    const handleRemoveImage = (id: string) => {
+        setImages((prev) => {
+            const remaining = prev.filter((img) => img.id !== id);
+            const removed = prev.find((img) => img.id === id);
+            if (removed) {
+                URL.revokeObjectURL(removed.previewUrl);
+            }
+            return remaining;
+        });
+    };
+
+    const handleStartCrop = (image: SelectedImage) => {
+        setCroppingImage(image);
+    };
+
+    const handleCropComplete = (file: File) => {
+        if (!croppingImage) return;
+        const newPreview = URL.createObjectURL(file);
+        setImages((prev) =>
+            prev.map((img) => {
+                if (img.id === croppingImage.id) {
+                    URL.revokeObjectURL(img.previewUrl);
+                    return {
+                        ...img,
+                        file,
+                        previewUrl: newPreview,
+                    };
+                }
+                return img;
+            })
+        );
+        setCroppingImage(null);
+    };
+
+    const handleCropCancel = () => {
+        setCroppingImage(null);
+    };
 
     const handlePost = async () => {
-        if (!content.trim()) return;
+        if (!content.trim() && images.length === 0) return;
 
         setIsPosting(true);
         try {
+            const hasImages = images.length > 0;
+
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/post/create`,
                 {
@@ -33,13 +144,32 @@ export function TweetInput() {
                     credentials: "include",
                     body: JSON.stringify({
                         content: content.trim(),
-                        mediaCount: 0,
+                        mediaCount: hasImages ? images.length : 0,
                     }),
                 }
             );
 
             if (response.ok) {
+                const data = await response.json();
+                const postId: string | undefined = data?.post?.id;
+
+                if (hasImages && postId && user?.id) {
+                    for (const img of images) {
+                        await uploadImage({
+                            file: img.file,
+                            fileType: "image",
+                            targetType: "post",
+                            targetId: postId,
+                            userId: user.id,
+                        });
+                    }
+                }
+
                 setContent("");
+                setImages((prev) => {
+                    prev.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+                    return [];
+                });
                 // Optionally trigger a feed refresh here if we had a way to do it
                 // For now, the user might need to refresh or we can use a global event/store
                 window.location.reload(); // Simple way to refresh feed for now
@@ -68,15 +198,70 @@ export function TweetInput() {
                     )}
                 </div>
                 <div className="flex-1">
-                    <Textarea
-                        placeholder="WHAT'S ON YOUR MIND?"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        className="min-h-[100px] w-full resize-none border-4 border-border bg-background p-4 text-xl font-bold placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:focus-visible:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-shadow rounded-none"
-                    />
+                    <div
+                        className={`border-4 border-border bg-background p-0 transition-shadow rounded-none ${
+                            isDragging
+                                ? "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+                                : ""
+                        }`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    >
+                        <Textarea
+                            placeholder="WHAT'S ON YOUR MIND?"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            className="min-h-[100px] w-full resize-none border-none bg-transparent p-4 text-xl font-bold placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:shadow-none focus-visible:outline-none"
+                        />
+                        {images.length > 0 && (
+                            <div className="px-4 pb-4">
+                                <div className="mt-2 grid grid-cols-2 gap-2">
+                                    {images.map((img) => (
+                                        <div
+                                            key={img.id}
+                                            className="relative group border-2 border-border bg-muted overflow-hidden aspect-square shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
+                                        >
+                                            <img
+                                                src={img.previewUrl}
+                                                alt="Selected"
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveImage(img.id)}
+                                                className="absolute top-1 right-1 bg-black/70 text-white text-xs px-2 py-1 font-bold uppercase"
+                                            >
+                                                Remove
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleStartCrop(img)}
+                                                className="absolute bottom-1 left-1 bg-background/90 text-foreground text-xs px-2 py-1 font-bold uppercase border border-border"
+                                            >
+                                                Crop
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                {images.length < MAX_IMAGES && (
+                                    <p className="mt-2 text-xs text-muted-foreground font-bold uppercase">
+                                        Drag and drop more images or use the button below (up to{" "}
+                                        {MAX_IMAGES}).
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </div>
                     <div className="mt-4 flex items-center justify-between">
                         <div className="flex gap-2 text-foreground">
-                            <button className="group border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5 active:scale-95">
+                            <button
+                                type="button"
+                                onClick={handleImageButtonClick}
+                                className="group border-2 border-transparent p-2 hover:border-border hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all hover:-translate-y-0.5 hover:translate-x-0.5 active:scale-95 disabled:opacity-50"
+                                disabled={images.length >= MAX_IMAGES}
+                                aria-label="Add images"
+                            >
                                 <ImageIcon className="h-6 w-6 text-foreground" />
                             </button>
                             {/*
@@ -102,8 +287,25 @@ export function TweetInput() {
                             {isPosting ? "SCREAMING..." : "SCREAM"}
                         </Button>
                     </div>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleFileInputChange}
+                    />
                 </div>
             </div>
+            {croppingImage && (
+                <ImageCropper
+                    imageUrl={croppingImage.previewUrl}
+                    onCancel={handleCropCancel}
+                    onComplete={handleCropComplete}
+                    fileName={croppingImage.file.name}
+                />
+            )}
         </div>
     );
 }
+
