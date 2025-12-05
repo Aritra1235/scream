@@ -62,9 +62,10 @@ export function LandingPage() {
             transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
           >
             <h1 className="text-6xl md:text-9xl font-black mb-8 leading-none tracking-tighter drop-shadow-[4px_4px_0px_rgba(255,255,255,1)]">
-              SCREAM YOUR <br />
+              SAY IT.  
+              <br />
               <span className="text-[#FF6B6B] bg-black px-4 transform -skew-x-6 inline-block mt-2">
-                THOUGHTS
+                MEAN IT.
               </span>
             </h1>
           </motion.div>
@@ -75,8 +76,8 @@ export function LandingPage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-xl md:text-3xl font-bold mb-12 max-w-3xl mx-auto bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1"
           >
-            The rawest, loudest, and most chaotic social platform on the internet.
-            No filters. Transparent algorithms. Just pure, unadulterated noise.
+            A platform built for real voices, real thoughts, and real people.  
+            No fake personas. No algorithmic manipulation. Just signal — not noise.
           </motion.p>
 
           <motion.div
@@ -86,10 +87,10 @@ export function LandingPage() {
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
             <NeoButton href="/sign-up" variant="primary">
-              START SCREAMING
+              START NOW
             </NeoButton>
             <NeoButton href="#features" variant="secondary">
-              WHAT IS THIS?
+              LEARN MORE
             </NeoButton>
           </motion.div>
         </div>
@@ -106,22 +107,18 @@ export function LandingPage() {
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT
-          ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE
-          CHAOS • JUST VIBES
+          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL •
         </motion.div>
         <motion.div
           animate={{ x: [0, -1000] }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • TRANSPARENT ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT
-          ALGORITHMS • PURE CHAOS • JUST VIBES • TRANSPARENT ALGORITHMS • PURE
-          CHAOS • JUST VIBES
+          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL •
         </motion.div>
       </div>
 
-      {/* Features Section */}
+      {/* Features */}
       <section id="features" className="py-24 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-5xl md:text-7xl font-black mb-20 text-center uppercase tracking-tight">
@@ -133,8 +130,8 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-12">
             <FeatureCard
-              title="Lightning Fast"
-              description="So fast it'll melt your face off. We optimized everything so you can doomscroll at the speed of light."
+              title="Blazing Tech"
+              description="Optimized systems, instant delivery. Built like a modern infra stack, not a legacy social feed."
               color="bg-[#F7FFF7]"
               icon={
                 <svg
@@ -144,17 +141,14 @@ export function LandingPage() {
                   viewBox="0 0 24 24"
                   strokeWidth="3"
                 >
-                  <path
-                    strokeLinecap="square"
-                    strokeLinejoin="miter"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               }
             />
+
             <FeatureCard
-              title="Global Chaos"
-              description="Connect with weirdos from every corner of the globe. Language barriers? Who cares. Memes are universal."
+              title="The World — Unfiltered"
+              description="Connect with millions, instantly. Think global group chat, but smarter and less chaotic… mostly."
               color="bg-[#FFE66D]"
               icon={
                 <svg
@@ -172,9 +166,10 @@ export function LandingPage() {
                 </svg>
               }
             />
+
             <FeatureCard
-              title="Stay Woke"
-              description="Or don't. We don't care. Read what's trending or post pictures of your cat. It's your life."
+              title="Be True. Be You."
+              description="No fake metrics. No performative nonsense. Post what’s real — your thoughts, your ideas, your energy."
               color="bg-[#FF6B6B]"
               icon={
                 <svg
@@ -201,18 +196,18 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-24 px-6 bg-[#4ECDC4] border-t-4 border-black">
         <div className="max-w-5xl mx-auto text-center bg-white border-4 border-black p-12 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)]">
           <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase">
-            Ready to lose your mind?
+            Ready to speak your mind?
           </h2>
           <p className="text-xl font-bold mb-10 max-w-2xl mx-auto">
-            Join millions of other users who have already given up on productivity.
-            It's free, it's fun, and it's waiting for you.
+            Join a platform built for authenticity, speed, and actual human expression.  
+            No noise. No pretending. Just you.
           </p>
           <NeoButton href="/sign-up" variant="primary" className="text-xl px-12 py-6">
-            GET STARTED NOW
+            GET STARTED
           </NeoButton>
         </div>
       </section>
@@ -221,5 +216,3 @@ export function LandingPage() {
     </div>
   );
 }
-
-
