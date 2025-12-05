@@ -213,6 +213,13 @@ export function TweetInput({
         }
     };
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+            event.preventDefault();
+            handlePost();
+        }
+    };
+
     if (!user) return null;
 
     return (
@@ -251,6 +258,7 @@ export function TweetInput({
                             }
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             className="min-h-[100px] w-full resize-none border-none bg-transparent p-4 text-xl font-bold placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:shadow-none focus-visible:outline-none"
                         />
                         {images.length > 0 && (
