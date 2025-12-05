@@ -14,7 +14,7 @@ import { RiSettings4Fill, RiSettings4Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { TweetModal } from "@/components/TweetModal";
 import { useUserStore } from "@/store/user-store";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, User, UserRound } from "lucide-react";
 import { useEffect } from "react";
 
 type NavItem = {
@@ -56,13 +56,25 @@ export default function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useUserStore();
 
+  const items: NavItem[] = user?.username
+    ? [
+        ...navItems,
+        {
+          label: "Profile",
+          href: `/${user.username}`,
+          icon: <User className="h-6 w-6" />,
+          activeIcon: <UserRound className="h-6 w-6" />,
+        },
+      ]
+    : navItems;
+
   return (
     <>
       <aside className="hidden h-screen px-4 py-3 text-foreground sm:flex sm:w-64 lg:w-72 overflow-hidden sticky top-0">
         <nav className="flex flex-col w-full h-full">
           <div className="mb-2 text-3xl font-black px-3 py-2 uppercase tracking-tighter">SCREAM</div>
           <ul className="flex flex-col gap-4 mt-4">
-            {navItems.map((item) => {
+            {items.map((item) => {
               const isActive =
                 pathname === item.href ||
                 (item.href !== "/home" && pathname?.startsWith(item.href));

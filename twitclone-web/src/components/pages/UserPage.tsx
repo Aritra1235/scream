@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { UserProfile } from "@/components/user/UserProfile";
 import { UserFeed } from "@/components/user/UserFeed";
 import { Spinner } from "@/components/ui/spinner";
+import { EditProfileModal } from "@/components/user/EditProfileModal";
+import { useUserStore } from "@/store/user-store";
 
 interface User {
   id: string;
@@ -19,6 +21,7 @@ interface User {
   following_count: number;
   posts_count: number;
   createdAt: string;
+  name?: string;
 }
 
 interface UserPageProps {
@@ -27,10 +30,12 @@ interface UserPageProps {
 
 export function UserPage({ username }: UserPageProps) {
   const router = useRouter();
+  const { user: currentUser } = useUserStore();
 
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -67,6 +72,18 @@ export function UserPage({ username }: UserPageProps) {
       fetchUser();
     }
   }, [username]);
+
+  const canEdit = useMemo(() => {
+    if (!user || !currentUser) return false;
+    return user.id === currentUser.id;
+  }, [user, currentUser]);
+
+  const handleProfileUpdated = (updatedUser: User) => {
+    setUser(updatedUser);
+    if (updatedUser.username && updatedUser.username !== username) {
+      router.replace(`/${updatedUser.username}`);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -114,11 +131,22 @@ export function UserPage({ username }: UserPageProps) {
       </div>
 
       {/* Profile header */}
-      <UserProfile user={user} />
+      <UserProfile
+        user={user}
+        canEdit={canEdit}
+        onEdit={() => setIsEditOpen(true)}
+      />
+
+      <EditProfileModal
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        user={user}
+        onUpdated={handleProfileUpdated}
+      />
 
       {/* Timeline */}
       <div className="flex-1">
-        <UserFeed username={username} />
+        <UserFeed username={user.username} />
       </div>
     </div>
   );

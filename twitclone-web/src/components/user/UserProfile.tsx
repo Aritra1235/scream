@@ -13,10 +13,13 @@ interface UserProfileProps {
     following_count: number;
     posts_count: number;
     createdAt: string;
+    name?: string;
   };
+  canEdit?: boolean;
+  onEdit?: () => void;
 }
 
-export function UserProfile({ user }: UserProfileProps) {
+export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
   const joinDate = new Date(user.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -47,8 +50,8 @@ export function UserProfile({ user }: UserProfileProps) {
         <div className="flex justify-between items-end -mt-[10%] sm:-mt-[15%] mb-3">
           <div className="relative rounded-full border-[4px] border-background bg-background">
             <img
-              src={user.avatar_url}
-              alt={user.display_name || user.username}
+              src={user.avatar_url || 'https://via.placeholder.com/128'}
+              alt={user.display_name || user.username || 'User'}
               className="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover bg-muted"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
@@ -57,9 +60,14 @@ export function UserProfile({ user }: UserProfileProps) {
             />
           </div>
           <div className="pb-2">
-            <button className="rounded-full border border-border px-4 py-1.5 font-bold hover:bg-muted/50 transition-colors text-sm">
-              Edit profile
-            </button>
+            {canEdit && (
+              <button
+                className="rounded-full border border-border px-4 py-1.5 font-bold hover:bg-muted/50 transition-colors text-sm"
+                onClick={onEdit}
+              >
+                Edit profile
+              </button>
+            )}
           </div>
         </div>
 
