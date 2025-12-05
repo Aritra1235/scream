@@ -190,10 +190,10 @@ export const loginNotificationEmailHtml = ({
                 </p>
                 
                 <div style="background-color: ${colors.yellow}; border: 3px solid ${colors.black}; padding: 20px; margin: 20px 0; box-shadow: 4px 4px 0px ${colors.black};">
-                    <p style="margin: 5px 0;"><strong>⏰ Time:</strong> ${time}</p>
-                    <p style="margin: 5px 0;"><strong>🌐 IP Address:</strong> ${ip || 'Unknown'}</p>
-                    ${(city || country) ? `<p style="margin: 5px 0;"><strong>📍 Location:</strong> ${city ? city + (country ? ', ' : '') : ''}${country || ''}</p>` : ''}
-                    ${device ? `<p style="margin: 5px 0;"><strong>📱 Device:</strong> ${device}</p>` : ''}
+                    <p style="margin: 5px 0;"><strong>Time:</strong> ${time}</p>
+                    <p style="margin: 5px 0;"><strong>IP Address:</strong> ${ip || 'Unknown'}</p>
+                    ${(city || country) ? `<p style="margin: 5px 0;"><strong>Location:</strong> ${city ? city + (country ? ', ' : '') : ''}${country || ''}</p>` : ''}
+                    ${device ? `<p style="margin: 5px 0;"><strong>Device:</strong> ${device}</p>` : ''}
                 </div>
 
                 <p style="font-size: 16px;">
