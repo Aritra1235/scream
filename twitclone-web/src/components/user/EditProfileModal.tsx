@@ -21,8 +21,14 @@ type EditableUser = {
   username: string;
   display_name?: string;
   name?: string;
+  bio?: string;
   avatar_url: string;
   banner_url: string;
+  verified: boolean;
+  followers_count: number;
+  following_count: number;
+  posts_count: number;
+  createdAt: string;
 };
 
 type EditProfileModalProps = {
