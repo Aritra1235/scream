@@ -1,4 +1,3 @@
-import { createPostSchema, repostPostSchema, deletePostSchema } from './modals';
 import { db } from '../../db/client';
 import { posts, user } from '../../db/schema';
 import { eq, and, sql, desc } from 'drizzle-orm';
@@ -27,16 +26,61 @@ async function createPost(userId: bigint, content: string, mediaCount: number) {
     }
 }
 
+async function createReply(userId: bigint, parentId: bigint, content: string, mediaCount: number = 0) {
+    const [parent] = await db.select({ id: posts.id }).from(posts).where(eq(posts.id, parentId));
+    if (!parent) {
+        throw new Error('Parent post not found');
+    }
+
+    const post = await db.insert(posts).values({
+        id: generateId(),
+        userId,
+        content,
+        mediaCount,
+        parentId,
+    }).returning();
+
+    if (!post || post.length === 0) {
+        throw new Error('Failed to create reply');
+    }
+
+    await db.update(user).set({ posts_count: sql`${user.posts_count} + 1` }).where(eq(user.id, userId));
+    return post;
+}
+
 
 async function repostPost(userId: bigint, repostOf: bigint) {
     const post = await db.insert(posts).values({
         id: generateId(),
         userId,
+        content: '',
+        mediaCount: 0,
         repostOf,
     }).returning();
     if(!post) {
         throw new Error('Failed to repost post');
     }
+    return post;
+}
+
+async function createQuoteRepost(userId: bigint, repostOf: bigint, content: string, mediaCount: number = 0) {
+    const [target] = await db.select({ id: posts.id }).from(posts).where(eq(posts.id, repostOf));
+    if (!target) {
+        throw new Error('Target post not found');
+    }
+
+    const post = await db.insert(posts).values({
+        id: generateId(),
+        userId,
+        content,
+        mediaCount,
+        repostOf,
+    }).returning();
+
+    if (!post || post.length === 0) {
+        throw new Error('Failed to quote repost post');
+    }
+    await db.update(user).set({ posts_count: sql`${user.posts_count} + 1` }).where(eq(user.id, userId));
     return post;
 }
 
@@ -88,4 +132,13 @@ async function getPostsByUsername(username: string, limit: number = 20, offset: 
     return await getPostsByUserId(BigInt(userId), limit, offset);
 }
 
-export { createPost, repostPost, deletePost, isPostOwner, getPostsByUserId, getPostsByUsername };
+export {
+    createPost,
+    createReply,
+    repostPost,
+    createQuoteRepost,
+    deletePost,
+    isPostOwner,
+    getPostsByUserId,
+    getPostsByUsername
+};

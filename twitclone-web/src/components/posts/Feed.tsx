@@ -27,6 +27,8 @@ interface FeedPost {
     replies: number;
     liked_by_user: boolean;
   };
+  parentId?: string | null;
+  repostOf?: FeedPost;
 }
 
 interface FeedResponse {
@@ -67,17 +69,33 @@ export function Feed({ className = '' }: FeedProps) {
       }
 
       const data: FeedResponse = await response.json();
-      data.posts.forEach(post => {
-        if (post.author.avatar_url) {
-          post.author.avatar_url = process.env.NEXT_PUBLIC_CDN_BASE_URL + "/" + post.author.avatar_url;
-        }
-        if (post.media && post.media.length > 0) {
-          post.media = post.media.map((item) => ({
+      const normalize = (post: FeedPost): FeedPost => {
+        const normalized: FeedPost = {
+          ...post,
+          author: {
+            ...post.author,
+            avatar_url: post.author.avatar_url ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}` : post.author.avatar_url,
+          },
+          media: post.media?.map((item) => ({
             ...item,
             mediaUrl: `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${item.mediaUrl}`,
-          }));
+          })),
+          engagement: {
+            ...post.engagement,
+            likes: Number(post.engagement.likes) || 0,
+            reposts: Number(post.engagement.reposts) || 0,
+            replies: Number(post.engagement.replies) || 0,
+            liked_by_user: !!post.engagement.liked_by_user,
+          },
+        };
+
+        if (post.repostOf) {
+          normalized.repostOf = normalize(post.repostOf);
         }
-      });
+        return normalized;
+      };
+
+      data.posts = data.posts.map(normalize);
 
       if (append) {
         setPosts(prev => [...prev, ...data.posts]);

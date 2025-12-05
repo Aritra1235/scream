@@ -1,50 +1,86 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Repeat2, Share, MoreHorizontal } from 'lucide-react';
+import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
-interface TweetProps {
+export interface TweetMedia {
+  mediaUrl: string;
+  type: string;
+  width: number | null;
+  height: number | null;
+  contentType: string;
+}
+
+export interface TweetAuthor {
+  id: string;
+  username: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+  verified: boolean;
+}
+
+export interface TweetEngagement {
+  likes: number;
+  reposts: number;
+  replies: number;
+  liked_by_user: boolean;
+}
+
+export interface TweetData {
   id: string;
   content: string;
   createdAt: string;
   mediaCount: number;
-  media?: {
-    mediaUrl: string;
-    type: string;
-    width: number | null;
-    height: number | null;
-    contentType: string;
-  }[];
-  author: {
-    id: string;
-    username: string | null;
-    display_name: string | null;
-    avatar_url: string | null;
-    verified: boolean;
-  };
-  engagement: {
-    likes: number;
-    reposts: number;
-    replies: number;
-    liked_by_user: boolean;
-  };
+  media?: TweetMedia[];
+  author: TweetAuthor;
+  engagement: TweetEngagement;
+  parentId?: string | null;
+  repostOf?: TweetData;
 }
 
-export function Tweet({ id, content, createdAt, mediaCount, media, author, engagement }: TweetProps) {
+interface TweetProps extends TweetData {
+  depth?: number;
+  disableNavigation?: boolean;
+  onReply?: () => void;
+}
+
+export function Tweet({
+  id,
+  content,
+  createdAt,
+  mediaCount,
+  media,
+  author,
+  engagement,
+  repostOf,
+  depth = 0,
+  disableNavigation = false,
+  onReply,
+}: TweetProps) {
+  const router = useRouter();
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
   const [liked, setLiked] = useState(engagement.liked_by_user);
-  const [likesCount, setLikesCount] = useState(engagement.likes);
+  const [likesCount, setLikesCount] = useState<number>(Number(engagement.likes) || 0);
+  const [repostsCount, setRepostsCount] = useState<number>(Number(engagement.reposts) || 0);
   const [isLiking, setIsLiking] = useState(false);
+  const [isReposting, setIsReposting] = useState(false);
+
+  const handleNavigate = () => {
+    if (disableNavigation) return;
+    router.push(`/post/${id}`);
+  };
 
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isLiking) return;
 
+    const nextLiked = !liked;
+    const delta = nextLiked ? 1 : -1;
     const originalLiked = liked;
     const originalCount = likesCount;
 
-    // Optimistic update
-    setLiked(!liked);
-    setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+    setLiked(nextLiked);
+    setLikesCount((prevCount) => prevCount + delta);
     setIsLiking(true);
 
     try {
@@ -63,7 +99,6 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
       }
     } catch (error) {
       console.error('Error updating like status:', error);
-      // Revert on error
       setLiked(originalLiked);
       setLikesCount(originalCount);
     } finally {
@@ -71,11 +106,57 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
     }
   };
 
+  const handleReply = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onReply) {
+      onReply();
+      return;
+    }
+    handleNavigate();
+  };
+
+  const handleRepost = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isReposting) return;
+
+    const comment = window.prompt('Add a comment to quote (leave empty to repost):', '');
+    if (comment === null) {
+      return;
+    }
+
+    const isQuote = comment.trim().length > 0;
+    setIsReposting(true);
+    try {
+      const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/post/${isQuote ? 'quote' : 'repost'}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          repostOf: id,
+          content: comment.trim(),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to repost');
+      }
+      setRepostsCount((prev) => prev + 1);
+    } catch (error) {
+      console.error('Error reposting:', error);
+    } finally {
+      setIsReposting(false);
+    }
+  };
+
   return (
-    <article className="border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card">
+    <article
+      className={`border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card ${depth > 0 ? 'pl-8' : ''}`}
+      onClick={handleNavigate}
+    >
       <div className="flex gap-4">
-        {/* Avatar */}
-        <a href={`/${author.username}`} className="flex-shrink-0" tabIndex={0}>
+        <a href={`/${author.username}`} className="flex-shrink-0" tabIndex={0} onClick={(e) => e.stopPropagation()}>
           <img
             src={author.avatar_url || '/default-avatar.png'}
             alt={`${author.display_name || author.username}'s avatar`}
@@ -83,11 +164,9 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
           />
         </a>
 
-        {/* Tweet Content */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <a href={`/${author.username}`} className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate" tabIndex={0}>
+            <a href={`/${author.username}`} className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate" tabIndex={0} onClick={(e) => e.stopPropagation()}>
               {author.display_name || author.username}
             </a>
             {author.verified && (
@@ -106,18 +185,33 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
             </span>
           </div>
 
-          {/* Content */}
           <div className="text-foreground text-lg font-medium mb-4 whitespace-pre-wrap break-words leading-relaxed">
             {content}
           </div>
 
-          {/* Media */}
+          {repostOf && (
+            <div className="mb-4 border-2 border-border bg-muted p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
+              <div className="flex items-center gap-2 mb-2">
+                <img
+                  src={repostOf.author.avatar_url || '/default-avatar.png'}
+                  alt={`${repostOf.author.username} avatar`}
+                  className="w-8 h-8 border border-border object-cover"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-black uppercase">{repostOf.author.display_name || repostOf.author.username}</span>
+                  <span className="text-xs text-muted-foreground">@{repostOf.author.username}</span>
+                </div>
+              </div>
+              <div className="text-sm text-foreground whitespace-pre-wrap break-words">
+                {repostOf.content}
+              </div>
+            </div>
+          )}
+
           {media && media.length > 0 && (
             <div className="mb-4 border-2 border-border bg-muted overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
               <div
-                className={`grid gap-1 ${
-                  media.length === 1 ? "grid-cols-1" : "grid-cols-2"
-                }`}
+                className={`grid gap-1 ${media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
               >
                 {media.slice(0, 4).map((item, index) => (
                   <div
@@ -127,9 +221,7 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
                     <img
                       src={item.mediaUrl}
                       alt="Post media"
-                      className={`w-full h-full object-cover ${
-                        media.length === 1 ? "max-h-[500px]" : ""
-                      }`}
+                      className={`w-full h-full object-cover ${media.length === 1 ? "max-h-[500px]" : ""}`}
                     />
                   </div>
                 ))}
@@ -137,27 +229,32 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
             </div>
           )}
 
-          {/* Fallback placeholder when mediaCount exists but media array missing */}
           {(!media || media.length === 0) && mediaCount > 0 && (
             <div className="mb-4 bg-muted border-2 border-border p-4 text-center font-bold text-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
               {mediaCount} MEDIA FILE{mediaCount > 1 ? "S" : ""} ATTACHED
             </div>
           )}
 
-          {/* Engagement Actions */}
           <div className="flex items-center justify-between max-w-md mt-2">
-            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group">
+            <button
+              onClick={handleReply}
+              className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group"
+            >
               <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-blue-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
                 <MessageCircle className="w-5 h-5" />
               </div>
               <span className="font-bold text-sm">{engagement.replies}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-foreground hover:text-green-600 transition-colors group">
+            <button
+              onClick={handleRepost}
+              className="flex items-center gap-2 text-foreground hover:text-green-600 transition-colors group"
+              disabled={isReposting}
+            >
               <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-green-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
                 <Repeat2 className="w-5 h-5" />
               </div>
-              <span className="font-bold text-sm">{engagement.reposts}</span>
+              <span className="font-bold text-sm">{repostsCount}</span>
             </button>
 
             <button
@@ -170,7 +267,7 @@ export function Tweet({ id, content, createdAt, mediaCount, media, author, engag
               <span className="font-bold text-sm">{likesCount}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group">
+            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group" onClick={(e) => e.stopPropagation()}>
               <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-blue-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
                 <Share className="w-5 h-5" />
               </div>

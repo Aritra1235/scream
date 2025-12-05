@@ -21,9 +21,27 @@ interface SelectedImage {
     previewUrl: string;
 }
 
+type ComposerVariant = "post" | "reply" | "quote";
+
+interface TweetInputProps {
+    parentId?: string;
+    repostOf?: string;
+    variant?: ComposerVariant;
+    placeholder?: string;
+    autoRefresh?: boolean;
+    onSuccess?: (post?: any) => void;
+}
+
 const MAX_IMAGES = 4;
 
-export function TweetInput() {
+export function TweetInput({
+    parentId,
+    repostOf,
+    variant = "post",
+    placeholder,
+    autoRefresh = true,
+    onSuccess,
+}: TweetInputProps) {
     const { user } = useUserStore();
     const [content, setContent] = useState("");
     const [isPosting, setIsPosting] = useState(false);
@@ -128,26 +146,38 @@ export function TweetInput() {
     };
 
     const handlePost = async () => {
-        if (!content.trim() && images.length === 0) return;
+        const requiresContent = variant !== "quote";
+        if (requiresContent && !content.trim()) return;
+        if (variant === "reply" && !parentId) return;
+        if (variant === "quote" && !repostOf) return;
 
         setIsPosting(true);
         try {
             const hasImages = images.length > 0;
+            const baseUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}`;
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/post/create`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        content: content.trim(),
-                        mediaCount: hasImages ? images.length : 0,
-                    }),
-                }
-            );
+            let endpoint = `${baseUrl}/post/create`;
+            const payload: Record<string, any> = {
+                content: content.trim(),
+                mediaCount: hasImages ? images.length : 0,
+            };
+
+            if (variant === "reply" && parentId) {
+                endpoint = `${baseUrl}/post/reply`;
+                payload.parentId = parentId;
+            } else if (variant === "quote" && repostOf) {
+                endpoint = `${baseUrl}/post/quote`;
+                payload.repostOf = repostOf;
+            }
+
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(payload),
+            });
 
             if (response.ok) {
                 const data = await response.json();
@@ -170,9 +200,11 @@ export function TweetInput() {
                     prev.forEach((img) => URL.revokeObjectURL(img.previewUrl));
                     return [];
                 });
-                // Optionally trigger a feed refresh here if we had a way to do it
-                // For now, the user might need to refresh or we can use a global event/store
-                window.location.reload(); // Simple way to refresh feed for now
+
+                onSuccess?.(data?.post);
+                if (autoRefresh) {
+                    window.location.reload();
+                }
             }
         } catch (error) {
             console.error("Failed to post tweet:", error);
@@ -209,7 +241,14 @@ export function TweetInput() {
                         onDrop={handleDrop}
                     >
                         <Textarea
-                            placeholder="WHAT'S ON YOUR MIND?"
+                            placeholder={
+                                placeholder ||
+                                (variant === "reply"
+                                    ? "Reply to this post..."
+                                    : variant === "quote"
+                                        ? "Add your take (optional)..."
+                                        : "WHAT'S ON YOUR MIND?")
+                            }
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             className="min-h-[100px] w-full resize-none border-none bg-transparent p-4 text-xl font-bold placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:shadow-none focus-visible:outline-none"
@@ -281,10 +320,21 @@ export function TweetInput() {
                         </div>
                         <Button
                             onClick={handlePost}
-                            disabled={!content.trim() || isPosting}
+                            disabled={
+                                isPosting ||
+                                (variant !== "quote" && !content.trim()) ||
+                                (variant === "reply" && !parentId) ||
+                                (variant === "quote" && !repostOf)
+                            }
                             className="rounded-none border-2 border-border bg-[#4ECDC4] px-8 py-6 font-black text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:bg-[#45b8b0] hover:-translate-y-1 hover:translate-x-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:disabled:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all uppercase"
                         >
-                            {isPosting ? "SCREAMING..." : "SCREAM"}
+                            {isPosting
+                                ? "SCREAMING..."
+                                : variant === "reply"
+                                    ? "REPLY"
+                                    : variant === "quote"
+                                        ? "QUOTE"
+                                        : "SCREAM"}
                         </Button>
                     </div>
                     <input
