@@ -1,0 +1,12 @@
+export { LandingPage } from "./LandingPage";
+export { AboutPage } from "./AboutPage";
+export { ContactPage } from "./ContactPage";
+export { PrivacyPage } from "./PrivacyPage";
+export { TermsPage } from "./TermsPage";
+export { SignInPage } from "./SignInPage";
+export { SignUpPage } from "./SignUpPage";
+export { HomePage } from "./HomePage";
+export { UserPage } from "./UserPage";
+export { SettingsPage } from "./SettingsPage";
+
+
