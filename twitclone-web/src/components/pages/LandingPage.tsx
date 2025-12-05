@@ -23,7 +23,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-black flex items-center justify-center text-white font-black text-xl">
-              T
+              S
             </div>
             <span className="text-2xl font-black uppercase tracking-tighter">
               SCREAM
