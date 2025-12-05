@@ -183,18 +183,21 @@ export function Tweet({
                   <div
                     className={`grid gap-1 ${repostOf.media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
                   >
-                    {repostOf.media.slice(0, 4).map((item, index) => (
-                      <div
-                        key={`${item.mediaUrl}-${index}`}
-                        className={`w-full ${repostOf.media.length === 1 ? "h-full" : "aspect-square"}`}
-                      >
-                        <img
-                          src={item.mediaUrl}
-                          alt="Repost media"
-                          className={`w-full h-full object-contain bg-muted ${repostOf.media.length === 1 ? "max-h-64" : "max-h-48"}`}
-                        />
-                      </div>
-                    ))}
+                    {(repostOf.media ?? []).slice(0, 4).map((item, index) => {
+                      const single = (repostOf.media ?? []).length === 1;
+                      return (
+                        <div
+                          key={`${item.mediaUrl}-${index}`}
+                          className={`w-full ${single ? "h-full" : "aspect-square"}`}
+                        >
+                          <img
+                            src={item.mediaUrl}
+                            alt="Repost media"
+                            className={`w-full h-full object-contain bg-muted ${single ? "max-h-64" : "max-h-48"}`}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
