@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import { TweetModal } from '@/components/TweetModal';
 
 export interface TweetMedia {
   mediaUrl: string;
@@ -64,6 +65,7 @@ export function Tweet({
   const [repostsCount, setRepostsCount] = useState<number>(Number(engagement.reposts) || 0);
   const [isLiking, setIsLiking] = useState(false);
   const [isReposting, setIsReposting] = useState(false);
+  const [showRepostModal, setShowRepostModal] = useState(false);
 
   const handleNavigate = () => {
     if (disableNavigation) return;
@@ -118,36 +120,7 @@ export function Tweet({
   const handleRepost = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isReposting) return;
-
-    const comment = window.prompt('Add a comment to quote (leave empty to repost):', '');
-    if (comment === null) {
-      return;
-    }
-
-    const isQuote = comment.trim().length > 0;
-    setIsReposting(true);
-    try {
-      const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/post/${isQuote ? 'quote' : 'repost'}`;
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          repostOf: id,
-          content: comment.trim(),
-        }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to repost');
-      }
-      setRepostsCount((prev) => prev + 1);
-    } catch (error) {
-      console.error('Error reposting:', error);
-    } finally {
-      setIsReposting(false);
-    }
+    setShowRepostModal(true);
   };
 
   return (
@@ -205,6 +178,26 @@ export function Tweet({
               <div className="text-sm text-foreground whitespace-pre-wrap break-words">
                 {repostOf.content}
               </div>
+              {repostOf.media && repostOf.media.length > 0 && (
+                <div className="mt-3 max-h-64 overflow-hidden rounded-sm border border-border bg-card/40">
+                  <div
+                    className={`grid gap-1 ${repostOf.media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+                  >
+                    {repostOf.media.slice(0, 4).map((item, index) => (
+                      <div
+                        key={`${item.mediaUrl}-${index}`}
+                        className={`w-full ${repostOf.media.length === 1 ? "h-full" : "aspect-square"}`}
+                      >
+                        <img
+                          src={item.mediaUrl}
+                          alt="Repost media"
+                          className={`w-full h-full object-contain bg-muted ${repostOf.media.length === 1 ? "max-h-64" : "max-h-48"}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -275,6 +268,31 @@ export function Tweet({
           </div>
         </div>
       </div>
+
+      {showRepostModal && (
+        <TweetModal
+          open={showRepostModal}
+          onOpenChange={(open) => {
+            setShowRepostModal(open);
+            setIsReposting(false);
+          }}
+          onTweetPosted={() => {
+            setRepostsCount((prev) => prev + 1);
+            setShowRepostModal(false);
+          }}
+          variant="repost"
+          repostTarget={{
+            id,
+            content,
+            author: {
+              displayName: author.display_name,
+              username: author.username || undefined,
+              avatar: author.avatar_url || undefined,
+            },
+            media,
+          }}
+        />
+      )}
     </article>
   );
 }
