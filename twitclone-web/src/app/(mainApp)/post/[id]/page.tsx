@@ -8,6 +8,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { Tweet, type TweetData } from "@/components/posts/Tweet";
 import { TweetInput } from "@/components/posts/TweetInput";
 
+export const runtime = "edge";
+
 type ThreadPost = TweetData & {
     replies?: ThreadPost[];
     repostOf?: ThreadPost;
