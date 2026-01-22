@@ -1,6 +1,6 @@
-# TwitClone
+# Scream
 
-A full-stack Twitter clone built with modern web technologies. Features real-time social media functionality including posts, replies, reposts, likes, follows, and media uploads.
+A full-stack social media platform built with modern web technologies. Features real-time social media functionality including posts, replies, reposts, likes, follows, and media uploads.
 
 ## 🚀 Tech Stack
 
@@ -38,7 +38,7 @@ A full-stack Twitter clone built with modern web technologies. Features real-tim
 ## 🏗️ Architecture
 
 ```
-twitclone/
+scream/
 ├── twitclone-api/          # Backend API
 │   ├── src/
 │   │   ├── modules/         # Feature modules
@@ -89,7 +89,7 @@ The application uses PostgreSQL with the following main entities:
 3. **Set up environment variables:**
    Create a `.env` file with:
    ```env
-   DATABASE_URL=postgresql://user:password@localhost:5432/twitclone
+   DATABASE_URL=postgresql://user:password@localhost:5432/scream
    AWS_ACCESS_KEY_ID=your-aws-access-key
    AWS_SECRET_ACCESS_KEY=your-aws-secret-key
    AWS_S3_BUCKET=your-bucket-name
