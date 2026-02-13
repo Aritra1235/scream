@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
-import { NeoButton, FeatureCard, LandingFooter } from "@/components/landing";
+import { FeatureCard, LandingFooter, NeoButton } from "@/components/landing";
 
 export function LandingPage() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -42,6 +43,13 @@ export function LandingPage() {
             >
               About
             </Link>
+            <Image
+              src="/vitaplogo.png"
+              alt="VIT-AP Logo"
+              width={100}
+              height={33}
+              className="object-contain"
+            />
             <NeoButton
               href="/sign-up"
               variant="primary"

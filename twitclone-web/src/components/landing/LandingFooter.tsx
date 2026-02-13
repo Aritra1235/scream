@@ -40,7 +40,7 @@ export function LandingFooter() {
       </div>
       <div className="max-w-7xl mx-auto mt-8 flex justify-center">
         <Image
-          src="https://vitap.ac.in/assets/images/logos/vitaplogo.png"
+          src="/vitaplogo.png"
           alt="VIT-AP Logo"
           width={150}
           height={50}
