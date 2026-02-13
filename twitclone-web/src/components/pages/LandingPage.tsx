@@ -42,7 +42,11 @@ export function LandingPage() {
             >
               About
             </Link>
-            <NeoButton href="/sign-up" variant="primary" className="py-2 px-6 text-base">
+            <NeoButton
+              href="/sign-up"
+              variant="primary"
+              className="py-2 px-6 text-base"
+            >
               Join Now
             </NeoButton>
           </div>
@@ -62,7 +66,7 @@ export function LandingPage() {
             transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
           >
             <h1 className="text-6xl md:text-9xl font-black mb-8 leading-none tracking-tighter drop-shadow-[4px_4px_0px_rgba(255,255,255,1)]">
-              SAY IT.  
+              SAY IT.
               <br />
               <span className="text-[#FF6B6B] bg-black px-4 transform -skew-x-6 inline-block mt-2">
                 MEAN IT.
@@ -76,8 +80,8 @@ export function LandingPage() {
             transition={{ delay: 0.3, duration: 0.6 }}
             className="text-xl md:text-3xl font-bold mb-12 max-w-3xl mx-auto bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1"
           >
-            A platform built for real voices, real thoughts, and real people.  
-            No fake personas. No algorithmic manipulation. Just signal — not noise.
+            A platform built for real voices, real thoughts, and real people. No
+            fake personas. No algorithmic manipulation. Just signal — not noise.
           </motion.p>
 
           <motion.div
@@ -107,14 +111,16 @@ export function LandingPage() {
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL •
+          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO
+          FILTERS • HIGH SIGNAL •
         </motion.div>
         <motion.div
           animate={{ x: [0, -1000] }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
           className="inline-block text-4xl font-black uppercase tracking-widest"
         >
-          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL •
+          • REAL PEOPLE • ZERO FILTERS • HIGH SIGNAL • REAL PEOPLE • ZERO
+          FILTERS • HIGH SIGNAL •
         </motion.div>
       </div>
 
@@ -141,7 +147,11 @@ export function LandingPage() {
                   viewBox="0 0 24 24"
                   strokeWidth="3"
                 >
-                  <path strokeLinecap="square" strokeLinejoin="miter" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path
+                    strokeLinecap="square"
+                    strokeLinejoin="miter"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
               }
             />
@@ -203,10 +213,14 @@ export function LandingPage() {
             Ready to speak your mind?
           </h2>
           <p className="text-xl font-bold mb-10 max-w-2xl mx-auto">
-            Join a platform built for authenticity, speed, and actual human expression.  
-            No noise. No pretending. Just you.
+            Join a platform built for authenticity, speed, and actual human
+            expression. No noise. No pretending. Just you.
           </p>
-          <NeoButton href="/sign-up" variant="primary" className="text-xl px-12 py-6">
+          <NeoButton
+            href="/sign-up"
+            variant="primary"
+            className="text-xl px-12 py-6"
+          >
             GET STARTED
           </NeoButton>
         </div>

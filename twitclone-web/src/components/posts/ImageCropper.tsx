@@ -20,7 +20,7 @@ interface ImageCropperProps {
 
 async function getCroppedBlob(
   imageSrc: string,
-  croppedAreaPixels: CropAreaPixels
+  croppedAreaPixels: CropAreaPixels,
 ): Promise<Blob> {
   const image = new Image();
   image.src = imageSrc;
@@ -48,7 +48,7 @@ async function getCroppedBlob(
     0,
     0,
     croppedAreaPixels.width,
-    croppedAreaPixels.height
+    croppedAreaPixels.height,
   );
 
   return new Promise<Blob>((resolve, reject) => {
@@ -79,7 +79,7 @@ export function ImageCropper({
     (_: unknown, areaPixels: CropAreaPixels) => {
       setCroppedAreaPixels(areaPixels);
     },
-    []
+    [],
   );
 
   const handleSave = useCallback(async () => {
@@ -149,5 +149,3 @@ export function ImageCropper({
     </div>
   );
 }
-
-

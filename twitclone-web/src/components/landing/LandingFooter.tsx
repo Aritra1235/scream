@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function LandingFooter() {
@@ -37,8 +38,15 @@ export function LandingFooter() {
           </Link>
         </div>
       </div>
+      <div className="max-w-7xl mx-auto mt-8 flex justify-center">
+        <Image
+          src="https://vitap.ac.in/assets/images/logos/vitaplogo.png"
+          alt="VIT-AP Logo"
+          width={150}
+          height={50}
+          className="object-contain"
+        />
+      </div>
     </footer>
   );
 }
-
-

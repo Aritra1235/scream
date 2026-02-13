@@ -27,7 +27,7 @@ export function HomePage() {
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/onboarding/${session.data.user.id}`,
             {
               credentials: "include",
-            }
+            },
           );
           if (response.ok) {
             const onboardingData = await response.json();
@@ -72,5 +72,3 @@ export function HomePage() {
     </div>
   );
 }
-
-

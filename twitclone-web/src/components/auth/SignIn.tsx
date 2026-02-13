@@ -7,7 +7,13 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,7 +24,12 @@ interface SignInProps {
   className?: string;
 }
 
-export default function SignIn({ onSuccess, onError, onSignUpClick, className = "" }: SignInProps) {
+export default function SignIn({
+  onSuccess,
+  onError,
+  onSignUpClick,
+  className = "",
+}: SignInProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -69,7 +80,9 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-primary-foreground font-bold text-lg">S</span>
           </div>
-          <CardTitle className="text-2xl font-bold text-foreground">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">
+            Welcome back
+          </CardTitle>
           <CardDescription className="text-muted-foreground">
             Sign in to your SCREAM account
           </CardDescription>
@@ -79,7 +92,9 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email address</Label>
+              <Label htmlFor="email" className="text-foreground">
+                Email address
+              </Label>
               <div className="relative">
                 <Input
                   id="email"
@@ -96,7 +111,9 @@ export default function SignIn({ onSuccess, onError, onSignUpClick, className = 
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
+              <Label htmlFor="password" className="text-foreground">
+                Password
+              </Label>
               <div className="relative">
                 <Input
                   id="password"

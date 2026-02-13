@@ -41,7 +41,7 @@ export function ContactPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -221,7 +221,9 @@ export function ContactPage() {
               </div>
 
               <div className="bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h3 className="text-2xl font-black uppercase mb-4">Bug Reports</h3>
+                <h3 className="text-2xl font-black uppercase mb-4">
+                  Bug Reports
+                </h3>
                 <p className="text-lg font-bold leading-relaxed">
                   Found a bug? Let us know the details and we'll fix it ASAP.
                 </p>
@@ -253,5 +255,3 @@ export function ContactPage() {
     </div>
   );
 }
-
-

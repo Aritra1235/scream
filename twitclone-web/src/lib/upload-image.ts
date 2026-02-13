@@ -11,7 +11,9 @@ interface UploadImageOptions {
   userId: string;
 }
 
-const getImageDimensions = (file: File): Promise<{ width: number; height: number }> =>
+const getImageDimensions = (
+  file: File,
+): Promise<{ width: number; height: number }> =>
   new Promise((resolve) => {
     const img = new Image();
     img.onload = () => resolve({ width: img.width, height: img.height });
@@ -47,7 +49,7 @@ export const uploadImage = async ({
         headers: {
           "Content-Type": file.type,
         },
-      }
+      },
     );
 
     if (!presignedResponse.ok) {
@@ -105,5 +107,3 @@ export const uploadImage = async ({
     return null;
   }
 };
-
-

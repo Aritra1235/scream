@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { useRouter } from 'next/navigation';
-import { TweetModal } from '@/components/TweetModal';
+import React, { useState } from "react";
+import { Heart, MessageCircle, Repeat2, Share } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
+import { TweetModal } from "@/components/TweetModal";
 
 export interface TweetMedia {
   mediaUrl: string;
@@ -61,8 +61,12 @@ export function Tweet({
   const router = useRouter();
   const timeAgo = formatDistanceToNow(new Date(createdAt), { addSuffix: true });
   const [liked, setLiked] = useState(engagement.liked_by_user);
-  const [likesCount, setLikesCount] = useState<number>(Number(engagement.likes) || 0);
-  const [repostsCount, setRepostsCount] = useState<number>(Number(engagement.reposts) || 0);
+  const [likesCount, setLikesCount] = useState<number>(
+    Number(engagement.likes) || 0,
+  );
+  const [repostsCount, setRepostsCount] = useState<number>(
+    Number(engagement.reposts) || 0,
+  );
   const [isLiking, setIsLiking] = useState(false);
   const [isReposting, setIsReposting] = useState(false);
   const [showRepostModal, setShowRepostModal] = useState(false);
@@ -86,21 +90,21 @@ export function Tweet({
     setIsLiking(true);
 
     try {
-      const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/like/${liked ? 'unlike' : 'like'}`;
+      const endpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/like/${liked ? "unlike" : "like"}`;
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ postId: id }),
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update like status');
+        throw new Error("Failed to update like status");
       }
     } catch (error) {
-      console.error('Error updating like status:', error);
+      console.error("Error updating like status:", error);
       setLiked(originalLiked);
       setLikesCount(originalCount);
     } finally {
@@ -125,13 +129,18 @@ export function Tweet({
 
   return (
     <article
-      className={`border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card ${depth > 0 ? 'pl-8' : ''}`}
+      className={`border-b-4 border-border p-6 hover:bg-muted transition-colors cursor-pointer bg-card ${depth > 0 ? "pl-8" : ""}`}
       onClick={handleNavigate}
     >
       <div className="flex gap-4">
-        <a href={`/${author.username}`} className="flex-shrink-0" tabIndex={0} onClick={(e) => e.stopPropagation()}>
+        <a
+          href={`/${author.username}`}
+          className="flex-shrink-0"
+          tabIndex={0}
+          onClick={(e) => e.stopPropagation()}
+        >
           <img
-            src={author.avatar_url || '/default-avatar.png'}
+            src={author.avatar_url || "/default-avatar.png"}
             alt={`${author.display_name || author.username}'s avatar`}
             className="w-12 h-12 border-2 border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] object-cover bg-muted"
           />
@@ -139,13 +148,26 @@ export function Tweet({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <a href={`/${author.username}`} className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate" tabIndex={0} onClick={(e) => e.stopPropagation()}>
+            <a
+              href={`/${author.username}`}
+              className="font-black text-foreground uppercase tracking-tight hover:underline decoration-2 underline-offset-2 truncate"
+              tabIndex={0}
+              onClick={(e) => e.stopPropagation()}
+            >
               {author.display_name || author.username}
             </a>
             {author.verified && (
               <div className="bg-foreground text-background p-0.5 rounded-none border border-border">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -166,13 +188,17 @@ export function Tweet({
             <div className="mb-4 border-2 border-border bg-muted p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
               <div className="flex items-center gap-2 mb-2">
                 <img
-                  src={repostOf.author.avatar_url || '/default-avatar.png'}
+                  src={repostOf.author.avatar_url || "/default-avatar.png"}
                   alt={`${repostOf.author.username} avatar`}
                   className="w-8 h-8 border border-border object-cover"
                 />
                 <div className="flex flex-col">
-                  <span className="text-sm font-black uppercase">{repostOf.author.display_name || repostOf.author.username}</span>
-                  <span className="text-xs text-muted-foreground">@{repostOf.author.username}</span>
+                  <span className="text-sm font-black uppercase">
+                    {repostOf.author.display_name || repostOf.author.username}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    @{repostOf.author.username}
+                  </span>
                 </div>
               </div>
               <div className="text-sm text-foreground whitespace-pre-wrap break-words">
@@ -212,7 +238,11 @@ export function Tweet({
                 {media.slice(0, 4).map((item, index) => (
                   <div
                     key={`${item.mediaUrl}-${index}`}
-                    className={media.length === 1 ? "w-full h-full" : "aspect-square w-full"}
+                    className={
+                      media.length === 1
+                        ? "w-full h-full"
+                        : "aspect-square w-full"
+                    }
                   >
                     <img
                       src={item.mediaUrl}
@@ -255,15 +285,20 @@ export function Tweet({
 
             <button
               onClick={handleLike}
-              className={`flex items-center gap-2 transition-colors group ${liked ? 'text-[#FF6B6B]' : 'text-foreground hover:text-[#FF6B6B]'}`}
+              className={`flex items-center gap-2 transition-colors group ${liked ? "text-[#FF6B6B]" : "text-foreground hover:text-[#FF6B6B]"}`}
             >
-              <div className={`p-2 border-2 border-transparent transition-all ${liked ? 'bg-[#FF6B6B] border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] text-black' : 'group-hover:border-border group-hover:bg-[#FF6B6B] group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]'}`}>
-                <Heart className={`w-5 h-5 ${liked ? 'fill-black' : ''}`} />
+              <div
+                className={`p-2 border-2 border-transparent transition-all ${liked ? "bg-[#FF6B6B] border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] text-black" : "group-hover:border-border group-hover:bg-[#FF6B6B] group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"}`}
+              >
+                <Heart className={`w-5 h-5 ${liked ? "fill-black" : ""}`} />
               </div>
               <span className="font-bold text-sm">{likesCount}</span>
             </button>
 
-            <button className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="flex items-center gap-2 text-foreground hover:text-blue-600 transition-colors group"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="p-2 border-2 border-transparent group-hover:border-border group-hover:bg-blue-100 group-hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:group-hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] transition-all">
                 <Share className="w-5 h-5" />
               </div>

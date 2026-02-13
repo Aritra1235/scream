@@ -2,7 +2,13 @@
 
 import { ExternalLink, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface EmailProviderOpenerProps {
   email: string;
@@ -14,7 +20,12 @@ const getEmailProvider = (email: string) => {
   if (!domain) return null;
 
   if (domain.includes("gmail.com")) return "gmail";
-  if (domain.includes("outlook.com") || domain.includes("live.com") || domain.includes("hotmail.com")) return "outlook";
+  if (
+    domain.includes("outlook.com") ||
+    domain.includes("live.com") ||
+    domain.includes("hotmail.com")
+  )
+    return "outlook";
   if (domain.includes("yahoo.com")) return "yahoo";
   return null;
 };
@@ -34,7 +45,10 @@ const getProviderUrl = (provider: string | null, senderEmail: string) => {
   }
 };
 
-export default function EmailProviderOpener({ email, senderEmail = "noreply@scream.aritra.ovh" }: EmailProviderOpenerProps) {
+export default function EmailProviderOpener({
+  email,
+  senderEmail = "noreply@scream.aritra.ovh",
+}: EmailProviderOpenerProps) {
   const provider = getEmailProvider(email);
   const providerUrl = getProviderUrl(provider, senderEmail);
 
@@ -64,8 +78,12 @@ export default function EmailProviderOpener({ email, senderEmail = "noreply@scre
   return (
     <Card className="border-border/40 bg-card/60 backdrop-blur">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-foreground">Open your email</CardTitle>
-        <CardDescription>Quickly access your inbox to find the verification email.</CardDescription>
+        <CardTitle className="text-xl font-semibold text-foreground">
+          Open your email
+        </CardTitle>
+        <CardDescription>
+          Quickly access your inbox to find the verification email.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {provider && providerUrl && (

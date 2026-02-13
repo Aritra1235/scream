@@ -27,5 +27,3 @@ export function ValueCard({ icon, title, description, color }: ValueCardProps) {
     </motion.div>
   );
 }
-
-

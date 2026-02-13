@@ -50,7 +50,11 @@ export function LandingNav({
               About
             </Link>
           )}
-          <NeoButton href="/sign-up" variant="primary" className="py-2 px-6 text-base">
+          <NeoButton
+            href="/sign-up"
+            variant="primary"
+            className="py-2 px-6 text-base"
+          >
             Join Now
           </NeoButton>
         </div>
@@ -58,5 +62,3 @@ export function LandingNav({
     </nav>
   );
 }
-
-

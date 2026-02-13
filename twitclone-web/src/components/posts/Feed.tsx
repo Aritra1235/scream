@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Tweet } from './Tweet';
-import { Spinner } from '@/components/ui/spinner';
+import React, { useState, useEffect } from "react";
+import { Tweet } from "./Tweet";
+import { Spinner } from "@/components/ui/spinner";
 
 interface FeedPost {
   id: string;
@@ -39,7 +39,7 @@ interface FeedProps {
   className?: string;
 }
 
-export function Feed({ className = '' }: FeedProps) {
+export function Feed({ className = "" }: FeedProps) {
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,11 +57,11 @@ export function Feed({ className = '' }: FeedProps) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/feed?limit=${limit}&offset=${currentOffset}`,
         {
-          credentials: 'include',
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -74,7 +74,9 @@ export function Feed({ className = '' }: FeedProps) {
           ...post,
           author: {
             ...post.author,
-            avatar_url: post.author.avatar_url ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}` : post.author.avatar_url,
+            avatar_url: post.author.avatar_url
+              ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}`
+              : post.author.avatar_url,
           },
           media: post.media?.map((item) => ({
             ...item,
@@ -98,7 +100,7 @@ export function Feed({ className = '' }: FeedProps) {
       data.posts = data.posts.map(normalize);
 
       if (append) {
-        setPosts(prev => [...prev, ...data.posts]);
+        setPosts((prev) => [...prev, ...data.posts]);
       } else {
         setPosts(data.posts);
       }
@@ -106,8 +108,8 @@ export function Feed({ className = '' }: FeedProps) {
       setHasMore(data.posts.length === limit);
       setOffset(currentOffset + data.posts.length);
     } catch (err) {
-      console.error('Error fetching feed:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load feed');
+      console.error("Error fetching feed:", err);
+      setError(err instanceof Error ? err.message : "Failed to load feed");
     } finally {
       setIsLoading(false);
     }
@@ -138,8 +140,18 @@ export function Feed({ className = '' }: FeedProps) {
     return (
       <div className={`text-center py-8 ${className}`}>
         <div className="text-muted-foreground mb-4">
-          <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          <svg
+            className="w-12 h-12 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            />
           </svg>
           <p className="font-medium">Failed to load feed</p>
           <p className="text-sm">{error}</p>
@@ -158,11 +170,23 @@ export function Feed({ className = '' }: FeedProps) {
     return (
       <div className={`text-center py-12 ${className}`}>
         <div className="text-muted-foreground">
-          <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          <svg
+            className="w-16 h-16 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
           </svg>
           <p className="text-lg font-medium mb-2">No posts yet</p>
-          <p className="text-sm">Follow some users to see their posts in your feed.</p>
+          <p className="text-sm">
+            Follow some users to see their posts in your feed.
+          </p>
         </div>
       </div>
     );
@@ -190,7 +214,7 @@ export function Feed({ className = '' }: FeedProps) {
                 LOADING...
               </div>
             ) : (
-              'LOAD MORE SCREAMS'
+              "LOAD MORE SCREAMS"
             )}
           </button>
         </div>

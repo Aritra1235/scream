@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Tweet } from '@/components/posts/Tweet';
-import { Spinner } from '@/components/ui/spinner';
+import React, { useState, useEffect } from "react";
+import { Tweet } from "@/components/posts/Tweet";
+import { Spinner } from "@/components/ui/spinner";
 
 interface FeedPost {
   id: string;
@@ -59,11 +59,11 @@ export function UserFeed({ username }: UserFeedProps) {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/feed/user/${username}?limit=${limit}&offset=${currentOffset}`,
         {
-          credentials: 'include',
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -76,7 +76,9 @@ export function UserFeed({ username }: UserFeedProps) {
           ...post,
           author: {
             ...post.author,
-            avatar_url: post.author.avatar_url ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}` : post.author.avatar_url,
+            avatar_url: post.author.avatar_url
+              ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}`
+              : post.author.avatar_url,
           },
           media: post.media?.map((item) => ({
             ...item,
@@ -107,8 +109,8 @@ export function UserFeed({ username }: UserFeedProps) {
       setHasMore(data.posts.length === limit);
       setOffset(currentOffset + data.posts.length);
     } catch (err) {
-      console.error('Error fetching user posts:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load posts');
+      console.error("Error fetching user posts:", err);
+      setError(err instanceof Error ? err.message : "Failed to load posts");
     } finally {
       setIsLoading(false);
     }
@@ -210,7 +212,7 @@ export function UserFeed({ username }: UserFeedProps) {
                 LOADING...
               </div>
             ) : (
-              'LOAD MORE SCREAMS'
+              "LOAD MORE SCREAMS"
             )}
           </button>
         </div>
@@ -220,7 +222,10 @@ export function UserFeed({ username }: UserFeedProps) {
         <div className="p-4 border-t border-border">
           <div className="text-center text-sm text-muted-foreground">
             <p>Failed to load more posts</p>
-            <button onClick={loadMore} className="mt-2 text-primary hover:underline">
+            <button
+              onClick={loadMore}
+              className="mt-2 text-primary hover:underline"
+            >
               Try again
             </button>
           </div>
@@ -229,4 +234,3 @@ export function UserFeed({ username }: UserFeedProps) {
     </div>
   );
 }
-

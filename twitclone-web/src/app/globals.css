@@ -45,47 +45,47 @@
 
 :root {
   --radius: 0rem; /* Neobrutalism usually has sharp corners or specific rounded ones. Let's go sharp or small radius. Landing page has some rounded-none. */
-  
+
   /* Neobrutalist Palette (Light/Default) */
-  --background: #FFE66D; /* Yellow */
+  --background: #ffe66d; /* Yellow */
   --foreground: #000000; /* Black */
-  
-  --card: #FFFFFF;
+
+  --card: #ffffff;
   --card-foreground: #000000;
-  
-  --popover: #FFFFFF;
+
+  --popover: #ffffff;
   --popover-foreground: #000000;
-  
-  --primary: #FF6B6B; /* Red */
+
+  --primary: #ff6b6b; /* Red */
   --primary-foreground: #000000;
-  
-  --secondary: #4ECDC4; /* Teal */
+
+  --secondary: #4ecdc4; /* Teal */
   --secondary-foreground: #000000;
-  
-  --muted: #F7FFF7; /* Very light green/white */
+
+  --muted: #f7fff7; /* Very light green/white */
   --muted-foreground: #000000;
-  
-  --accent: #4ECDC4;
+
+  --accent: #4ecdc4;
   --accent-foreground: #000000;
-  
-  --destructive: #FF6B6B;
+
+  --destructive: #ff6b6b;
   --destructive-foreground: #000000;
-  
+
   --border: #000000;
-  --input: #FFFFFF;
+  --input: #ffffff;
   --ring: #000000;
-  
-  --chart-1: #FF6B6B;
-  --chart-2: #4ECDC4;
-  --chart-3: #FFE66D;
+
+  --chart-1: #ff6b6b;
+  --chart-2: #4ecdc4;
+  --chart-3: #ffe66d;
   --chart-4: #000000;
-  --chart-5: #FFFFFF;
-  
-  --sidebar: #FFFFFF;
+  --chart-5: #ffffff;
+
+  --sidebar: #ffffff;
   --sidebar-foreground: #000000;
-  --sidebar-primary: #FF6B6B;
+  --sidebar-primary: #ff6b6b;
   --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #FFE66D;
+  --sidebar-accent: #ffe66d;
   --sidebar-accent-foreground: #000000;
   --sidebar-border: #000000;
   --sidebar-ring: #000000;
@@ -94,47 +94,47 @@
 .dark {
   /* Neobrutalist Dark (High Contrast) */
   --background: #000000;
-  --foreground: #FFFFFF;
-  
+  --foreground: #ffffff;
+
   --card: #1a1a1a;
-  --card-foreground: #FFFFFF;
-  
+  --card-foreground: #ffffff;
+
   --popover: #1a1a1a;
-  --popover-foreground: #FFFFFF;
-  
-  --primary: #FF6B6B; /* Keep Red */
+  --popover-foreground: #ffffff;
+
+  --primary: #ff6b6b; /* Keep Red */
   --primary-foreground: #000000;
-  
-  --secondary: #4ECDC4; /* Keep Teal */
+
+  --secondary: #4ecdc4; /* Keep Teal */
   --secondary-foreground: #000000;
-  
+
   --muted: #2a2a2a;
-  --muted-foreground: #AAAAAA;
-  
-  --accent: #FFE66D; /* Yellow accent */
+  --muted-foreground: #aaaaaa;
+
+  --accent: #ffe66d; /* Yellow accent */
   --accent-foreground: #000000;
-  
-  --destructive: #FF6B6B;
+
+  --destructive: #ff6b6b;
   --destructive-foreground: #000000;
-  
-  --border: #FFFFFF;
+
+  --border: #ffffff;
   --input: #000000;
-  --ring: #FFFFFF;
-  
-  --chart-1: #FF6B6B;
-  --chart-2: #4ECDC4;
-  --chart-3: #FFE66D;
-  --chart-4: #FFFFFF;
+  --ring: #ffffff;
+
+  --chart-1: #ff6b6b;
+  --chart-2: #4ecdc4;
+  --chart-3: #ffe66d;
+  --chart-4: #ffffff;
   --chart-5: #000000;
-  
+
   --sidebar: #000000;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #FF6B6B;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ff6b6b;
   --sidebar-primary-foreground: #000000;
   --sidebar-accent: #2a2a2a;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #FFFFFF;
-  --sidebar-ring: #FFFFFF;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #ffffff;
+  --sidebar-ring: #ffffff;
 }
 
 @layer base {

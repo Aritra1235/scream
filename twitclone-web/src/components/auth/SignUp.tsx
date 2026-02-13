@@ -7,7 +7,13 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,7 +24,12 @@ interface SignUpProps {
   className?: string;
 }
 
-export default function SignUp({ onSuccess, onError, onSignInClick, className = "" }: SignUpProps) {
+export default function SignUp({
+  onSuccess,
+  onError,
+  onSignInClick,
+  className = "",
+}: SignUpProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,20 +41,25 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  const handleInputChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-  };
+  const handleInputChange =
+    (field: keyof typeof formData) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validation
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
       onError?.("Please fill in all fields");
       return;
     }
@@ -91,7 +107,9 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-primary-foreground font-bold text-lg">S</span>
           </div>
-          <CardTitle className="text-2xl font-bold text-foreground">Join SCREAM</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">
+            Join SCREAM
+          </CardTitle>
           <CardDescription className="text-muted-foreground">
             Create your account to get started
           </CardDescription>
@@ -101,7 +119,9 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Field */}
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-foreground">Full Name</Label>
+              <Label htmlFor="name" className="text-foreground">
+                Full Name
+              </Label>
               <div className="relative">
                 <Input
                   id="name"
@@ -118,7 +138,9 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email address</Label>
+              <Label htmlFor="email" className="text-foreground">
+                Email address
+              </Label>
               <div className="relative">
                 <Input
                   id="email"
@@ -135,7 +157,9 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
+              <Label htmlFor="password" className="text-foreground">
+                Password
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -166,7 +190,9 @@ export default function SignUp({ onSuccess, onError, onSignInClick, className = 
 
             {/* Confirm Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-foreground">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-foreground">
+                Confirm Password
+              </Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"

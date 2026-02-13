@@ -75,7 +75,7 @@ export function EditProfileModal({
 
   const normalizedOriginalUsername = useMemo(
     () => (user.username || "").toLowerCase(),
-    [user.username]
+    [user.username],
   );
 
   useEffect(() => {
@@ -108,7 +108,10 @@ export function EditProfileModal({
     const timeout = setTimeout(async () => {
       setIsCheckingUsername(true);
       try {
-        const available = await checkUsernameAvailability(normalized, controller.signal);
+        const available = await checkUsernameAvailability(
+          normalized,
+          controller.signal,
+        );
         setUsernameError(available ? null : "This username is already taken");
       } catch (err) {
         if (!(err instanceof DOMException && err.name === "AbortError")) {
@@ -126,12 +129,15 @@ export function EditProfileModal({
   }, [username, normalizedOriginalUsername, open]);
 
   const handleFileChange =
-    (type: "avatar" | "banner") => async (event: React.ChangeEvent<HTMLInputElement>) => {
+    (type: "avatar" | "banner") =>
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
       const isAvatar = type === "avatar";
-      const setUploading = isAvatar ? setIsUploadingAvatar : setIsUploadingBanner;
+      const setUploading = isAvatar
+        ? setIsUploadingAvatar
+        : setIsUploadingBanner;
       const setKey = isAvatar ? setAvatarKey : setBannerKey;
       const setPreview = isAvatar ? setAvatarPreview : setBannerPreview;
 
@@ -158,7 +164,9 @@ export function EditProfileModal({
         setPreview(buildCdnUrl(uploadedKey));
       } catch (uploadError) {
         console.error("Image upload failed:", uploadError);
-        setError(`Failed to upload ${isAvatar ? "profile" : "banner"} image. Please try again.`);
+        setError(
+          `Failed to upload ${isAvatar ? "profile" : "banner"} image. Please try again.`,
+        );
         setPreview(isAvatar ? user.avatar_url : user.banner_url);
       } finally {
         setUploading(false);
@@ -316,7 +324,9 @@ export function EditProfileModal({
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-sm font-black uppercase tracking-tight">Name</Label>
+              <Label className="text-sm font-black uppercase tracking-tight">
+                Name
+              </Label>
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
@@ -326,8 +336,12 @@ export function EditProfileModal({
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-black uppercase tracking-tight">Username</Label>
-                {isCheckingUsername && <Spinner className="size-4 text-muted-foreground" />}
+                <Label className="text-sm font-black uppercase tracking-tight">
+                  Username
+                </Label>
+                {isCheckingUsername && (
+                  <Spinner className="size-4 text-muted-foreground" />
+                )}
               </div>
               <Input
                 value={username}
@@ -335,7 +349,9 @@ export function EditProfileModal({
                 placeholder="username"
                 aria-invalid={Boolean(usernameError)}
               />
-              <p className={`text-xs font-semibold ${usernameError ? "text-destructive" : "text-muted-foreground"}`}>
+              <p
+                className={`text-xs font-semibold ${usernameError ? "text-destructive" : "text-muted-foreground"}`}
+              >
                 {usernameError
                   ? usernameError
                   : "Only letters, numbers, and underscores. Minimum 3 characters."}
@@ -372,7 +388,10 @@ export function EditProfileModal({
   );
 }
 
-async function checkUsernameAvailability(username: string, signal?: AbortSignal) {
+async function checkUsernameAvailability(
+  username: string,
+  signal?: AbortSignal,
+) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const prefix = process.env.NEXT_PUBLIC_API_PREFIX;
@@ -407,7 +426,11 @@ function stripCdnUrl(value?: string | null) {
 function buildCdnUrl(value?: string | null) {
   if (!value) return "";
   const trimmed = value.trim();
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("data:")) {
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("data:")
+  ) {
     return trimmed;
   }
   const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "");
@@ -416,4 +439,3 @@ function buildCdnUrl(value?: string | null) {
   }
   return trimmed;
 }
-

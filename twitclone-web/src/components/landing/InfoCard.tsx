@@ -41,5 +41,3 @@ export function InfoCard({
     </motion.div>
   );
 }
-
-

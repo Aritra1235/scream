@@ -8,5 +8,3 @@ export { NeoInput } from "./NeoInput";
 export { NeoTextarea } from "./NeoTextarea";
 export { LandingNav } from "./LandingNav";
 export { LandingFooter } from "./LandingFooter";
-
-
