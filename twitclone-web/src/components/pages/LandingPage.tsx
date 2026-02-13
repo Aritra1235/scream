@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { FeatureCard, LandingFooter, NeoButton } from "@/components/landing";
+import { VITAP_LOGO_PATH } from "@/lib/constants";
 
 export function LandingPage() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -44,11 +45,12 @@ export function LandingPage() {
               About
             </Link>
             <Image
-              src="/vitaplogo.png"
+              src={VITAP_LOGO_PATH}
               alt="VIT-AP Logo"
               width={100}
               height={33}
               className="object-contain"
+              priority
             />
             <NeoButton
               href="/sign-up"
