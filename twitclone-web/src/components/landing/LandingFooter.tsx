@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { VITAP_LOGO_PATH } from "@/lib/constants";
 
@@ -40,7 +39,7 @@ export function LandingFooter() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-8 flex justify-center">
-        <Image
+        <img
           src={VITAP_LOGO_PATH}
           alt="VIT-AP Logo"
           width={150}

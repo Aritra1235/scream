@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { FeatureCard, LandingFooter, NeoButton } from "@/components/landing";
@@ -44,13 +43,12 @@ export function LandingPage() {
             >
               About
             </Link>
-            <Image
+            <img
               src={VITAP_LOGO_PATH}
               alt="VIT-AP Logo"
               width={100}
               height={33}
               className="object-contain"
-              priority
             />
             <NeoButton
               href="/sign-up"
