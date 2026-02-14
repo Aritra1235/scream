@@ -23,6 +23,13 @@ export function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b-4 border-black px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
+            <img
+              src={VITAP_LOGO_PATH}
+              alt="VIT-AP Logo"
+              width={100}
+              height={100}
+              className="object-contain"
+            />
             <div className="w-10 h-10 bg-black flex items-center justify-center text-white font-black text-xl">
               S
             </div>
@@ -43,13 +50,6 @@ export function LandingPage() {
             >
               About
             </Link>
-            <img
-              src={VITAP_LOGO_PATH}
-              alt="VIT-AP Logo"
-              width={100}
-              height={33}
-              className="object-contain"
-            />
             <NeoButton
               href="/sign-up"
               variant="primary"

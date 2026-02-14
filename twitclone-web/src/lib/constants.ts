@@ -1,1 +1,1 @@
-export const VITAP_LOGO_PATH = "/vitaplogo.png";
+export const VITAP_LOGO_PATH = "/vitaplogored.png";
