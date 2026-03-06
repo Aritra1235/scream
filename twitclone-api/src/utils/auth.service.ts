@@ -46,17 +46,7 @@ async function getLocationFromIP(ip: string): Promise<{ city?: string; country?:
 
 
 function resolveWebAppUrl() {
-    const configured = (config.misc.webUrl || "").trim();
-    const fallback = "http://localhost:3001";
-    const target = configured.length > 0 ? configured : fallback;
-
-    if (/^https?:\/\//i.test(target)) {
-        return target;
-    }
-
-    const isLocalhost = /^localhost(?::|$)/i.test(target) || /^127\./.test(target);
-    const scheme = isLocalhost ? "http" : "https";
-    return `${scheme}://${target}`;
+    return config.misc.webUrl;
 }
 
 const webAppBaseUrl = resolveWebAppUrl();

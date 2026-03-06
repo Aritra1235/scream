@@ -1,3 +1,5 @@
+import { normalizeConfiguredUrl, parseConfiguredUrls, toUniqueOrigins } from "../utils/url-config";
+
 interface Config {
     axiom: {
         token: string;
@@ -11,6 +13,7 @@ interface Config {
     betterAuth: {
         secret: string;
         url: string;
+        trustedOrigins: string[];
     };
     database: {
         url: string;
@@ -30,8 +33,34 @@ interface Config {
     misc:{
         port: number;
         webUrl: string;
+        webUrls: string[];
+        corsOrigins: string[];
     }
 }
+
+const defaultApiUrl = normalizeConfiguredUrl(`localhost:${process.env.PORT || "3000"}`);
+const defaultWebUrl = normalizeConfiguredUrl("localhost:3001");
+const webUrls = parseConfiguredUrls(process.env.WEB_URLS, process.env.WEB_URL);
+const resolvedWebUrls = webUrls.length > 0 ? webUrls : [defaultWebUrl];
+const corsOrigins = toUniqueOrigins(
+    parseConfiguredUrls(
+        process.env.CORS_ALLOWED_ORIGINS,
+        process.env.CORS_ORIGINS,
+        process.env.WEB_URLS,
+        process.env.WEB_URL,
+    ),
+);
+const resolvedCorsOrigins = corsOrigins.length > 0 ? corsOrigins : toUniqueOrigins(resolvedWebUrls);
+const betterAuthTrustedOrigins = toUniqueOrigins(
+    parseConfiguredUrls(
+        process.env.BETTER_AUTH_TRUSTED_ORIGINS,
+        process.env.BETTER_AUTH_URLS,
+        process.env.CORS_ALLOWED_ORIGINS,
+        process.env.CORS_ORIGINS,
+        process.env.WEB_URLS,
+        process.env.WEB_URL,
+    ),
+);
 
 const config: Config = {
     axiom: {
@@ -45,7 +74,9 @@ const config: Config = {
     },
     betterAuth: {
         secret: process.env.BETTER_AUTH_SECRET as string,
-        url: process.env.BETTER_AUTH_URL as string,
+        url: normalizeConfiguredUrl(process.env.BETTER_AUTH_BASE_URL ?? process.env.BETTER_AUTH_URL) || defaultApiUrl,
+        trustedOrigins:
+            betterAuthTrustedOrigins.length > 0 ? betterAuthTrustedOrigins : resolvedCorsOrigins,
     },
     database: {
         url: process.env.DATABASE_URL as string,
@@ -64,7 +95,9 @@ const config: Config = {
     },
     misc: {
         port: parseInt(process.env.PORT as string, 10),
-        webUrl: process.env.WEB_URL as string,
+        webUrl: resolvedWebUrls[0],
+        webUrls: resolvedWebUrls,
+        corsOrigins: resolvedCorsOrigins,
     },
 
 }

@@ -87,19 +87,27 @@ The application uses PostgreSQL with the following main entities:
    ```
 
 3. **Set up environment variables:**
-   Create a `.env` file with:
-   ```env
-   DATABASE_URL=postgresql://user:password@localhost:5432/scream
-   AWS_ACCESS_KEY_ID=your-aws-access-key
-   AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-   AWS_S3_BUCKET=your-bucket-name
-   AWS_REGION=your-aws-region
-   AXIOM_TOKEN=your-axiom-token
+    Create a `.env` file with:
+    ```env
+    DATABASE_URL=postgresql://user:password@localhost:5432/scream
+    PORT=3000
+    BETTER_AUTH_URL=http://localhost:3000
+    WEB_URL=http://localhost:3001
+    # Optional comma-separated lists for multiple browser origins
+    CORS_ORIGINS=http://localhost:3001,https://app.example.com
+    BETTER_AUTH_TRUSTED_ORIGINS=http://localhost:3001,https://app.example.com
+    AWS_ACCESS_KEY_ID=your-aws-access-key
+    AWS_SECRET_ACCESS_KEY=your-aws-secret-key
+    AWS_S3_BUCKET=your-bucket-name
+    AWS_REGION=your-aws-region
+    AXIOM_TOKEN=your-axiom-token
    AXIOM_DATASET=your-dataset-name
    CDN_BASE_URL=https://your-cdn-url.com
-   DEFAULT_AVATAR_OBJECT=default-avatar.png
-   DEFAULT_BANNER_OBJECT=default-banner.png
-   ```
+    DEFAULT_AVATAR_OBJECT=default-avatar.png
+    DEFAULT_BANNER_OBJECT=default-banner.png
+    ```
+
+    `CORS_ORIGINS`, `CORS_ALLOWED_ORIGINS`, `BETTER_AUTH_TRUSTED_ORIGINS`, `BETTER_AUTH_URLS`, and `WEB_URLS` accept comma-separated values. `BETTER_AUTH_URL` (or `BETTER_AUTH_BASE_URL`) still sets the primary Better Auth server URL used for auth callbacks.
 
 4. **Set up the database:**
    ```bash
