@@ -3,10 +3,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, MailCheck, RefreshCw, ShieldAlert, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  MailCheck,
+  RefreshCw,
+  ShieldAlert,
+  ShieldCheck,
+} from "lucide-react";
 
 import { authClient } from "@/lib/auth-client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -21,13 +33,17 @@ const sanitizePrefix = (prefix?: string | null) => {
   return prefix.replace(/^\/+/, "").replace(/\/+$/, "");
 };
 
-const normalizedBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, "") ?? "";
+const normalizedBaseUrl =
+  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, "") ?? "";
 const apiPrefix = sanitizePrefix(process.env.NEXT_PUBLIC_API_PREFIX);
 const apiBase = normalizedBaseUrl
   ? `${normalizedBaseUrl}/${apiPrefix}`
   : `/api/${apiPrefix}`;
 
-const statusStyles: Record<VerificationStatus, { label: string; accent: string; icon: React.ReactNode }> = {
+const statusStyles: Record<
+  VerificationStatus,
+  { label: string; accent: string; icon: React.ReactNode }
+> = {
   idle: {
     label: "Waiting for verification",
     accent: "bg-amber-500/20 text-amber-400",
@@ -62,12 +78,13 @@ export default function VerifyEmail() {
   const [statusMessage, setStatusMessage] = useState(
     token
       ? "Confirming your verification link..."
-      : "We sent you a secure link. Open it on this device to continue."
+      : "We sent you a secure link. Open it on this device to continue.",
   );
   const [resendStatus, setResendStatus] = useState<ResendStatus>("idle");
   const [resendMessage, setResendMessage] = useState("");
   const [sessionEmail, setSessionEmail] = useState("");
-  const [hasAttemptedVerification, setHasAttemptedVerification] = useState(false);
+  const [hasAttemptedVerification, setHasAttemptedVerification] =
+    useState(false);
 
   const redirectToApp = useCallback(async () => {
     try {
@@ -117,7 +134,10 @@ export default function VerifyEmail() {
 
       if (result.error) {
         setStatus("error");
-        setStatusMessage(result.error.message || "We could not confirm that link. Request a new email.");
+        setStatusMessage(
+          result.error.message ||
+            "We could not confirm that link. Request a new email.",
+        );
         return;
       }
 
@@ -127,14 +147,17 @@ export default function VerifyEmail() {
       try {
         await authClient.getSession();
       } catch (error) {
-        console.warn("[VerifyEmail] Unable to refresh session after verification", error);
+        console.warn(
+          "[VerifyEmail] Unable to refresh session after verification",
+          error,
+        );
       }
 
       setTimeout(() => {
         redirectToApp();
       }, 1500);
     },
-    [redirectToApp]
+    [redirectToApp],
   );
 
   useEffect(() => {
@@ -161,12 +184,17 @@ export default function VerifyEmail() {
 
     if (result.error) {
       setResendStatus("error");
-      setResendMessage(result.error.message || "Unable to send email right now. Try again soon.");
+      setResendMessage(
+        result.error.message ||
+          "Unable to send email right now. Try again soon.",
+      );
       return;
     }
 
     setResendStatus("sent");
-    setResendMessage("Verification email sent. Check your inbox (and spam folder).");
+    setResendMessage(
+      "Verification email sent. Check your inbox (and spam folder).",
+    );
   };
 
   const displayedEmail = useMemo(() => {
@@ -182,10 +210,13 @@ export default function VerifyEmail() {
           <CardHeader>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <CardTitle className="text-3xl font-semibold text-foreground">Verify your email</CardTitle>
-
+                <CardTitle className="text-3xl font-semibold text-foreground">
+                  Verify your email
+                </CardTitle>
               </div>
-              <div className={`rounded-full px-4 py-2 text-sm font-medium ${statusStyles[status].accent} flex items-center gap-2`}>
+              <div
+                className={`rounded-full px-4 py-2 text-sm font-medium ${statusStyles[status].accent} flex items-center gap-2`}
+              >
                 {statusStyles[status].icon}
                 {statusStyles[status].label}
               </div>
@@ -198,8 +229,9 @@ export default function VerifyEmail() {
                   <MailCheck className="h-6 w-6" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-lg font-medium text-foreground">{statusMessage}</p>
-
+                  <p className="text-lg font-medium text-foreground">
+                    {statusMessage}
+                  </p>
                 </div>
               </div>
               {status === "verifying" && (
@@ -210,13 +242,18 @@ export default function VerifyEmail() {
               )}
               {status === "error" && (
                 <div className="mt-6 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                  The link might be expired or already used. Request a fresh email below.
+                  The link might be expired or already used. Request a fresh
+                  email below.
                 </div>
               )}
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
-              {["Check your inbox", "Tap the secure link", "Get instant access"].map((title, index) => (
+              {[
+                "Check your inbox",
+                "Tap the secure link",
+                "Get instant access",
+              ].map((title, index) => (
                 <div
                   key={title}
                   className="rounded-2xl border border-border/40 bg-background/40 p-4 text-center shadow-sm"
@@ -226,9 +263,11 @@ export default function VerifyEmail() {
                   </div>
                   <p className="text-sm font-medium text-foreground">{title}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {index === 0 && "Look for \"Verify your SCREAM account\"."}
-                    {index === 1 && "The link opens this page and confirms automatically."}
-                    {index === 2 && "We redirect you to finish onboarding or jump back into SCREAM."}
+                    {index === 0 && 'Look for "Verify your SCREAM account".'}
+                    {index === 1 &&
+                      "The link opens this page and confirms automatically."}
+                    {index === 2 &&
+                      "We redirect you to finish onboarding or jump back into SCREAM."}
                   </p>
                 </div>
               ))}
@@ -237,7 +276,11 @@ export default function VerifyEmail() {
             <Separator className="bg-border/60" />
 
             <div className="flex flex-wrap items-center gap-3">
-              <Button variant="outline" className="border-border text-foreground hover:bg-accent" onClick={() => router.push("/sign-in")}>
+              <Button
+                variant="outline"
+                className="border-border text-foreground hover:bg-accent"
+                onClick={() => router.push("/sign-in")}
+              >
                 Return to sign in
               </Button>
               <div className="flex-1 flex justify-center">
@@ -255,7 +298,9 @@ export default function VerifyEmail() {
         <div className="w-full max-w-lg space-y-6">
           <Card className="border-border/40 bg-card/80 backdrop-blur">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Didn&rsquo;t get the email?</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">
+                Didn&rsquo;t get the email?
+              </CardTitle>
               <CardDescription>Resend the verification email.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -265,8 +310,8 @@ export default function VerifyEmail() {
                     resendStatus === "sent"
                       ? "bg-emerald-500/10 text-emerald-300"
                       : resendStatus === "error"
-                      ? "bg-destructive/10 text-destructive"
-                      : "bg-muted/40 text-muted-foreground"
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-muted/40 text-muted-foreground"
                   }`}
                 >
                   {resendMessage}
@@ -290,16 +335,18 @@ export default function VerifyEmail() {
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">
-                Tip: Add <span className="font-medium text-foreground">noreply@scream.aritra.ovh</span> to your contacts to avoid spam filters.
+                Tip: Add{" "}
+                <span className="font-medium text-foreground">
+                  noreply@scream.aritra.ovh
+                </span>{" "}
+                to your contacts to avoid spam filters.
               </p>
             </CardContent>
           </Card>
 
           <EmailProviderOpener email={displayedEmail} />
-
         </div>
       </div>
     </div>
   );
 }
-

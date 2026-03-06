@@ -37,5 +37,3 @@ export function ContactCard({
     </motion.div>
   );
 }
-
-

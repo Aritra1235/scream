@@ -72,7 +72,9 @@ export default function Sidebar() {
     <>
       <aside className="hidden h-screen px-4 py-3 text-foreground sm:flex sm:w-64 lg:w-72 overflow-hidden sticky top-0">
         <nav className="flex flex-col w-full h-full">
-          <div className="mb-2 text-3xl font-black px-3 py-2 uppercase tracking-tighter">SCREAM</div>
+          <div className="mb-2 text-3xl font-black px-3 py-2 uppercase tracking-tighter">
+            SCREAM
+          </div>
           <ul className="flex flex-col gap-4 mt-4">
             {items.map((item) => {
               const isActive =
@@ -83,15 +85,16 @@ export default function Sidebar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`group flex items-center gap-4 rounded-none border-2 border-transparent px-4 py-3 text-xl transition-all duration-200 ${isActive
-                      ? "font-black bg-[#4ECDC4] border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] -translate-y-1 translate-x-1"
-                      : "font-bold hover:bg-card hover:border-border hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:translate-x-1"
-                      }`}
+                    className={`group flex items-center gap-4 rounded-none border-2 border-transparent px-4 py-3 text-xl transition-all duration-200 ${
+                      isActive
+                        ? "font-black bg-[#4ECDC4] border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] -translate-y-1 translate-x-1"
+                        : "font-bold hover:bg-card hover:border-border hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:translate-x-1"
+                    }`}
                   >
-                    <span>
-                      {isActive ? item.activeIcon : item.icon}
+                    <span>{isActive ? item.activeIcon : item.icon}</span>
+                    <span className="hidden md:inline uppercase tracking-tight">
+                      {item.label}
                     </span>
-                    <span className="hidden md:inline uppercase tracking-tight">{item.label}</span>
                   </Link>
                 </li>
               );
@@ -104,11 +107,7 @@ export default function Sidebar() {
           >
             <span className="hidden md:inline uppercase">Scream</span>
             <span className="md:hidden">
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7" />
               </svg>
             </span>
@@ -145,12 +144,7 @@ export default function Sidebar() {
         </nav>
       </aside>
 
-      <TweetModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
+      <TweetModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 }
-
-

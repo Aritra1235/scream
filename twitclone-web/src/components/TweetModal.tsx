@@ -61,8 +61,7 @@ export function TweetModal({
   const isOverLimit = remainingCharacters < 0;
   const isRepost = variant === "repost" && repostTarget?.id;
   const canPost =
-    !isOverLimit &&
-    (isRepost ? Boolean(repostTarget?.id) : characterCount > 0);
+    !isOverLimit && (isRepost ? Boolean(repostTarget?.id) : characterCount > 0);
 
   const resolvedRepostTarget = useMemo(() => {
     if (!repostTarget) return null;
@@ -233,26 +232,29 @@ export function TweetModal({
                   <div className="text-sm text-foreground whitespace-pre-wrap break-words leading-relaxed">
                     {resolvedRepostTarget.content || "No content"}
                   </div>
-                  {resolvedRepostTarget.media && resolvedRepostTarget.media.length > 0 && (
-                    <div className="mt-3 max-h-56 overflow-hidden rounded-sm border border-border bg-card/40">
-                      <div
-                        className={`grid gap-1 ${resolvedRepostTarget.media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
-                      >
-                        {resolvedRepostTarget.media.slice(0, 4).map((item, index) => (
-                          <div
-                            key={`${item.mediaUrl}-${index}`}
-                            className={`w-full ${resolvedRepostTarget.media.length === 1 ? "h-full" : "aspect-square"}`}
-                          >
-                            <img
-                              src={item.mediaUrl}
-                              alt="Repost media"
-                              className={`w-full h-full object-contain bg-muted ${resolvedRepostTarget.media.length === 1 ? "max-h-56" : "max-h-40"}`}
-                            />
-                          </div>
-                        ))}
+                  {resolvedRepostTarget.media &&
+                    resolvedRepostTarget.media.length > 0 && (
+                      <div className="mt-3 max-h-56 overflow-hidden rounded-sm border border-border bg-card/40">
+                        <div
+                          className={`grid gap-1 ${resolvedRepostTarget.media.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+                        >
+                          {resolvedRepostTarget.media
+                            .slice(0, 4)
+                            .map((item, index) => (
+                              <div
+                                key={`${item.mediaUrl}-${index}`}
+                                className={`w-full ${resolvedRepostTarget.media.length === 1 ? "h-full" : "aspect-square"}`}
+                              >
+                                <img
+                                  src={item.mediaUrl}
+                                  alt="Repost media"
+                                  className={`w-full h-full object-contain bg-muted ${resolvedRepostTarget.media.length === 1 ? "max-h-56" : "max-h-40"}`}
+                                />
+                              </div>
+                            ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               )}
 
@@ -266,7 +268,11 @@ export function TweetModal({
                 <div className="flex items-center gap-4">
                   {characterCount > 0 && (
                     <div className="relative h-8 w-8 flex items-center justify-center font-bold text-xs">
-                      <span className={isOverLimit ? "text-red-600" : "text-foreground"}>
+                      <span
+                        className={
+                          isOverLimit ? "text-red-600" : "text-foreground"
+                        }
+                      >
                         {remainingCharacters}
                       </span>
                     </div>
@@ -299,7 +305,11 @@ function trimmedLabel(text: string) {
 function resolveAvatarUrl(avatar?: string | null) {
   if (!avatar) return null;
   const lower = avatar.toLowerCase();
-  if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("data:")) {
+  if (
+    lower.startsWith("http://") ||
+    lower.startsWith("https://") ||
+    lower.startsWith("data:")
+  ) {
     return avatar;
   }
   return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${avatar}`;
@@ -307,9 +317,12 @@ function resolveAvatarUrl(avatar?: string | null) {
 
 function resolveMediaUrl(url: string) {
   const lower = url.toLowerCase();
-  if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("data:")) {
+  if (
+    lower.startsWith("http://") ||
+    lower.startsWith("https://") ||
+    lower.startsWith("data:")
+  ) {
     return url;
   }
   return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${url}`;
 }
-

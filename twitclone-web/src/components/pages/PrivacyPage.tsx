@@ -13,7 +13,12 @@ import {
   AlertCircle,
   FileText,
 } from "lucide-react";
-import { NeoButton, InfoCard, LandingNav, LandingFooter } from "@/components/landing";
+import {
+  NeoButton,
+  InfoCard,
+  LandingNav,
+  LandingFooter,
+} from "@/components/landing";
 
 export function PrivacyPage() {
   return (
@@ -54,19 +59,20 @@ export function PrivacyPage() {
           >
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
-                SCREAM ("we", "us", "our") is committed to protecting your privacy
-                and personal data. This Privacy Policy explains how we collect, use,
-                disclose, and safeguard your information when you use our social
-                media platform and services (the "Service").
+                SCREAM ("we", "us", "our") is committed to protecting your
+                privacy and personal data. This Privacy Policy explains how we
+                collect, use, disclose, and safeguard your information when you
+                use our social media platform and services (the "Service").
               </p>
               <p className="text-lg leading-relaxed">
-                This Privacy Policy applies to all users of the Service and should
-                be read in conjunction with our Terms of Service. By using SCREAM,
-                you consent to the data practices described in this policy.
+                This Privacy Policy applies to all users of the Service and
+                should be read in conjunction with our Terms of Service. By
+                using SCREAM, you consent to the data practices described in
+                this policy.
               </p>
               <p className="text-lg leading-relaxed">
-                If you do not agree with the terms of this Privacy Policy, please do
-                not access or use the Service.
+                If you do not agree with the terms of this Privacy Policy,
+                please do not access or use the Service.
               </p>
             </div>
           </InfoCard>
@@ -82,21 +88,23 @@ export function PrivacyPage() {
                   Personal Information
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  When you create an account, we collect information such as your
-                  username, email address, password (encrypted), display name,
-                  profile picture, bio, and any other information you choose to
-                  provide. We may also collect your date of birth to verify age
-                  requirements.
+                  When you create an account, we collect information such as
+                  your username, email address, password (encrypted), display
+                  name, profile picture, bio, and any other information you
+                  choose to provide. We may also collect your date of birth to
+                  verify age requirements.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-2xl font-black uppercase mb-3">User Content</h3>
+                <h3 className="text-2xl font-black uppercase mb-3">
+                  User Content
+                </h3>
                 <p className="text-lg leading-relaxed">
                   We collect and store the content you create, post, or share on
-                  SCREAM, including posts, replies, comments, images, videos, direct
-                  messages, and any interactions (likes, reposts, bookmarks) with
-                  other users' content.
+                  SCREAM, including posts, replies, comments, images, videos,
+                  direct messages, and any interactions (likes, reposts,
+                  bookmarks) with other users' content.
                 </p>
               </div>
 
@@ -105,10 +113,10 @@ export function PrivacyPage() {
                   Usage Information
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  We automatically collect information about your interactions with
-                  the Service, including pages or content viewed, search queries,
-                  clicks, features used, time and date of access, session duration,
-                  and clickstream data.
+                  We automatically collect information about your interactions
+                  with the Service, including pages or content viewed, search
+                  queries, clicks, features used, time and date of access,
+                  session duration, and clickstream data.
                 </p>
               </div>
 
@@ -117,10 +125,11 @@ export function PrivacyPage() {
                   Device & Technical Data
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  We collect information about the device and software you use to
-                  access the Service, including IP address, browser type and version,
-                  device type, operating system, device identifiers, mobile network
-                  information, and general location data derived from IP address.
+                  We collect information about the device and software you use
+                  to access the Service, including IP address, browser type and
+                  version, device type, operating system, device identifiers,
+                  mobile network information, and general location data derived
+                  from IP address.
                 </p>
               </div>
 
@@ -129,9 +138,9 @@ export function PrivacyPage() {
                   Communications
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  When you contact us or communicate through the Service, we collect
-                  the content of those communications, including customer support
-                  inquiries and feedback.
+                  When you contact us or communicate through the Service, we
+                  collect the content of those communications, including
+                  customer support inquiries and feedback.
                 </p>
               </div>
             </div>
@@ -148,10 +157,10 @@ export function PrivacyPage() {
                   Service Provision
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  To create and maintain your account, authenticate your identity,
-                  provide and deliver the Service features, process your requests,
-                  and enable social features such as following other users and
-                  interacting with content.
+                  To create and maintain your account, authenticate your
+                  identity, provide and deliver the Service features, process
+                  your requests, and enable social features such as following
+                  other users and interacting with content.
                 </p>
               </div>
 
@@ -160,20 +169,23 @@ export function PrivacyPage() {
                   Personalization & Improvement
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  To personalize your experience, provide content recommendations,
-                  understand usage patterns, analyze trends, measure effectiveness of
-                  features, develop new features and services, and improve the
-                  overall quality of SCREAM.
+                  To personalize your experience, provide content
+                  recommendations, understand usage patterns, analyze trends,
+                  measure effectiveness of features, develop new features and
+                  services, and improve the overall quality of SCREAM.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-2xl font-black uppercase mb-3">Communication</h3>
+                <h3 className="text-2xl font-black uppercase mb-3">
+                  Communication
+                </h3>
                 <p className="text-lg leading-relaxed">
-                  To send you service-related notifications, account updates, security
-                  alerts, respond to your inquiries, and communicate about new features
-                  or changes to our policies. We may also send promotional
-                  communications if you've opted in (you can opt out at any time).
+                  To send you service-related notifications, account updates,
+                  security alerts, respond to your inquiries, and communicate
+                  about new features or changes to our policies. We may also
+                  send promotional communications if you've opted in (you can
+                  opt out at any time).
                 </p>
               </div>
 
@@ -182,10 +194,10 @@ export function PrivacyPage() {
                   Security & Safety
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  To detect, prevent, and address fraud, abuse, security risks, and
-                  technical issues; enforce our Terms of Service; protect the rights,
-                  property, or safety of SCREAM, our users, or others; and comply
-                  with legal obligations.
+                  To detect, prevent, and address fraud, abuse, security risks,
+                  and technical issues; enforce our Terms of Service; protect
+                  the rights, property, or safety of SCREAM, our users, or
+                  others; and comply with legal obligations.
                 </p>
               </div>
 
@@ -194,9 +206,9 @@ export function PrivacyPage() {
                   Legal Compliance
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  To comply with applicable laws, regulations, legal processes, or
-                  governmental requests; respond to legal claims; and exercise or
-                  defend legal rights.
+                  To comply with applicable laws, regulations, legal processes,
+                  or governmental requests; respond to legal claims; and
+                  exercise or defend legal rights.
                 </p>
               </div>
             </div>
@@ -213,11 +225,11 @@ export function PrivacyPage() {
                   What Are Cookies?
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  Cookies are small text files stored on your device that help us
-                  recognize you, remember your preferences, and analyze how you use
-                  the Service. We use both session cookies (deleted when you close
-                  your browser) and persistent cookies (remain until deleted or
-                  expired).
+                  Cookies are small text files stored on your device that help
+                  us recognize you, remember your preferences, and analyze how
+                  you use the Service. We use both session cookies (deleted when
+                  you close your browser) and persistent cookies (remain until
+                  deleted or expired).
                 </p>
               </div>
 
@@ -227,16 +239,16 @@ export function PrivacyPage() {
                 </h3>
                 <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                   <li>
-                    <strong>Essential Cookies:</strong> Required for the Service to
-                    function, including authentication and security
+                    <strong>Essential Cookies:</strong> Required for the Service
+                    to function, including authentication and security
                   </li>
                   <li>
-                    <strong>Preference Cookies:</strong> Remember your settings and
-                    preferences
+                    <strong>Preference Cookies:</strong> Remember your settings
+                    and preferences
                   </li>
                   <li>
-                    <strong>Analytics Cookies:</strong> Help us understand how you
-                    use the Service and improve performance
+                    <strong>Analytics Cookies:</strong> Help us understand how
+                    you use the Service and improve performance
                   </li>
                   <li>
                     <strong>Marketing Cookies:</strong> Used to deliver relevant
@@ -270,10 +282,10 @@ export function PrivacyPage() {
                   Public Information
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  Your profile information and posts are public by default and can be
-                  viewed by anyone, including non-users. Search engines may index
-                  this public content. Be mindful of what you choose to share
-                  publicly.
+                  Your profile information and posts are public by default and
+                  can be viewed by anyone, including non-users. Search engines
+                  may index this public content. Be mindful of what you choose
+                  to share publicly.
                 </p>
               </div>
 
@@ -282,9 +294,9 @@ export function PrivacyPage() {
                   We Do NOT Sell Your Data
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  SCREAM does not sell, rent, or trade your personal information to
-                  third parties for marketing purposes. Your trust is important to
-                  us.
+                  SCREAM does not sell, rent, or trade your personal information
+                  to third parties for marketing purposes. Your trust is
+                  important to us.
                 </p>
               </div>
 
@@ -293,11 +305,12 @@ export function PrivacyPage() {
                   Service Providers
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  We may share information with trusted third-party service providers
-                  who assist us in operating the Service, such as hosting providers,
-                  analytics services, email services, and customer support tools.
-                  These providers are contractually obligated to protect your
-                  information and use it only for the purposes we specify.
+                  We may share information with trusted third-party service
+                  providers who assist us in operating the Service, such as
+                  hosting providers, analytics services, email services, and
+                  customer support tools. These providers are contractually
+                  obligated to protect your information and use it only for the
+                  purposes we specify.
                 </p>
               </div>
 
@@ -306,10 +319,10 @@ export function PrivacyPage() {
                   Legal Requirements
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  We may disclose your information if required by law, court order,
-                  or legal process; to enforce our Terms of Service; to protect the
-                  rights, property, or safety of SCREAM, our users, or the public; or
-                  in connection with legal claims or disputes.
+                  We may disclose your information if required by law, court
+                  order, or legal process; to enforce our Terms of Service; to
+                  protect the rights, property, or safety of SCREAM, our users,
+                  or the public; or in connection with legal claims or disputes.
                 </p>
               </div>
 
@@ -318,10 +331,10 @@ export function PrivacyPage() {
                   Business Transfers
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  In the event of a merger, acquisition, reorganization, or sale of
-                  assets, your information may be transferred to the successor
-                  entity. We will notify you before your information becomes subject
-                  to a different privacy policy.
+                  In the event of a merger, acquisition, reorganization, or sale
+                  of assets, your information may be transferred to the
+                  successor entity. We will notify you before your information
+                  becomes subject to a different privacy policy.
                 </p>
               </div>
 
@@ -330,8 +343,8 @@ export function PrivacyPage() {
                   With Your Consent
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  We may share your information for other purposes with your explicit
-                  consent.
+                  We may share your information for other purposes with your
+                  explicit consent.
                 </p>
               </div>
             </div>
@@ -345,9 +358,9 @@ export function PrivacyPage() {
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
                 We implement appropriate technical and organizational security
-                measures to protect your personal information against unauthorized
-                access, alteration, disclosure, or destruction. These measures
-                include:
+                measures to protect your personal information against
+                unauthorized access, alteration, disclosure, or destruction.
+                These measures include:
               </p>
               <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                 <li>Encryption of data in transit using SSL/TLS protocols</li>
@@ -358,10 +371,11 @@ export function PrivacyPage() {
                 <li>Incident response and breach notification procedures</li>
               </ul>
               <p className="text-lg leading-relaxed font-bold">
-                However, no method of transmission over the internet or electronic
-                storage is 100% secure. While we strive to protect your information,
-                we cannot guarantee absolute security. You are responsible for
-                maintaining the confidentiality of your account credentials.
+                However, no method of transmission over the internet or
+                electronic storage is 100% secure. While we strive to protect
+                your information, we cannot guarantee absolute security. You are
+                responsible for maintaining the confidentiality of your account
+                credentials.
               </p>
             </div>
           </InfoCard>
@@ -377,9 +391,9 @@ export function PrivacyPage() {
                   Access & Portability
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  You have the right to access your personal information and request
-                  a copy of your data in a portable format. You can download your
-                  data through your account settings.
+                  You have the right to access your personal information and
+                  request a copy of your data in a portable format. You can
+                  download your data through your account settings.
                 </p>
               </div>
 
@@ -388,8 +402,9 @@ export function PrivacyPage() {
                   Correction & Update
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  You can update, correct, or modify your profile information and
-                  account settings at any time through your account dashboard.
+                  You can update, correct, or modify your profile information
+                  and account settings at any time through your account
+                  dashboard.
                 </p>
               </div>
 
@@ -399,9 +414,10 @@ export function PrivacyPage() {
                 </h3>
                 <p className="text-lg leading-relaxed">
                   You have the right to request deletion of your personal
-                  information. You can delete your account through account settings,
-                  or contact us to request deletion. Note that some information may
-                  be retained for legal or legitimate business purposes.
+                  information. You can delete your account through account
+                  settings, or contact us to request deletion. Note that some
+                  information may be retained for legal or legitimate business
+                  purposes.
                 </p>
               </div>
 
@@ -410,9 +426,9 @@ export function PrivacyPage() {
                   Object & Restrict Processing
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  You have the right to object to certain processing of your personal
-                  information and request restriction of processing under certain
-                  circumstances.
+                  You have the right to object to certain processing of your
+                  personal information and request restriction of processing
+                  under certain circumstances.
                 </p>
               </div>
 
@@ -421,10 +437,10 @@ export function PrivacyPage() {
                   Withdraw Consent
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  Where we rely on your consent to process your information, you have
-                  the right to withdraw that consent at any time. This will not
-                  affect the lawfulness of processing based on consent before
-                  withdrawal.
+                  Where we rely on your consent to process your information, you
+                  have the right to withdraw that consent at any time. This will
+                  not affect the lawfulness of processing based on consent
+                  before withdrawal.
                 </p>
               </div>
 
@@ -433,9 +449,9 @@ export function PrivacyPage() {
                   Marketing Communications
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  You can opt out of marketing emails by clicking the unsubscribe
-                  link in any promotional email or by adjusting your notification
-                  settings.
+                  You can opt out of marketing emails by clicking the
+                  unsubscribe link in any promotional email or by adjusting your
+                  notification settings.
                 </p>
               </div>
             </div>
@@ -449,31 +465,31 @@ export function PrivacyPage() {
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
                 We retain your personal information for as long as necessary to
-                provide the Service, fulfill the purposes described in this Privacy
-                Policy, and comply with legal obligations.
+                provide the Service, fulfill the purposes described in this
+                Privacy Policy, and comply with legal obligations.
               </p>
               <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                 <li>
-                  <strong>Account Information:</strong> Retained while your account
-                  is active and for a reasonable period afterward
+                  <strong>Account Information:</strong> Retained while your
+                  account is active and for a reasonable period afterward
                 </li>
                 <li>
-                  <strong>User Content:</strong> Public posts may be retained even
-                  after account deletion to maintain platform integrity
+                  <strong>User Content:</strong> Public posts may be retained
+                  even after account deletion to maintain platform integrity
                 </li>
                 <li>
-                  <strong>Usage Data:</strong> Typically retained for up to 2 years
-                  for analytics purposes
+                  <strong>Usage Data:</strong> Typically retained for up to 2
+                  years for analytics purposes
                 </li>
                 <li>
-                  <strong>Legal Compliance:</strong> Some data may be retained longer
-                  if required by law or for legal defense
+                  <strong>Legal Compliance:</strong> Some data may be retained
+                  longer if required by law or for legal defense
                 </li>
               </ul>
               <p className="text-lg leading-relaxed">
-                After the retention period, we will delete or anonymize your personal
-                information. You can request earlier deletion by contacting us,
-                subject to legal and operational constraints.
+                After the retention period, we will delete or anonymize your
+                personal information. You can request earlier deletion by
+                contacting us, subject to legal and operational constraints.
               </p>
             </div>
           </InfoCard>
@@ -485,22 +501,27 @@ export function PrivacyPage() {
           >
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
-                SCREAM operates globally, and your information may be transferred to,
-                stored, and processed in countries other than your country of
-                residence. These countries may have different data protection laws.
+                SCREAM operates globally, and your information may be
+                transferred to, stored, and processed in countries other than
+                your country of residence. These countries may have different
+                data protection laws.
               </p>
               <p className="text-lg leading-relaxed">
-                When we transfer your personal information internationally, we ensure
-                appropriate safeguards are in place, such as:
+                When we transfer your personal information internationally, we
+                ensure appropriate safeguards are in place, such as:
               </p>
               <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
-                <li>Standard contractual clauses approved by relevant authorities</li>
-                <li>Adequacy decisions recognizing equivalent data protection</li>
+                <li>
+                  Standard contractual clauses approved by relevant authorities
+                </li>
+                <li>
+                  Adequacy decisions recognizing equivalent data protection
+                </li>
                 <li>Other legally approved transfer mechanisms</li>
               </ul>
               <p className="text-lg leading-relaxed">
-                By using SCREAM, you consent to the transfer of your information to
-                countries outside your residence.
+                By using SCREAM, you consent to the transfer of your information
+                to countries outside your residence.
               </p>
             </div>
           </InfoCard>
@@ -512,20 +533,20 @@ export function PrivacyPage() {
           >
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
-                SCREAM is not intended for children under the age of 13. We do not
-                knowingly collect personal information from children under 13. If we
-                become aware that we have collected personal information from a child
-                under 13 without parental consent, we will take steps to delete that
-                information.
+                SCREAM is not intended for children under the age of 13. We do
+                not knowingly collect personal information from children under
+                13. If we become aware that we have collected personal
+                information from a child under 13 without parental consent, we
+                will take steps to delete that information.
               </p>
               <p className="text-lg leading-relaxed">
-                If you are a parent or guardian and believe your child has provided
-                us with personal information, please contact us immediately at
-                privacy@scream.com.
+                If you are a parent or guardian and believe your child has
+                provided us with personal information, please contact us
+                immediately at privacy@scream.com.
               </p>
               <p className="text-lg leading-relaxed">
-                Users between 13 and 18 should obtain parental consent before using
-                the Service.
+                Users between 13 and 18 should obtain parental consent before
+                using the Service.
               </p>
             </div>
           </InfoCard>
@@ -537,19 +558,21 @@ export function PrivacyPage() {
           >
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
-                The Service may contain links to third-party websites, services, or
-                resources that are not owned or controlled by SCREAM. This Privacy
-                Policy does not apply to those third-party services.
+                The Service may contain links to third-party websites, services,
+                or resources that are not owned or controlled by SCREAM. This
+                Privacy Policy does not apply to those third-party services.
               </p>
               <p className="text-lg leading-relaxed">
-                We are not responsible for the privacy practices of third parties. We
-                encourage you to review the privacy policies of any third-party
-                services before providing them with your information.
+                We are not responsible for the privacy practices of third
+                parties. We encourage you to review the privacy policies of any
+                third-party services before providing them with your
+                information.
               </p>
               <p className="text-lg leading-relaxed">
-                If you connect your SCREAM account with third-party services (such as
-                social media platforms), those services may share information with us
-                in accordance with your settings on those platforms.
+                If you connect your SCREAM account with third-party services
+                (such as social media platforms), those services may share
+                information with us in accordance with your settings on those
+                platforms.
               </p>
             </div>
           </InfoCard>
@@ -565,8 +588,8 @@ export function PrivacyPage() {
                   Your CCPA Rights
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  If you are a California resident, you have specific rights under
-                  the California Consumer Privacy Act (CCPA):
+                  If you are a California resident, you have specific rights
+                  under the California Consumer Privacy Act (CCPA):
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                   <li>
@@ -575,8 +598,8 @@ export function PrivacyPage() {
                   </li>
                   <li>Right to delete personal information held by us</li>
                   <li>
-                    Right to opt-out of the sale of personal information (we do not
-                    sell personal information)
+                    Right to opt-out of the sale of personal information (we do
+                    not sell personal information)
                   </li>
                   <li>
                     Right to non-discrimination for exercising your CCPA rights
@@ -608,17 +631,17 @@ export function PrivacyPage() {
                   Legal Basis for Processing
                 </h3>
                 <p className="text-lg leading-relaxed">
-                  Under the General Data Protection Regulation (GDPR), we process
-                  your personal information based on:
+                  Under the General Data Protection Regulation (GDPR), we
+                  process your personal information based on:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                   <li>
-                    <strong>Contract:</strong> Processing necessary to perform our
-                    contract with you (Terms of Service)
+                    <strong>Contract:</strong> Processing necessary to perform
+                    our contract with you (Terms of Service)
                   </li>
                   <li>
-                    <strong>Legitimate Interests:</strong> Our legitimate business
-                    interests (e.g., security, service improvement)
+                    <strong>Legitimate Interests:</strong> Our legitimate
+                    business interests (e.g., security, service improvement)
                   </li>
                   <li>
                     <strong>Consent:</strong> Your explicit consent for specific
@@ -637,8 +660,8 @@ export function PrivacyPage() {
                 </h3>
                 <p className="text-lg leading-relaxed">
                   EU/EEA residents have additional rights including the right to
-                  lodge a complaint with a supervisory authority in your country of
-                  residence.
+                  lodge a complaint with a supervisory authority in your country
+                  of residence.
                 </p>
               </div>
             </div>
@@ -652,13 +675,13 @@ export function PrivacyPage() {
             <div className="space-y-4">
               <p className="text-lg leading-relaxed">
                 We may update this Privacy Policy from time to time to reflect
-                changes in our practices, technology, legal requirements, or other
-                factors. We will notify you of material changes by:
+                changes in our practices, technology, legal requirements, or
+                other factors. We will notify you of material changes by:
               </p>
               <ul className="list-disc list-inside space-y-2 text-lg leading-relaxed ml-4">
                 <li>
-                  Posting the updated policy on this page with a new "Last Updated"
-                  date
+                  Posting the updated policy on this page with a new "Last
+                  Updated" date
                 </li>
                 <li>
                   Sending you an email notification (for significant changes)
@@ -667,8 +690,8 @@ export function PrivacyPage() {
               </ul>
               <p className="text-lg leading-relaxed">
                 Your continued use of the Service after changes become effective
-                constitutes acceptance of the updated Privacy Policy. We encourage
-                you to review this policy periodically.
+                constitutes acceptance of the updated Privacy Policy. We
+                encourage you to review this policy periodically.
               </p>
             </div>
           </InfoCard>
@@ -690,15 +713,18 @@ export function PrivacyPage() {
                 </p>
                 <p className="text-lg font-bold">
                   Contact Page:{" "}
-                  <Link href="/contact" className="underline hover:text-[#FF6B6B]">
+                  <Link
+                    href="/contact"
+                    className="underline hover:text-[#FF6B6B]"
+                  >
                     scream.com/contact
                   </Link>
                 </p>
               </div>
               <p className="text-lg leading-relaxed">
-                We will respond to all legitimate privacy-related inquiries within 30
-                days. For urgent matters, please mark your communication as "Urgent
-                Privacy Request."
+                We will respond to all legitimate privacy-related inquiries
+                within 30 days. For urgent matters, please mark your
+                communication as "Urgent Privacy Request."
               </p>
             </div>
           </InfoCard>
@@ -714,10 +740,14 @@ export function PrivacyPage() {
               Still have questions?
             </h2>
             <p className="text-xl font-bold mb-8 max-w-2xl mx-auto">
-              We're committed to transparency and protecting your privacy. Reach out
-              anytime with questions or concerns.
+              We're committed to transparency and protecting your privacy. Reach
+              out anytime with questions or concerns.
             </p>
-            <NeoButton href="/contact" variant="primary" className="text-xl px-12 py-6">
+            <NeoButton
+              href="/contact"
+              variant="primary"
+              className="text-xl px-12 py-6"
+            >
               Contact Support
             </NeoButton>
           </motion.div>
@@ -728,5 +758,3 @@ export function PrivacyPage() {
     </div>
   );
 }
-
-

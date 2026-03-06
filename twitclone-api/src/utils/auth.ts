@@ -26,7 +26,8 @@ const RESET_PASSWORD_TOKEN_EXPIRY_SECONDS = 60 * 60;
 const RESET_PASSWORD_TOKEN_EXPIRY_MINUTES = Math.floor(RESET_PASSWORD_TOKEN_EXPIRY_SECONDS / 60);
 
 export const auth = betterAuth({
-    trustedOrigins: ["http://localhost:3001", "https://scream.aritra.ovh"],
+    baseURL: config.betterAuth.url,
+    trustedOrigins: config.betterAuth.trustedOrigins,
     database: drizzleAdapter(db, {
         provider: "pg",
         schema: schema,

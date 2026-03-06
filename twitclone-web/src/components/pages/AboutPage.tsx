@@ -30,8 +30,8 @@ export function AboutPage() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl font-bold mb-12 max-w-3xl mx-auto bg-white border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-1">
-              The raw, chaotic, and unfiltered social platform we built because the
-              internet needed more noise.
+              The raw, chaotic, and unfiltered social platform we built because
+              the internet needed more noise.
             </p>
           </motion.div>
         </div>
@@ -161,14 +161,15 @@ export function AboutPage() {
             </h2>
             <div className="text-center space-y-6">
               <p className="text-2xl md:text-3xl font-black leading-relaxed">
-                To create a digital space where authenticity thrives, where voices
-                are amplified by transparent algorithms, and where human connection
-                happens on its own terms.
+                To create a digital space where authenticity thrives, where
+                voices are amplified by transparent algorithms, and where human
+                connection happens on its own terms.
               </p>
               <p className="text-xl font-bold leading-relaxed">
-                We're not just building a social platform. We're building a movement.
-                A rebellion against the sanitized, controlled, opaque algorithm-driven
-                internet. Join us in making the web loud and transparent again.
+                We're not just building a social platform. We're building a
+                movement. A rebellion against the sanitized, controlled, opaque
+                algorithm-driven internet. Join us in making the web loud and
+                transparent again.
               </p>
             </div>
           </motion.div>
@@ -187,11 +188,15 @@ export function AboutPage() {
               Ready to Make Some <span className="text-[#FFE66D]">Noise</span>?
             </h2>
             <p className="text-xl font-bold mb-12 max-w-2xl mx-auto">
-              Join thousands of users who have discovered the freedom of authentic
-              expression. The internet's most chaotic social platform is waiting for
-              you.
+              Join thousands of users who have discovered the freedom of
+              authentic expression. The internet's most chaotic social platform
+              is waiting for you.
             </p>
-            <NeoButton href="/sign-up" variant="secondary" className="text-2xl px-16 py-8">
+            <NeoButton
+              href="/sign-up"
+              variant="secondary"
+              className="text-2xl px-16 py-8"
+            >
               START SCREAMING
             </NeoButton>
           </motion.div>
@@ -202,5 +207,3 @@ export function AboutPage() {
     </div>
   );
 }
-
-

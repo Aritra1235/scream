@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { VITAP_LOGO_PATH } from "@/lib/constants";
 
 export function LandingFooter() {
   return (
@@ -37,8 +38,15 @@ export function LandingFooter() {
           </Link>
         </div>
       </div>
+      <div className="max-w-7xl mx-auto mt-8 flex justify-center">
+        <img
+          src={VITAP_LOGO_PATH}
+          alt="VIT-AP Logo"
+          width={150}
+          height={50}
+          className="object-contain"
+        />
+      </div>
     </footer>
   );
 }
-
-

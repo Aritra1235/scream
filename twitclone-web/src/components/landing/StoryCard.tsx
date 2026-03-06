@@ -21,11 +21,11 @@ export function StoryCard({ icon, title, content, delay = 0 }: StoryCardProps) {
         <div className="p-4 bg-[#4ECDC4] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           {icon}
         </div>
-        <h3 className="text-3xl font-black uppercase tracking-tight">{title}</h3>
+        <h3 className="text-3xl font-black uppercase tracking-tight">
+          {title}
+        </h3>
       </div>
       <p className="text-lg font-bold leading-relaxed">{content}</p>
     </motion.div>
   );
 }
-
-

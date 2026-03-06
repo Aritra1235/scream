@@ -47,7 +47,7 @@ export function UserPage({ username }: UserPageProps) {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/profile/${username}`,
           {
             credentials: "include",
-          }
+          },
         );
 
         if (!response.ok) {
@@ -151,5 +151,3 @@ export function UserPage({ username }: UserPageProps) {
     </div>
   );
 }
-
-

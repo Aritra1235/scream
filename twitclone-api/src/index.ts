@@ -17,11 +17,8 @@ import { profile } from "./modules/profile";
 import { resolveWebAppUrl } from "./utils/auth.service";
 import { password } from "./modules/password";
 
-console.log('config', config);
-
-
 const webAppUrl = resolveWebAppUrl();
-const corsOrigins = Array.from(new Set([webAppUrl].filter(Boolean)));
+const corsOrigins = Array.from(new Set([webAppUrl, ...config.misc.corsOrigins].filter(Boolean)));
 
 const app = new Elysia()
   .get('/', () => 'Hello World!')

@@ -1,4 +1,4 @@
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon } from "lucide-react";
 
 interface UserProfileProps {
   user: {
@@ -20,9 +20,9 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
-  const joinDate = new Date(user.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
+  const joinDate = new Date(user.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
   });
 
   return (
@@ -36,7 +36,7 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
+              target.style.display = "none";
             }}
           />
         ) : (
@@ -50,12 +50,12 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
         <div className="flex justify-between items-end -mt-[10%] sm:-mt-[15%] mb-3">
           <div className="relative rounded-full border-[4px] border-background bg-background">
             <img
-              src={user.avatar_url || 'https://via.placeholder.com/128'}
-              alt={user.display_name || user.username || 'User'}
+              src={user.avatar_url || "https://via.placeholder.com/128"}
+              alt={user.display_name || user.username || "User"}
               className="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover bg-muted"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = 'https://via.placeholder.com/128';
+                target.src = "https://via.placeholder.com/128";
               }}
             />
           </div>
@@ -110,11 +110,15 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
         {/* Stats */}
         <div className="flex gap-5 text-sm">
           <div className="hover:underline cursor-pointer">
-            <span className="font-bold text-foreground">{user.following_count}</span>{' '}
+            <span className="font-bold text-foreground">
+              {user.following_count}
+            </span>{" "}
             <span className="text-muted-foreground">Following</span>
           </div>
           <div className="hover:underline cursor-pointer">
-            <span className="font-bold text-foreground">{user.followers_count}</span>{' '}
+            <span className="font-bold text-foreground">
+              {user.followers_count}
+            </span>{" "}
             <span className="text-muted-foreground">Followers</span>
           </div>
         </div>
@@ -122,11 +126,11 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
 
       {/* Tabs Navigation */}
       <div className="flex border-b border-border">
-        {['Posts', 'Replies', 'Highlights', 'Media', 'Likes'].map((tab, i) => (
+        {["Posts", "Replies", "Highlights", "Media", "Likes"].map((tab, i) => (
           <button
             key={tab}
             className={`flex-1 hover:bg-muted/50 transition-colors px-4 py-3 text-sm font-medium relative ${
-              i === 0 ? 'text-foreground font-bold' : 'text-muted-foreground'
+              i === 0 ? "text-foreground font-bold" : "text-muted-foreground"
             }`}
           >
             {tab}
@@ -139,4 +143,3 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
     </section>
   );
 }
-
