@@ -1,6 +1,7 @@
 import { db } from '../../db/client';
 import { posts, user, likes, media } from '../../db/schema';
-import { eq, desc, sql, and, isNull } from 'drizzle-orm';
+import { eq, desc, sql, and, isNull, inArray } from 'drizzle-orm';
+import { getFollowingIds } from '../suggestions/services';
 
 type MediaItem = {
     mediaUrl: string;
@@ -281,4 +282,55 @@ async function getPostWithThread(postId: string, currentUserId?: string): Promis
     return post;
 }
 
-export { getSimpleFeed, getUserFeed, getPostWithThread, type FeedPost };
+/**
+ * Graph-powered home feed: returns posts exclusively from users that the
+ * current user follows, ordered by recency.  Post IDs are sourced from the
+ * Neo4j social graph (with a PostgreSQL fallback) and full post data is then
+ * fetched from PostgreSQL.
+ */
+async function getFollowingFeed(currentUserId: string, limit: number = 20, offset: number = 0): Promise<FeedPost[]> {
+    try {
+        const followingIds = await getFollowingIds(currentUserId);
+
+        if (followingIds.length === 0) {
+            return [];
+        }
+
+        const rows = await db.select({
+            id: posts.id,
+            content: posts.content,
+            createdAt: posts.createdAt,
+            mediaCount: posts.mediaCount,
+            userId: posts.userId,
+            username: user.username,
+            display_name: user.display_name,
+            avatar_url: user.avatar_url,
+            verified: user.verified,
+            parentId: posts.parentId,
+            repostOf: posts.repostOf,
+        })
+            .from(posts)
+            .innerJoin(user, eq(posts.userId, user.id))
+            .where(
+                and(
+                    inArray(posts.userId, followingIds.map(BigInt)),
+                    isNull(posts.parentId)
+                )
+            )
+            .orderBy(desc(posts.createdAt))
+            .limit(limit)
+            .offset(offset);
+
+        const feed: FeedPost[] = [];
+        for (const row of rows) {
+            const item = await buildFeedPost(row, currentUserId, 0, 0);
+            feed.push(item);
+        }
+        return feed;
+    } catch (error) {
+        console.error('Error fetching following feed:', error);
+        throw new Error('Failed to fetch following feed');
+    }
+}
+
+export { getSimpleFeed, getUserFeed, getPostWithThread, getFollowingFeed, type FeedPost };

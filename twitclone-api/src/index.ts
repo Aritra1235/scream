@@ -16,6 +16,12 @@ import { apiKeyModule } from "./modules/apikey";
 import { profile } from "./modules/profile";  
 import { resolveWebAppUrl } from "./utils/auth.service";
 import { password } from "./modules/password";
+import { follow } from "./modules/follow";
+import { suggestions } from "./modules/suggestions";
+import { initNeo4j, closeNeo4j } from "./db/neo4j";
+
+// Initialise Neo4j constraints and verify connectivity (non-blocking)
+void initNeo4j();
 
 const webAppUrl = resolveWebAppUrl();
 const corsOrigins = Array.from(new Set([webAppUrl, ...config.misc.corsOrigins].filter(Boolean)));
@@ -41,6 +47,8 @@ const app = new Elysia()
   .use(apiKeyModule)
   .use(profile)
   .use(password)
+  .use(follow)
+  .use(suggestions)
   .use(openapi())
   .use(
     opentelemetry({
@@ -61,3 +69,13 @@ const app = new Elysia()
 
 
 console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  await closeNeo4j();
+  process.exit(0);
+});
+process.on('SIGINT', async () => {
+  await closeNeo4j();
+  process.exit(0);
+});
