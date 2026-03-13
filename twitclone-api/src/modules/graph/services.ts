@@ -150,14 +150,12 @@ export async function getTrendingUsers(
     try {
         const result = await session.run(
             `MATCH (u:User)
-             WHERE u.username <> ""
+             WHERE u.username IS NOT NULL AND u.username <> ""
              OPTIONAL MATCH (follower)-[:FOLLOWS]->(u)
+             WITH u, count(DISTINCT follower) AS followers
              OPTIONAL MATCH (u)-[:POSTED]->(p:Post)
-             OPTIONAL MATCH ()-[:LIKED]->(p)
-             WITH u,
-                  count(DISTINCT follower) AS followers,
-                  count(DISTINCT p) AS postCount,
-                  followers * 3 + postCount AS score
+             WITH u, followers, count(DISTINCT p) AS postCount
+             WITH u, followers * 3 + postCount AS score
              ORDER BY score DESC
              LIMIT $limit
              RETURN u.id AS id, score`,

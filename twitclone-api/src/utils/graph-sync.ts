@@ -1,6 +1,7 @@
 import { getSession } from "./neo4j";
 import { db } from "../db/client";
 import { user as userTable, follows as followsTable, posts as postsTable, likes as likesTable } from "../db/schema";
+import { inArray } from "drizzle-orm";
 
 export async function syncUserToGraph(userId: string, username: string | null, displayName: string | null): Promise<void> {
     const session = getSession();
@@ -18,12 +19,33 @@ export async function syncUserToGraph(userId: string, username: string | null, d
 export async function syncFollowToGraph(followerId: string, followingId: string): Promise<void> {
     const session = getSession();
     try {
+        const users = await db.select({
+            id: userTable.id,
+            username: userTable.username,
+            display_name: userTable.display_name,
+        }).from(userTable).where(
+            inArray(userTable.id, [BigInt(followerId), BigInt(followingId)])
+        );
+
+        const userMap = new Map(users.map(u => [u.id.toString(), u]));
+        const follower = userMap.get(followerId);
+        const following = userMap.get(followingId);
+
         await session.run(
             `MERGE (a:User {id: $followerId})
+             SET a.username = $followerUsername, a.displayName = $followerDisplayName
              MERGE (b:User {id: $followingId})
+             SET b.username = $followingUsername, b.displayName = $followingDisplayName
              MERGE (a)-[r:FOLLOWS]->(b)
              SET r.createdAt = datetime()`,
-            { followerId, followingId }
+            {
+                followerId,
+                followingId,
+                followerUsername: follower?.username || "",
+                followerDisplayName: follower?.display_name || "",
+                followingUsername: following?.username || "",
+                followingDisplayName: following?.display_name || "",
+            }
         );
     } finally {
         await session.close();
