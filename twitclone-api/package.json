@@ -2,7 +2,9 @@
   "name": "twitclone-api",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --forceExit --detectOpenHandles",
+    "test:unit": "jest --forceExit --detectOpenHandles tests/unit",
+    "test:e2e": "jest --forceExit --detectOpenHandles tests/e2e",
     "dev": "bun run --watch src/index.ts",
     "build": "bun build --compile src/index.ts --outfile build/twitclone-api",
     "start": "./build/twitclone-api",
@@ -27,8 +29,14 @@
     "valibot": "^1.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^7.2.0",
     "bun-types": "latest",
-    "drizzle-kit": "^0.31.6"
+    "dotenv": "^17.3.1",
+    "drizzle-kit": "^0.31.6",
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6"
   },
   "module": "src/index.js"
 }
