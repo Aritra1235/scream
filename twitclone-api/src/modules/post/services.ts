@@ -3,6 +3,7 @@ import { posts, user } from '../../db/schema';
 import { eq, and, sql, desc } from 'drizzle-orm';
 import { generateId } from '../../utils/snowflake';
 import { getUserIdByUsername } from '../common';
+import { syncPostToGraph } from '../../utils/graph-sync';
 
 async function createPost(userId: bigint, content: string, mediaCount: number) {
     try {
@@ -17,6 +18,9 @@ async function createPost(userId: bigint, content: string, mediaCount: number) {
             throw new Error('Failed to create post');
         }
         await db.update(user).set({ posts_count: sql`${user.posts_count} + 1` }).where(eq(user.id, userId));
+        syncPostToGraph(post[0].id.toString(), userId.toString()).catch((err) =>
+            console.error("[graph-sync] post sync failed:", err)
+        );
         return post;
     } catch (error) {
         // Log the actual error for debugging

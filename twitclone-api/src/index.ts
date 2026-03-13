@@ -16,6 +16,10 @@ import { apiKeyModule } from "./modules/apikey";
 import { profile } from "./modules/profile";  
 import { resolveWebAppUrl } from "./utils/auth.service";
 import { password } from "./modules/password";
+import { follow } from "./modules/follow";
+import { graph } from "./modules/graph";
+import { initNeo4jSchema } from "./utils/neo4j";
+import { seedGraphFromPostgres } from "./utils/graph-sync";
 
 const webAppUrl = resolveWebAppUrl();
 const corsOrigins = Array.from(new Set([webAppUrl, ...config.misc.corsOrigins].filter(Boolean)));
@@ -41,6 +45,8 @@ const app = new Elysia()
   .use(apiKeyModule)
   .use(profile)
   .use(password)
+  .use(follow)
+  .use(graph)
   .use(openapi())
   .use(
     opentelemetry({
@@ -60,4 +66,8 @@ const app = new Elysia()
   .listen(config.misc.port)
 
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+console.log(`Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
+
+initNeo4jSchema()
+    .then(() => seedGraphFromPostgres())
+    .catch((err) => console.error("[neo4j] Initialization failed:", err))

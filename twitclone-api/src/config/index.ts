@@ -18,6 +18,11 @@ interface Config {
     database: {
         url: string;
     };
+    neo4j: {
+        uri: string;
+        user: string;
+        password: string;
+    };
     cdn: {
         baseUrl: string;
         defaultAvatar: string;
@@ -80,6 +85,11 @@ const config: Config = {
     },
     database: {
         url: process.env.DATABASE_URL as string,
+    },
+    neo4j: {
+        uri: process.env.NEO4J_URI || "bolt://localhost:7687",
+        user: process.env.NEO4J_USER || "neo4j",
+        password: process.env.NEO4J_PASSWORD || "neo4jdev",
     },
     cdn: {
         baseUrl: process.env.CDN_BASE_URL as string,

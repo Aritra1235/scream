@@ -1,6 +1,6 @@
 import { db } from '../../db/client';
-import { posts, user, likes, media } from '../../db/schema';
-import { eq, desc, sql, and, isNull } from 'drizzle-orm';
+import { posts, user, likes, media, follows } from '../../db/schema';
+import { eq, desc, sql, and, isNull, inArray } from 'drizzle-orm';
 
 type MediaItem = {
     mediaUrl: string;
@@ -281,4 +281,54 @@ async function getPostWithThread(postId: string, currentUserId?: string): Promis
     return post;
 }
 
-export { getSimpleFeed, getUserFeed, getPostWithThread, type FeedPost };
+async function getFollowingFeed(currentUserId: string, limit: number = 20, offset: number = 0): Promise<FeedPost[]> {
+    try {
+        const followingRows = await db
+            .select({ followingId: follows.followingId })
+            .from(follows)
+            .where(eq(follows.followerId, BigInt(currentUserId)));
+
+        const followingIds = followingRows.map((r) => r.followingId);
+
+        if (followingIds.length === 0) {
+            return [];
+        }
+
+        followingIds.push(BigInt(currentUserId));
+
+        const rows = await db.select({
+            id: posts.id,
+            content: posts.content,
+            createdAt: posts.createdAt,
+            mediaCount: posts.mediaCount,
+            userId: posts.userId,
+            username: user.username,
+            display_name: user.display_name,
+            avatar_url: user.avatar_url,
+            verified: user.verified,
+            parentId: posts.parentId,
+            repostOf: posts.repostOf,
+        })
+            .from(posts)
+            .innerJoin(user, eq(posts.userId, user.id))
+            .where(and(
+                isNull(posts.parentId),
+                inArray(posts.userId, followingIds),
+            ))
+            .orderBy(desc(posts.createdAt))
+            .limit(limit)
+            .offset(offset);
+
+        const feed: FeedPost[] = [];
+        for (const row of rows) {
+            const item = await buildFeedPost(row, currentUserId, 0, 0);
+            feed.push(item);
+        }
+        return feed;
+    } catch (error) {
+        console.error('Error fetching following feed:', error);
+        throw new Error('Failed to fetch following feed');
+    }
+}
+
+export { getSimpleFeed, getUserFeed, getFollowingFeed, getPostWithThread, type FeedPost };

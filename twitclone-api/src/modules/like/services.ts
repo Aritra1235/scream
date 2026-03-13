@@ -2,6 +2,7 @@ import { config } from '../../config';
 import { db } from '../../db/client';
 import { likes, posts, user } from '../../db/schema';
 import { and, desc, eq, sql } from 'drizzle-orm';
+import { syncLikeToGraph, removeLikeFromGraph } from '../../utils/graph-sync';
 
 type PostLikeUser = {
     userId: string;
@@ -31,6 +32,10 @@ async function likePost(userId: bigint, postId: bigint) {
             throw new Error('Failed to update post');
         }
         
+        syncLikeToGraph(userId.toString(), postId.toString()).catch((err) =>
+            console.error("[graph-sync] like sync failed:", err)
+        );
+
         return { ...like, ...updatedPost };
     });
 }
@@ -58,6 +63,10 @@ async function unlikePost(userId: bigint, postId: bigint) {
             throw new Error('Failed to update post');
         }
         
+        removeLikeFromGraph(userId.toString(), postId.toString()).catch((err) =>
+            console.error("[graph-sync] unlike sync failed:", err)
+        );
+
         return { unlike: unlike[0], post: updatedPost };
     });
 }

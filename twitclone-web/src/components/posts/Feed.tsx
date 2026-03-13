@@ -37,9 +37,10 @@ interface FeedResponse {
 
 interface FeedProps {
   className?: string;
+  mode?: "all" | "following";
 }
 
-export function Feed({ className = "" }: FeedProps) {
+export function Feed({ className = "", mode = "all" }: FeedProps) {
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,8 +55,9 @@ export function Feed({ className = "" }: FeedProps) {
         setIsLoading(true);
       }
 
+      const feedPath = mode === "following" ? "feed/following" : "feed";
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/feed?limit=${limit}&offset=${currentOffset}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/${process.env.NEXT_PUBLIC_API_PREFIX}/${feedPath}?limit=${limit}&offset=${currentOffset}`,
         {
           credentials: "include",
           headers: {
@@ -116,8 +118,11 @@ export function Feed({ className = "" }: FeedProps) {
   };
 
   useEffect(() => {
-    fetchFeed();
-  }, []);
+    setPosts([]);
+    setOffset(0);
+    setHasMore(true);
+    fetchFeed(0, false);
+  }, [mode]);
 
   const loadMore = () => {
     if (!isLoading && hasMore) {

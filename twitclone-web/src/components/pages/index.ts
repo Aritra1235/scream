@@ -8,3 +8,4 @@ export { SignUpPage } from "./SignUpPage";
 export { HomePage } from "./HomePage";
 export { UserPage } from "./UserPage";
 export { SettingsPage } from "./SettingsPage";
+export { ExplorePage } from "./ExplorePage";

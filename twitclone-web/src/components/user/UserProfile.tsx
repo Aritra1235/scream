@@ -1,4 +1,6 @@
 import { CalendarIcon } from "lucide-react";
+import { FollowButton } from "./FollowButton";
+import { useState } from "react";
 
 interface UserProfileProps {
   user: {
@@ -20,6 +22,7 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
+  const [followersCount, setFollowersCount] = useState(user.followers_count);
   const joinDate = new Date(user.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -60,13 +63,20 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
             />
           </div>
           <div className="pb-2">
-            {canEdit && (
+            {canEdit ? (
               <button
                 className="rounded-full border border-border px-4 py-1.5 font-bold hover:bg-muted/50 transition-colors text-sm"
                 onClick={onEdit}
               >
                 Edit profile
               </button>
+            ) : (
+              <FollowButton
+                targetUserId={user.id}
+                onFollowChange={(isFollowing) => {
+                  setFollowersCount((prev) => prev + (isFollowing ? 1 : -1));
+                }}
+              />
             )}
           </div>
         </div>
@@ -117,7 +127,7 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
           </div>
           <div className="hover:underline cursor-pointer">
             <span className="font-bold text-foreground">
-              {user.followers_count}
+              {followersCount}
             </span>{" "}
             <span className="text-muted-foreground">Followers</span>
           </div>

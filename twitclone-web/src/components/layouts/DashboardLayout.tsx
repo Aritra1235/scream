@@ -8,6 +8,7 @@ import { UserStoreDebug } from "@/components/user-store-debug";
 import { useUserStore } from "@/store/user-store";
 import { Spinner } from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
+import { WhoToFollow } from "@/components/widgets/WhoToFollow";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,7 +93,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               {children}
             </main>
-            <div className="hidden xl:block w-72" data-right-side></div>
+            <div className="hidden xl:block w-72 p-4 space-y-4 overflow-y-auto" data-right-side>
+              <WhoToFollow />
+            </div>
           </div>
         </div>
       )}
