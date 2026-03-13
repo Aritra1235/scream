@@ -50,7 +50,10 @@ export function WhoToFollow() {
       </h3>
       <div className="divide-y-2 divide-border">
         {suggestions.map((user) => (
-          <div key={user.id} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors">
+          <div
+            key={user.id}
+            className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors"
+          >
             <Link href={`/${user.username}`} className="shrink-0">
               <div className="w-10 h-10 border-2 border-border bg-muted overflow-hidden">
                 {user.avatar_url ? (
@@ -75,7 +78,8 @@ export function WhoToFollow() {
               </Link>
               {user.mutualCount > 0 && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {user.mutualCount} mutual{user.mutualCount > 1 ? "s" : ""} follow
+                  {user.mutualCount} mutual{user.mutualCount > 1 ? "s" : ""}{" "}
+                  follow
                 </p>
               )}
             </div>

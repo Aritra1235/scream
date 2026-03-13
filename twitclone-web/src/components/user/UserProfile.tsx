@@ -126,9 +126,7 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
             <span className="text-muted-foreground">Following</span>
           </div>
           <div className="hover:underline cursor-pointer">
-            <span className="font-bold text-foreground">
-              {followersCount}
-            </span>{" "}
+            <span className="font-bold text-foreground">{followersCount}</span>{" "}
             <span className="text-muted-foreground">Followers</span>
           </div>
         </div>

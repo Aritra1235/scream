@@ -63,7 +63,9 @@ export function HomePage() {
     <div className="flex flex-col bg-card min-h-full">
       {/* Header with Feed Tabs */}
       <div className="sticky top-0 bg-card/90 backdrop-blur-sm border-b-4 border-border z-10">
-        <h1 className="text-2xl font-black uppercase tracking-tight px-6 py-4">Home</h1>
+        <h1 className="text-2xl font-black uppercase tracking-tight px-6 py-4">
+          Home
+        </h1>
         <div className="flex border-t-2 border-border">
           <button
             onClick={() => setFeedMode("all")}

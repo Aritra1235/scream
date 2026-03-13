@@ -93,7 +93,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               {children}
             </main>
-            <div className="hidden xl:block w-72 p-4 space-y-4 overflow-y-auto" data-right-side>
+            <div
+              className="hidden xl:block w-72 p-4 space-y-4 overflow-y-auto"
+              data-right-side
+            >
               <WhoToFollow />
             </div>
           </div>

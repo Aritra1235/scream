@@ -14,7 +14,9 @@ export function FollowButton({
   onFollowChange,
 }: FollowButtonProps) {
   const [isFollowing, setIsFollowing] = useState(initialFollowing ?? false);
-  const [isLoading, setIsLoading] = useState(!initialFollowing && initialFollowing === undefined);
+  const [isLoading, setIsLoading] = useState(
+    !initialFollowing && initialFollowing === undefined,
+  );
   const [isHovering, setIsHovering] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
