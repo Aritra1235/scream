@@ -2,6 +2,7 @@ import { config } from '../../config';
 import { db } from '../../db/client';
 import { likes, posts, user } from '../../db/schema';
 import { and, desc, eq, sql } from 'drizzle-orm';
+import { neo4jWrite } from '../../db/neo4j';
 
 type PostLikeUser = {
     userId: string;
@@ -13,7 +14,7 @@ type PostLikeUser = {
 
 
 async function likePost(userId: bigint, postId: bigint) {
-    return await db.transaction(async (tx) => {
+    const result = await db.transaction(async (tx) => {
         const [like] = await tx.insert(likes)
             .values({ userId, postId })
             .returning();
@@ -33,11 +34,21 @@ async function likePost(userId: bigint, postId: bigint) {
         
         return { ...like, ...updatedPost };
     });
+
+    // Sync to Neo4j (non-blocking)
+    void neo4jWrite(
+        `MERGE (u:User {id: $userId})
+         MERGE (p:Post {id: $postId})
+         MERGE (u)-[:LIKED {at: datetime()}]->(p)`,
+        { userId: userId.toString(), postId: postId.toString() }
+    );
+
+    return result;
 }
 
 
 async function unlikePost(userId: bigint, postId: bigint) {
-    return await db.transaction(async (tx) => {
+    const result = await db.transaction(async (tx) => {
         const unlike = await tx.delete(likes)
             .where(and(
                 eq(likes.userId, userId),
@@ -60,6 +71,15 @@ async function unlikePost(userId: bigint, postId: bigint) {
         
         return { unlike: unlike[0], post: updatedPost };
     });
+
+    // Sync to Neo4j (non-blocking)
+    void neo4jWrite(
+        `MATCH (u:User {id: $userId})-[r:LIKED]->(p:Post {id: $postId})
+         DELETE r`,
+        { userId: userId.toString(), postId: postId.toString() }
+    );
+
+    return result;
 }
 
 async function getPostLikesCount(postId: bigint): Promise<number> {
