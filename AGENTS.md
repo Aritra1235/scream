@@ -11,13 +11,14 @@ Scream is a full-stack Twitter/X clone ("TwitClone") monorepo with two services:
 | Backend API | `twitclone-api/` | Bun (Elysia.js) | bun | 3000 |
 | Frontend Web | `twitclone-web/` | Node.js (Next.js 16) | pnpm | 3001 |
 
-PostgreSQL is required as the data store. Schema is managed via Drizzle ORM.
+PostgreSQL is required as the primary data store (Drizzle ORM). Neo4j is used as a secondary graph database for social graph features (follow recommendations, trending users, mutual followers).
 
 ### Starting services
 
 1. **PostgreSQL**: `sudo pg_ctlcluster 16 main start` (verify with `pg_isready`)
-2. **Backend**: `cd twitclone-api && bun run dev` (runs on port 3000 with `--watch`)
-3. **Frontend**: `cd twitclone-web && pnpm dev` (runs on port 3001)
+2. **Neo4j**: `sudo -u neo4j neo4j start` (verify at http://localhost:7474, credentials: neo4j/neo4jdev)
+3. **Backend**: `cd twitclone-api && bun run dev` (runs on port 3000 with `--watch`; auto-seeds Neo4j from Postgres on startup)
+4. **Frontend**: `cd twitclone-web && pnpm dev` (runs on port 3001)
 
 ### Key commands
 
@@ -36,3 +37,5 @@ PostgreSQL is required as the data store. Schema is managed via Drizzle ORM.
 - AWS S3, Mailgun, Axiom, and CDN configs use placeholder values in local dev -- media uploads and observability features won't work, but core posting/auth/feed features function fine.
 - The `.env` files (`twitclone-api/.env` and `twitclone-web/.env`) are gitignored. Copy from `.env.example` and adjust as needed.
 - The PostgreSQL database, user, and schema must exist before starting the API. The update script handles `bun run db:push` to keep the schema in sync.
+- Neo4j is auto-seeded from PostgreSQL data when the backend starts. If Neo4j is not running, the backend still starts but graph features (suggestions, trending, mutual followers) will return empty results or fall back gracefully.
+- Neo4j default credentials for local dev: `neo4j` / `neo4jdev` on `bolt://localhost:7687`.
