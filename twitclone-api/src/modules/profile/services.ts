@@ -12,8 +12,8 @@ export async function getUser(userId: bigint) {
     // Build return object, only including non-null nullable fields
     const result: any = {
         id: userRecord.id.toString(),
-        avatar_url: config.cdn.baseUrl+"/"+userRecord.avatar_url,
-        banner_url: config.cdn.baseUrl+"/"+userRecord.banner_url,
+        avatar_url: config.aws.bucketName + "/" + userRecord.avatar_url,
+        banner_url: config.aws.bucketName + "/" + userRecord.banner_url,
         verified: userRecord.verified,
         email: userRecord.email,
         emailVerified: userRecord.emailVerified,

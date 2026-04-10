@@ -179,10 +179,10 @@ export const auth = betterAuth({
         },
         session: {
             create: {
-                before: async (session, context) => {
-                    const ip = context?.headers?.get('x-forwarded-for') ||
-                        context?.headers?.get('x-real-ip') ||
-                        null;
+                before: async (session) => {
+                    return {
+                        data: session,
+                    };
                 },
                 after: async (session, context) => {
                     try {
@@ -244,10 +244,10 @@ export const auth = betterAuth({
                 }
             },
             update: {
-                before: async (session, context) => {
-                    const ip = context?.headers?.get('x-forwarded-for') ||
-                        context?.headers?.get('x-real-ip') ||
-                        null;
+                before: async (session) => {
+                    return {
+                        data: session,
+                    };
                 }
             }
         },

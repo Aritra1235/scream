@@ -86,10 +86,7 @@ func GetPostLikes(ctx context.Context, cfg *config.Config, postID int64, limit, 
 		var id int64
 		rows.Scan(&id, &u.Username, &u.DisplayName, &u.AvatarURL, &u.Verified)
 		u.UserID = strconv.FormatInt(id, 10)
-		if u.AvatarURL != nil {
-			v := cfg.CDNBaseURL + "/" + *u.AvatarURL
-			u.AvatarURL = &v
-		}
+		u.AvatarURL = buildOptionalAssetURL(cfg, u.AvatarURL)
 		result = append(result, u)
 	}
 	if result == nil {

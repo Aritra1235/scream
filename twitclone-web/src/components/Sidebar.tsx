@@ -119,7 +119,7 @@ export default function Sidebar() {
                 <div className="h-10 w-10 border-2 border-border bg-muted overflow-hidden">
                   {user.avatar_url ? (
                     <img
-                      src={user.avatar_url}
+                      src={`${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${user.avatar_url}`}
                       alt={user.name || "User"}
                       className="h-full w-full object-cover"
                     />

@@ -232,7 +232,7 @@ export function TweetInput({
         <div className="h-12 w-12 border-2 border-border bg-muted overflow-hidden flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]">
           {user.avatar_url ? (
             <img
-              src={user.avatar_url}
+              src={`${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${user.avatar_url}`}
               alt={user.name || "User"}
               className="h-full w-full object-cover"
             />

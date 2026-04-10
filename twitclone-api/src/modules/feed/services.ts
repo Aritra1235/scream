@@ -1,6 +1,7 @@
 import { db } from '../../db/client';
 import { posts, user, likes, media, follows } from '../../db/schema';
 import { eq, desc, sql, and, isNull, inArray } from 'drizzle-orm';
+import { config } from '../../config';
 
 type MediaItem = {
     mediaUrl: string;
@@ -89,7 +90,7 @@ async function getMediaForPost(postId: bigint): Promise<MediaItem[]> {
         .orderBy(desc(media.createdAt));
 
     return mediaRows.map((item) => ({
-        mediaUrl: item.mediaUrl,
+        mediaUrl: config.aws.bucketName + "/" + item.mediaUrl,
         type: item.type,
         width: item.width,
         height: item.height,
@@ -154,7 +155,7 @@ async function buildFeedPost(
             id: row.userId.toString(),
             username: row.username,
             display_name: row.display_name,
-            avatar_url: row.avatar_url,
+            avatar_url: row.avatar_url ? config.aws.bucketName + "/" + row.avatar_url : null,
             verified: row.verified,
         },
         engagement,

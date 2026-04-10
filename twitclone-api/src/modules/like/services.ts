@@ -110,7 +110,7 @@ async function getPostLikes(
     // Convert BigInt to string for JSON serialization
     return result.map(row => ({
         ...row,
-        avatar_url: config.cdn.baseUrl+"/" + row.avatar_url,
+        avatar_url: r.avatar_url ? config.aws.bucketName + "/" + r.avatar_url : null,
         userId: row.userId.toString()
     }));
 }

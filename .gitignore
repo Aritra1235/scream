@@ -6,3 +6,9 @@ misc/*
 docs/*
 twitclone-web/src/lib/constants.ts
 telemetry-id
+/api-go/bin/
+api-go/.env
+api-go/.env
+twitclone-api/.env.old
+api-go/.env
+api-go/server

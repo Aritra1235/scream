@@ -22,7 +22,10 @@ import (
 )
 
 func main() {
-	cfg := config.Load()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
 
 	if err := db.InitPostgres(cfg.DatabaseURL); err != nil {
 		log.Fatalf("Failed to connect to PostgreSQL: %v", err)
@@ -43,12 +46,12 @@ func main() {
 	r.Use(chimiddleware.Logger)
 	r.Use(chimiddleware.Recoverer)
 	r.Use(chimiddleware.RealIP)
-	r.Use(cors.Handler(cors.Options{
+	r.Use(middleware.SkipAuthProxyCORS(cors.Handler(cors.Options{
 		AllowedOrigins:   cfg.CORSOrigins,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
-	}))
+	})))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World!"))
@@ -60,8 +63,8 @@ func main() {
 
 	// API v1 routes
 	profileH := handler.NewProfileHandler(cfg)
-	postH := handler.NewPostHandler()
-	feedH := handler.NewFeedHandler()
+	postH := handler.NewPostHandler(cfg)
+	feedH := handler.NewFeedHandler(cfg)
 	likeH := handler.NewLikeHandler(cfg)
 	followH := handler.NewFollowHandler(cfg)
 	graphH := handler.NewGraphHandler(cfg)

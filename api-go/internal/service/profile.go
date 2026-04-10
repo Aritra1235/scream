@@ -82,12 +82,6 @@ func UpdateProfile(ctx context.Context, cfg *config.Config, userID int64, displa
 }
 
 func prefixCDN(cfg *config.Config, u *models.User) {
-	if u.AvatarURL != nil {
-		v := cfg.CDNBaseURL + "/" + *u.AvatarURL
-		u.AvatarURL = &v
-	}
-	if u.BannerURL != nil {
-		v := cfg.CDNBaseURL + "/" + *u.BannerURL
-		u.BannerURL = &v
-	}
+	u.AvatarURL = buildOptionalAssetURL(cfg, u.AvatarURL)
+	u.BannerURL = buildOptionalAssetURL(cfg, u.BannerURL)
 }

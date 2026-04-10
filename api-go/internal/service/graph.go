@@ -27,12 +27,18 @@ func GetWhoToFollow(ctx context.Context, cfg *config.Config, currentUserID strin
 		return getPopularUsers(ctx, cfg, currentUserID, limit)
 	}
 
-	var suggestions []struct{ id string; mutualCount int }
+	var suggestions []struct {
+		id          string
+		mutualCount int
+	}
 	for result.Next(ctx) {
 		record := result.Record()
 		id, _ := record.Get("id")
 		mc, _ := record.Get("mutualCount")
-		suggestions = append(suggestions, struct{ id string; mutualCount int }{
+		suggestions = append(suggestions, struct {
+			id          string
+			mutualCount int
+		}{
 			id: id.(string), mutualCount: int(toInt64(mc)),
 		})
 	}
@@ -61,11 +67,17 @@ func getPopularUsers(ctx context.Context, cfg *config.Config, currentUserID stri
 		return []models.SuggestedUser{}, nil
 	}
 
-	var users []struct{ id string; mutualCount int }
+	var users []struct {
+		id          string
+		mutualCount int
+	}
 	for result.Next(ctx) {
 		record := result.Record()
 		id, _ := record.Get("id")
-		users = append(users, struct{ id string; mutualCount int }{id: id.(string), mutualCount: 0})
+		users = append(users, struct {
+			id          string
+			mutualCount int
+		}{id: id.(string), mutualCount: 0})
 	}
 
 	return enrichUsers(ctx, cfg, users)
@@ -108,10 +120,7 @@ func GetMutualFollowers(ctx context.Context, cfg *config.Config, currentUserID, 
 			continue
 		}
 		m.ID = strconv.FormatInt(uid, 10)
-		if m.AvatarURL != nil {
-			v := cfg.CDNBaseURL + "/" + *m.AvatarURL
-			m.AvatarURL = &v
-		}
+		m.AvatarURL = buildOptionalAssetURL(cfg, m.AvatarURL)
 		mutuals = append(mutuals, m)
 	}
 	return mutuals, nil
@@ -150,9 +159,15 @@ func GetTrendingUsers(ctx context.Context, cfg *config.Config, limit int) ([]mod
 		entries = append(entries, entry{id: id.(string), score: int(toInt64(score))})
 	}
 
-	suggestions := make([]struct{ id string; mutualCount int }, len(entries))
+	suggestions := make([]struct {
+		id          string
+		mutualCount int
+	}, len(entries))
 	for i, e := range entries {
-		suggestions[i] = struct{ id string; mutualCount int }{id: e.id, mutualCount: 0}
+		suggestions[i] = struct {
+			id          string
+			mutualCount int
+		}{id: e.id, mutualCount: 0}
 	}
 
 	enriched, err := enrichUsers(ctx, cfg, suggestions)
@@ -170,7 +185,10 @@ func GetTrendingUsers(ctx context.Context, cfg *config.Config, limit int) ([]mod
 	return trending, nil
 }
 
-func enrichUsers(ctx context.Context, cfg *config.Config, graphUsers []struct{ id string; mutualCount int }) ([]models.SuggestedUser, error) {
+func enrichUsers(ctx context.Context, cfg *config.Config, graphUsers []struct {
+	id          string
+	mutualCount int
+}) ([]models.SuggestedUser, error) {
 	var result []models.SuggestedUser
 	for _, gu := range graphUsers {
 		id, _ := strconv.ParseInt(gu.id, 10, 64)
@@ -185,10 +203,7 @@ func enrichUsers(ctx context.Context, cfg *config.Config, graphUsers []struct{ i
 		}
 		u.ID = strconv.FormatInt(uid, 10)
 		u.MutualCount = gu.mutualCount
-		if u.AvatarURL != nil {
-			v := cfg.CDNBaseURL + "/" + *u.AvatarURL
-			u.AvatarURL = &v
-		}
+		u.AvatarURL = buildOptionalAssetURL(cfg, u.AvatarURL)
 		result = append(result, u)
 	}
 	if result == nil {

@@ -58,7 +58,7 @@ export function WhoToFollow() {
               <div className="w-10 h-10 border-2 border-border bg-muted overflow-hidden">
                 {user.avatar_url ? (
                   <img
-                    src={user.avatar_url}
+                    src={process.env.NEXT_PUBLIC_CDN_BASE_URL + "/" + user.avatar_url}
                     alt={user.display_name || "User"}
                     className="w-full h-full object-cover"
                   />

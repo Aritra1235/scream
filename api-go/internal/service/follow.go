@@ -119,7 +119,10 @@ func GetFollowing(ctx context.Context, cfg *config.Config, userID int64, limit, 
 	return scanFollowUsers(rows, cfg)
 }
 
-func scanFollowUsers(rows interface{ Next() bool; Scan(dest ...interface{}) error }, cfg *config.Config) ([]models.FollowUserInfo, error) {
+func scanFollowUsers(rows interface {
+	Next() bool
+	Scan(dest ...interface{}) error
+}, cfg *config.Config) ([]models.FollowUserInfo, error) {
 	var result []models.FollowUserInfo
 	for rows.Next() {
 		var u models.FollowUserInfo
@@ -128,10 +131,7 @@ func scanFollowUsers(rows interface{ Next() bool; Scan(dest ...interface{}) erro
 			return nil, err
 		}
 		u.ID = strconv.FormatInt(id, 10)
-		if u.AvatarURL != nil {
-			v := cfg.CDNBaseURL + "/" + *u.AvatarURL
-			u.AvatarURL = &v
-		}
+		u.AvatarURL = buildOptionalAssetURL(cfg, u.AvatarURL)
 		result = append(result, u)
 	}
 	if result == nil {

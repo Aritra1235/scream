@@ -117,7 +117,7 @@ export async function getFollowers(
     return rows.map((r) => ({
         ...r,
         id: r.id.toString(),
-        avatar_url: r.avatar_url ? config.cdn.baseUrl + "/" + r.avatar_url : null,
+        avatar_url: r.avatar_url ? config.aws.bucketName + "/" + r.avatar_url : null,
     }));
 }
 
@@ -147,7 +147,7 @@ export async function getFollowing(
     return rows.map((r) => ({
         ...r,
         id: r.id.toString(),
-        avatar_url: r.avatar_url ? config.cdn.baseUrl + "/" + r.avatar_url : null,
+        avatar_url: r.avatar_url ? config.aws.bucketName + "/" + r.avatar_url : null,
     }));
 }
 

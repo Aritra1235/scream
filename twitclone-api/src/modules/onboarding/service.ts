@@ -1,7 +1,7 @@
 import { db } from '../../db/client';
 import { user } from '../../db/schema';
 import { eq } from 'drizzle-orm';
-import { config } from '../../config/index';
+import { config } from "../../config";
 
 async function checkIfUserOnboardedAndEmailVerified(userId: bigint) {
     const userData = await db.select().from(user).where(eq(user.id, userId));

@@ -131,7 +131,7 @@ export async function getMutualFollowers(
             id: r.id.toString(),
             username: r.username,
             display_name: r.display_name,
-            avatar_url: r.avatar_url ? config.cdn.baseUrl + "/" + r.avatar_url : null,
+            avatar_url: r.avatar_url ? config.aws.bucketName + "/" + r.avatar_url : null,
             verified: r.verified,
         }));
     } catch (err) {
@@ -233,7 +233,7 @@ async function enrichUsers(
                 id: pgUser.id.toString(),
                 username: pgUser.username,
                 display_name: pgUser.display_name,
-                avatar_url: pgUser.avatar_url ? config.cdn.baseUrl + "/" + pgUser.avatar_url : null,
+                avatar_url: pgUser.avatar_url ? config.aws.bucketName + "/" + pgUser.avatar_url : null,
                 bio: pgUser.bio,
                 verified: pgUser.verified,
                 followers_count: pgUser.followers_count,

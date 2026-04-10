@@ -6,14 +6,15 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
+	"github.com/Aritra1235/scream/api-go/internal/config"
 	"github.com/Aritra1235/scream/api-go/internal/middleware"
 	"github.com/Aritra1235/scream/api-go/internal/service"
 	"github.com/Aritra1235/scream/api-go/internal/util"
 )
 
-type PostHandler struct{}
+type PostHandler struct{ cfg *config.Config }
 
-func NewPostHandler() *PostHandler { return &PostHandler{} }
+func NewPostHandler(cfg *config.Config) *PostHandler { return &PostHandler{cfg: cfg} }
 
 func (h *PostHandler) Create(w http.ResponseWriter, r *http.Request) {
 	user := middleware.GetUser(r.Context())
@@ -84,7 +85,9 @@ func (h *PostHandler) Reply(w http.ResponseWriter, r *http.Request) {
 
 func (h *PostHandler) Repost(w http.ResponseWriter, r *http.Request) {
 	user := middleware.GetUser(r.Context())
-	var body struct{ RepostOf string `json:"repostOf"` }
+	var body struct {
+		RepostOf string `json:"repostOf"`
+	}
 	if err := util.DecodeBody(r, &body); err != nil {
 		util.Error(w, http.StatusBadRequest, "Invalid body")
 		return
@@ -124,7 +127,9 @@ func (h *PostHandler) Quote(w http.ResponseWriter, r *http.Request) {
 
 func (h *PostHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	user := middleware.GetUser(r.Context())
-	var body struct{ PostID string `json:"postId"` }
+	var body struct {
+		PostID string `json:"postId"`
+	}
 	if err := util.DecodeBody(r, &body); err != nil {
 		util.Error(w, http.StatusBadRequest, "Invalid body")
 		return
@@ -154,7 +159,9 @@ func (h *PostHandler) GetByUsername(w http.ResponseWriter, r *http.Request) {
 
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
-	if limit == 0 { limit = 20 }
+	if limit == 0 {
+		limit = 20
+	}
 
 	rows, err := service.GetPostsByUserID(r.Context(), uid, limit, offset)
 	if err != nil {
@@ -172,7 +179,7 @@ func (h *PostHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		uid = &user.ID
 	}
 
-	post, err := service.GetPostWithThread(r.Context(), postID, uid)
+	post, err := service.GetPostWithThread(r.Context(), h.cfg, postID, uid)
 	if err != nil {
 		util.Error(w, http.StatusNotFound, "Post not found")
 		return

@@ -34,7 +34,7 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
       <div className="relative h-32 sm:h-48 w-full bg-muted overflow-hidden">
         {user.banner_url ? (
           <img
-            src={user.banner_url}
+            src={`${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${user.banner_url}`}
             alt="Banner"
             className="w-full h-full object-cover"
             onError={(e) => {
@@ -53,13 +53,9 @@ export function UserProfile({ user, canEdit, onEdit }: UserProfileProps) {
         <div className="flex justify-between items-end -mt-[10%] sm:-mt-[15%] mb-3">
           <div className="relative rounded-full border-[4px] border-background bg-background">
             <img
-              src={user.avatar_url || "https://via.placeholder.com/128"}
+              src={`${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${user.avatar_url}`}
               alt={user.display_name || user.username || "User"}
               className="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover bg-muted"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = "https://via.placeholder.com/128";
-              }}
             />
           </div>
           <div className="pb-2">
