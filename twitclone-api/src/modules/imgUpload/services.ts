@@ -24,7 +24,7 @@ async function generatePresignedUrl(options: PresignedUrlOptions): Promise<Presi
     
     // Generate unique object key using just UUID
     const objectId = randomUUID();
-    const objectKey = `${fileType}s/${objectId}`;
+    const objectKey = `static/${fileType}s/${objectId}`;
     
     // Create PUT command with explicit ContentType
     const putCommand = new PutObjectCommand({
