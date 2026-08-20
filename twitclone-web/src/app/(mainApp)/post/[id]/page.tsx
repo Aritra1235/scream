@@ -9,6 +9,8 @@ import { Tweet, type TweetData } from "@/components/posts/Tweet";
 import { TweetInput } from "@/components/posts/TweetInput";
 import { resolveImageUrl } from "@/lib/image-url";
 
+export const runtime = "edge";
+
 type ThreadPost = TweetData & {
     replies?: ThreadPost[];
     repostOf?: ThreadPost;
