@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserStore } from "@/store/user-store";
+import { DEFAULT_AVATAR_KEY, resolveImageUrl } from "@/lib/image-url";
 import {
   X,
   Image as ImageIcon,
@@ -216,7 +217,7 @@ export function TweetModal({
                     <img
                       src={
                         resolvedRepostTarget.author?.avatar ||
-                        "/default-avatar.png"
+                        resolveImageUrl(DEFAULT_AVATAR_KEY)
                       }
                       alt="Repost target avatar"
                       className="w-8 h-8 border border-border object-cover bg-card"
@@ -297,19 +298,9 @@ function trimmedLabel(text: string) {
 }
 
 function resolveAvatarUrl(avatar?: string | null) {
-  if (!avatar) return null;
-  const lower = avatar.toLowerCase();
-  if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("data:")) {
-    return avatar;
-  }
-  return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${avatar}`;
+  return avatar ? resolveImageUrl(avatar) : null;
 }
 
 function resolveMediaUrl(url: string) {
-  const lower = url.toLowerCase();
-  if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("data:")) {
-    return url;
-  }
-  return `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${url}`;
+  return resolveImageUrl(url);
 }
-

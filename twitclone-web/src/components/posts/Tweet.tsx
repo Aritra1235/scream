@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { TweetModal } from '@/components/TweetModal';
+import { resolveAvatarUrl, resolveImageUrl } from '@/lib/image-url';
 
 export interface TweetMedia {
   mediaUrl: string;
@@ -131,7 +132,7 @@ export function Tweet({
       <div className="flex gap-4">
         <a href={`/${author.username}`} className="flex-shrink-0" tabIndex={0} onClick={(e) => e.stopPropagation()}>
           <img
-            src={author.avatar_url || '/default-avatar.png'}
+            src={resolveAvatarUrl(author.avatar_url)}
             alt={`${author.display_name || author.username}'s avatar`}
             className="w-12 h-12 border-2 border-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] object-cover bg-muted"
           />
@@ -166,7 +167,7 @@ export function Tweet({
             <div className="mb-4 border-2 border-border bg-muted p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
               <div className="flex items-center gap-2 mb-2">
                 <img
-                  src={repostOf.author.avatar_url || '/default-avatar.png'}
+                  src={resolveAvatarUrl(repostOf.author.avatar_url)}
                   alt={`${repostOf.author.username} avatar`}
                   className="w-8 h-8 border border-border object-cover"
                 />
@@ -191,7 +192,7 @@ export function Tweet({
                           className={`w-full ${single ? "h-full" : "aspect-square"}`}
                         >
                           <img
-                            src={item.mediaUrl}
+                            src={resolveImageUrl(item.mediaUrl)}
                             alt="Repost media"
                             className={`w-full h-full object-contain bg-muted ${single ? "max-h-64" : "max-h-48"}`}
                           />
@@ -215,7 +216,7 @@ export function Tweet({
                     className={media.length === 1 ? "w-full h-full" : "aspect-square w-full"}
                   >
                     <img
-                      src={item.mediaUrl}
+                      src={resolveImageUrl(item.mediaUrl)}
                       alt="Post media"
                       className={`w-full h-full object-cover ${media.length === 1 ? "max-h-[500px]" : ""}`}
                     />

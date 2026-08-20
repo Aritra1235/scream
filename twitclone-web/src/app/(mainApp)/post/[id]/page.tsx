@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Tweet, type TweetData } from "@/components/posts/Tweet";
 import { TweetInput } from "@/components/posts/TweetInput";
+import { resolveImageUrl } from "@/lib/image-url";
 
 export const runtime = "edge";
 
@@ -20,13 +21,11 @@ function normalizePost(post: ThreadPost): ThreadPost {
         ...post,
         author: {
             ...post.author,
-            avatar_url: post.author.avatar_url
-                ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}`
-                : post.author.avatar_url,
+            avatar_url: post.author.avatar_url ? resolveImageUrl(post.author.avatar_url) : post.author.avatar_url,
         },
         media: post.media?.map((item) => ({
             ...item,
-            mediaUrl: `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${item.mediaUrl}`,
+            mediaUrl: resolveImageUrl(item.mediaUrl),
         })),
         engagement: {
             ...post.engagement,
@@ -158,4 +157,3 @@ export default function PostDetailPage() {
         </div>
     );
 }
-

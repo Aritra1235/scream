@@ -289,7 +289,7 @@ export function EditProfileModal({
           <div className="flex items-end gap-4">
             <div className="relative -mt-12 h-24 w-24 border-4 border-background bg-background shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
               <img
-                src={avatarPreview || "/default-avatar.png"}
+                src={buildCdnUrl(avatarPreview || "Twitter_default_profile_400x400.png")}
                 alt="Avatar preview"
                 className="w-full h-full object-cover bg-muted"
               />
@@ -399,7 +399,7 @@ function stripCdnUrl(value?: string | null) {
   const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "");
   if (base && trimmed.startsWith(base)) {
     const withoutBase = trimmed.slice(base.length);
-    return withoutBase.startsWith("/") ? withoutBase.slice(1) : withoutBase;
+    return withoutBase.replace(/^\/+/, "").replace(/^scream\/static\//, "");
   }
   return trimmed.replace(/^\/+/, "");
 }
@@ -407,13 +407,15 @@ function stripCdnUrl(value?: string | null) {
 function buildCdnUrl(value?: string | null) {
   if (!value) return "";
   const trimmed = value.trim();
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("data:")) {
+  if (trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
   const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "");
   if (base) {
-    return `${base}/${trimmed.replace(/^\/+/, "")}`;
+    if (/^https?:\/\//i.test(trimmed) && !trimmed.startsWith(base)) return trimmed;
+    let key = trimmed.startsWith(base) ? trimmed.slice(base.length) : trimmed;
+    key = key.replace(/^\/+/, "").replace(/^scream\/static\//, "");
+    return `${base}/scream/static/${key}`;
   }
   return trimmed;
 }
-

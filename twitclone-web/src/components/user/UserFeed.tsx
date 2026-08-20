@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tweet } from '@/components/posts/Tweet';
 import { Spinner } from '@/components/ui/spinner';
+import { resolveImageUrl } from '@/lib/image-url';
 
 interface FeedPost {
   id: string;
@@ -76,11 +77,11 @@ export function UserFeed({ username }: UserFeedProps) {
           ...post,
           author: {
             ...post.author,
-            avatar_url: post.author.avatar_url ? `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${post.author.avatar_url}` : post.author.avatar_url,
+            avatar_url: post.author.avatar_url ? resolveImageUrl(post.author.avatar_url) : post.author.avatar_url,
           },
           media: post.media?.map((item) => ({
             ...item,
-            mediaUrl: `${process.env.NEXT_PUBLIC_CDN_BASE_URL}/${item.mediaUrl}`,
+            mediaUrl: resolveImageUrl(item.mediaUrl),
           })),
           engagement: {
             ...post.engagement,
@@ -229,4 +230,3 @@ export function UserFeed({ username }: UserFeedProps) {
     </div>
   );
 }
-

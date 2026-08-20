@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { resolveImageUrl } from '@/lib/image-url';
 
 interface User {
     id: string;
@@ -51,7 +52,15 @@ export const useUserStore = create<UserState>((set) => ({
                 throw new Error('Failed to fetch user');
             }
             const data = await response.json();
-            set({ user: data.user, isLoading: false, needsEmailVerification: false });
+            set({
+                user: {
+                    ...data.user,
+                    avatar_url: resolveImageUrl(data.user.avatar_url),
+                    banner_url: resolveImageUrl(data.user.banner_url),
+                },
+                isLoading: false,
+                needsEmailVerification: false,
+            });
         } catch (error) {
             set({ error: (error as Error).message, isLoading: false, needsEmailVerification: false });
         }
