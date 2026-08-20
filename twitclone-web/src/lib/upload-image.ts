@@ -14,9 +14,16 @@ interface UploadImageOptions {
 const getImageDimensions = (file: File): Promise<{ width: number; height: number }> =>
   new Promise((resolve) => {
     const img = new Image();
-    img.onload = () => resolve({ width: img.width, height: img.height });
-    img.onerror = () => resolve({ width: 0, height: 0 });
-    img.src = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({ width: img.width, height: img.height });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({ width: 0, height: 0 });
+    };
+    img.src = objectUrl;
   });
 
 export const uploadImage = async ({
@@ -25,8 +32,7 @@ export const uploadImage = async ({
   targetType,
   targetId,
   userId,
-}: UploadImageOptions): Promise<string | null> => {
-  try {
+}: UploadImageOptions): Promise<string> => {
     if (!targetId || !userId) {
       throw new Error("Missing target or user identifier for upload");
     }
@@ -51,7 +57,7 @@ export const uploadImage = async ({
     );
 
     if (!presignedResponse.ok) {
-      throw new Error("Failed to get upload URL");
+      throw new Error(`Failed to get upload URL (${presignedResponse.status})`);
     }
 
     const { uploadUrl, objectKey } = (await presignedResponse.json()) as {
@@ -69,7 +75,7 @@ export const uploadImage = async ({
     });
 
     if (!uploadResponse.ok) {
-      throw new Error("Failed to upload file to S3");
+      throw new Error(`Failed to upload image (${uploadResponse.status})`);
     }
 
     // Step 3: Get image dimensions
@@ -96,14 +102,9 @@ export const uploadImage = async ({
     });
 
     if (!saveResponse.ok) {
-      throw new Error("Failed to save upload info");
+      throw new Error(`Failed to attach image to post (${saveResponse.status})`);
     }
 
     return mediaUrl;
-  } catch (error) {
-    console.error("Image upload failed:", error);
-    return null;
-  }
 };
-
 

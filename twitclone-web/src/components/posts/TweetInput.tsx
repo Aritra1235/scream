@@ -183,16 +183,20 @@ export function TweetInput({
                 const data = await response.json();
                 const postId: string | undefined = data?.post?.id;
 
-                if (hasImages && postId && user?.id) {
-                    for (const img of images) {
-                        await uploadImage({
+                if (hasImages) {
+                    if (!postId || !user?.id) {
+                        throw new Error("The post was created, but the image could not be attached");
+                    }
+
+                    await Promise.all(images.map((img) =>
+                        uploadImage({
                             file: img.file,
                             fileType: "image",
                             targetType: "post",
                             targetId: postId,
                             userId: user.id,
-                        });
-                    }
+                        })
+                    ));
                 }
 
                 setContent("");
@@ -208,6 +212,7 @@ export function TweetInput({
             }
         } catch (error) {
             console.error("Failed to post tweet:", error);
+            window.alert(error instanceof Error ? error.message : "Failed to publish post");
         } finally {
             setIsPosting(false);
         }
@@ -366,4 +371,3 @@ export function TweetInput({
         </div>
     );
 }
-
