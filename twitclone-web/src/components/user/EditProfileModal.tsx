@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { uploadImage } from "@/lib/upload-image";
+import { resolveImageUrl } from "@/lib/image-url";
 import { useUserStore } from "@/store/user-store";
 
 type EditableUser = {
@@ -399,7 +400,7 @@ function stripCdnUrl(value?: string | null) {
   const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "");
   if (base && trimmed.startsWith(base)) {
     const withoutBase = trimmed.slice(base.length);
-    return withoutBase.replace(/^\/+/, "").replace(/^scream\/static\//, "");
+    return withoutBase.replace(/^\/+/, "");
   }
   return trimmed.replace(/^\/+/, "");
 }
@@ -410,12 +411,5 @@ function buildCdnUrl(value?: string | null) {
   if (trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
-  const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "");
-  if (base) {
-    if (/^https?:\/\//i.test(trimmed) && !trimmed.startsWith(base)) return trimmed;
-    let key = trimmed.startsWith(base) ? trimmed.slice(base.length) : trimmed;
-    key = key.replace(/^\/+/, "").replace(/^scream\/static\//, "");
-    return `${base}/scream/static/${key}`;
-  }
-  return trimmed;
+  return resolveImageUrl(trimmed);
 }
