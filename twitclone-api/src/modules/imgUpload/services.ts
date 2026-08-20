@@ -40,7 +40,7 @@ async function generatePresignedUrl(options: PresignedUrlOptions): Promise<Presi
         uploadUrl,
         // The upload key is relative to the bucket, while mediaUrl needs the
         // bucket-prefixed public path consumed by the CDN.
-        objectKey: `/${config.aws.bucketName}/${objectKey}`,
+        objectKey: `${config.aws.bucketName}/${objectKey}`,
     };
 }
 
